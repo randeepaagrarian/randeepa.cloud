@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/head %>
+    </head>
+    <body>
+        <% include ../../layouts/invoice_header_venders %>
+
+        <div class="container">
+
+            <h3 style="padding: 0px; margin: 0px">Invoice &mdash; <%= invoiceID %></h3>
+            <p>Invoice Contents <%= invoiceDetails[0]['date'] %></p>
+            <p>Issuer: <b> <%= invoiceDetails[0]['issuer'] %> </b></p>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Rate</th>
+                        <th>Route Pass ID</th>
+                        <th>Source Documents</th>
+                        <th>Start Time</th>
+                        <th>Location</th>
+                        <th>Mileage</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% routes.forEach(function(route) { %>
+                        <tr>
+                            <td><%= route.route_id %></td>
+                            <td><%= route.rate %></td>
+                            <td><%= route.route_pass_id %></td>
+                            <td><%= route.source_documents %></td>
+                            <td><%= route.route_start_time %></td>
+                            <td><%= route.end_location %></td>
+                            <td><%= route.mileage %></td>
+                            <td><%= route.route_cost %></td>
+                        </tr>
+                    <% }) %>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>LKR <%= summary.total %></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <p>................................................</p>
+            <p>Authorized Officer</p>
+
+            <% include ../../layouts/footer %>
+        </div>
+    </body>
+</html>

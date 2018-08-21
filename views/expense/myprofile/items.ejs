@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>#</th>
+                                                    <th>Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Description</th>
+                                                    <th>Bill Received</th>
+                                                    <th>Bill Received Date</th>
+                                                    <th>Bill Paid</th>
+                                                    <th>Bill Paid Date</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% expenseItems.forEach(function(expenseItem) { %>
+                                                        <% if(expenseItem.rejected == 0) { %>
+                                                            <tr>
+                                                                <td> <%= expenseItem.expense_id %> </td>
+                                                                <td> <%= expenseItem.name %> </td>
+                                                                <td> <%= expenseItem.amount %> </td>
+                                                                <td> <%= expenseItem.description %> </td>
+                                                                <% if(expenseItem.bill_received == 0) { %>
+                                                                    <td> <font color='red'>&#x2717;</font> </td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_received_date %> </td>
+                                                                <% if(expenseItem.bill_paid == 0) { %>
+                                                                    <td> <font color='red'>&#x2717;</font> </td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_paid_date %> </td>
+                                                            </tr>
+                                                        <% } else { %>
+                                                            <tr class="warning">
+                                                                <td> <%= expenseItem.expense_id %> </td>
+                                                                <td> <%= expenseItem.name %> </td>
+                                                                <td> <%= expenseItem.amount %> </td>
+                                                                <td> <%= expenseItem.description %> </td>
+                                                                <% if(expenseItem.bill_received == 0) { %>
+                                                                    <td></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_received_date %> </td>
+                                                                <% if(expenseItem.bill_paid == 0) { %>
+                                                                    <td></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_paid_date %> </td>
+                                                            </tr>
+                                                        <% } %>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <form method="POST" action="/admin/addUser" enctype="multipart/form-data">
+                                            <table>
+
+
+                                                <tr>
+                                                    <td>First Name &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='first_name' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Name &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='last_name' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Common Name &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='common_name' /></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Email &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='email' /></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Region &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="region">
+                                                            <% regions.forEach(function(region){ %>
+                                                                <option value="<%= region.id %>"><%= region.name %></option>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Territory &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="territory">
+                                                            <% territories.forEach(function(territory){ %>
+                                                                <option value="<%= territory.id %>"><%= territory.name %></option>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Birthday &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='birthday' placeholder='YYYY-MM-DD' /></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Designation &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='designation'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Profile &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="profile">
+                                                                <option value="1">Yes</option>
+                                                                <option value="0">No</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Application Form &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='file' name='application_form' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Submit</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

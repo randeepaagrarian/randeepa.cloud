@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/head %>
+
+        <style>
+        .nopadding {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        </style>
+    </head>
+    <body>
+        <% include ../../layouts/invoice_header_agrarian_delivery_note %>
+
+        <div class="container">
+
+            <h4 style="padding: 0px; margin: 0px"><%= deliveryDocumentDetails[0]['delivery_document_type_name'] %> &mdash; <%= deliveryDocumentId %></h3>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <p>M/S: <b><%= deliveryDocumentDetails[0]['dealer_name'] %></b></p>
+                    <p>Address: <b><%= deliveryDocumentDetails[0]['dealer_address'] %></b></p>
+                    <p>From: <b><%= deliveryDocumentDetails[0]['from_dealer'] %></b></p>
+                    <p>Officer Resposible / Telephone: <b><%= deliveryDocumentDetails[0]['officer_responsible'] %>(<%= deliveryDocumentDetails[0]['officer_telephone'] %>)</b> </p>
+                </div>
+                <div class="col-xs-6">
+                    <p>Date: <b><%= deliveryDocumentDetails[0]['date'] %></b></p>
+                    <p>Issuer: <b><%= deliveryDocumentDetails[0]['issuer'] %></b></p>
+                    <p>Vehicle No: <b><%= deliveryDocumentDetails[0]['vehicle_no'] %></b></p>
+                </div>
+            </div>
+
+            <% let total = 0; for(let i = 0; i < deliveryDocumentContents.length; i++) { total += deliveryDocumentContents[i].price; } %>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Chassis/Serial No</th>
+                        <th>Engine No</th>
+                        <th>Model</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% deliveryDocumentContents.forEach(function(deliveryDocumentContent) { %>
+                        <tr>
+                            <td><%= deliveryDocumentContent.primary_id %></td>
+                            <td><%= deliveryDocumentContent.secondary_id %></td>
+                            <td><%= deliveryDocumentContent.model_name %></td>
+                            <td>RS <%= deliveryDocumentContent.price %></td>
+                        </tr>
+                    <% }) %>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>RS <%= total %></b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="nopadding">Recived above mentioned goods in good condition</p>
+                    <table>
+                        <tr>
+                            <td>Name:</td>
+                            <td>.....................................................................</td>
+                        </tr>
+                        <tr>
+                            <td>NIC: </td>
+                            <td>.....................................................................</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Signature: </td>
+                            <td>.....................................................................</td>
+                        </tr>
+                        <tr>
+                            <td>Dealer Name: &nbsp;</td>
+                            <td>.....................................................................</td>
+                        </tr>
+                    </table>
+                    <br>
+                </div>
+                <div class="col-xs-6">
+                    <p class="nopadding">Notes: <b><%= deliveryDocumentDetails[0]['notes'] %></b></p>
+                </div>
+                <div class="col-xs-12">
+                    <p class="nopadding">Special Notes and Remarks</p>
+                    <hr style="border-style: dotted;" />
+                    <hr style="border-style: dotted;" />
+                </div>
+            </div>
+
+            <p class="nopadding"><b>Driver Info</b></p>
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <p class="nopadding">Driver Name: <b><%= deliveryDocumentDetails[0]['driver_name'] %></b></p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="nopadding">Driver NIC: <b><%= deliveryDocumentDetails[0]['driver_nic'] %></b></p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="nopadding">Driver Telephone: <b><%= deliveryDocumentDetails[0]['driver_telephone'] %></b></p>
+                </div>
+            </div>
+
+            <p><i>This is a computer generated document and is valid without manual signature.</i></p>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <br>
+                    <hr class="nopadding" style="border-style: dotted;" />
+                    <p class="nopadding">Driver Signature</p>
+                </div>
+                <div class="col-xs-6">
+                    <br>
+                    <hr class="nopadding" style="border-style: dotted;" />
+                    <p class="nopadding">Security Stamp</p>
+                </div>
+            </div>
+
+
+            <% include ../../layouts/footer %>
+        </div>
+    </body>
+</html>

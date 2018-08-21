@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <% if(warning_msg != '') { %>
+                                    <div class='alert alert-warning'><%= warning_msg %></div>
+                                <% } %>
+
+                                <% if(success_msg != '') { %>
+                                    <div class='alert alert-success'><%= success_msg %></div>
+                                <% } %>
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Dealer Name</th>
+                                                    <th>Dealer Telephone</th>
+                                                    <th>Dealer Address</th>
+                                                    <th>Dealer Type</th>
+                                                    <th>Territory</th>
+                                                    <th>Edit</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% dealers.forEach(function(dealer) { %>
+                                                        <tr>
+                                                            <td><%= dealer.name %></td>
+                                                            <td><%= dealer.telephone %></td>
+                                                            <td><%= dealer.address %></td>
+                                                            <td><%= dealer.dealer_type_name %></td>
+                                                            <td><%= dealer.territory_name %></td>
+                                                            <td><a href="/stock/dealer/edit?dealerId=<%= dealer.id %>">Edit</a></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../../layouts/pro/includes %>
+</html>

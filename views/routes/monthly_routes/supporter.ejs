@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/head %>
+    </head>
+    <body>
+        <% include ../../layouts/invoice_header_venders %>
+
+        <div class="container">
+
+            <h3 style="padding: 0px; margin: 0px">Mr <%= supporter[0]['first_name'] %> <%= supporter[0]['last_name'] %> <%= supporter[0]['telephone_no'] %></h3>
+            <p>Monthly Route Summary <b><%= year %> &bull; <%= month %></b></p>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle Number</th>
+                        <th>Route Date</th>
+                        <th>Start Meter</th>
+                        <th>End Meter</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% routes.forEach(function(route) { %>
+                        <tr>
+                            <td><%= route.id %></td>
+                            <td><%= route.vehicle_number %></td>
+                            <td><%= route.route_start_time %></td>
+                            <td><%= route.start_meter %></td>
+                            <td><%= route.end_meter %></td>
+                            <td><%= route.start_location %></td>
+                            <td><%= route.end_location %></td>
+                        </tr>
+                    <% }) %>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b><%= summary.total %> KM</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Over KM</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b><%= summary.overKM %> KM</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Payment</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>RS <%= summary.overKMPayment %></b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <% include ../../layouts/footer %>
+        </div>
+    </body>
+</html>

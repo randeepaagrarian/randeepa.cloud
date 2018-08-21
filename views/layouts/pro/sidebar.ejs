@@ -1,0 +1,104 @@
+<div class="sidebar" data-color="blue" data-image="/img/sidebar-5.jpg">
+    <div class="logo">
+        <a href="/" class="simple-text logo-mini">
+            <img style="width: 30px;" src="/img/R-Logo-White-RGB.png">
+        </a>
+
+        <a href="/" class="simple-text logo-normal">
+            Randeepa Cloud
+        </a>
+    </div>
+
+    <div class="sidebar-wrapper">
+
+        <div class="user">
+            <div class="info">
+                <div class="photo">
+                    <% if(user.profile_pic != null) { %>
+                        <img src="<%= user.profile_pic %>" />
+                    <% } else { %>
+                        <img src="/img/default-avatar.jpg" />
+                    <% } %>
+                </div>
+
+                <a>
+                    <span>
+                        Hello, <%= user.name %>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <ul class="nav">
+            <li class="<%= navbar == 'Dashboard' ? 'active' : '' %>">
+                <a href="/">
+                    <i class="pe-7s-graph"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+
+            <% if(typeof user.accessLevel.sale != 'undefined') { %>
+                <li class="<%= navbar == 'Sales' ? 'active' : '' %>">
+                    <a href="/sales">
+                        <i class="pe-7s-add-user"></i>
+                        <p>Sales</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.banking != 'undefined') { %>
+                <li class="<%= navbar == 'Banking' ? 'active' : '' %>">
+                    <a href="/bankings">
+                        <i class="pe-7s-cloud-download"></i>
+                        <p>Banking</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.routes != 'undefined') { %>
+                <li class="<%= navbar == 'Routes' ? 'active' : '' %>">
+                    <a href="/vehicle-routes">
+                        <i class="pe-7s-refresh-2"></i>
+                        <p>Routes</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.visits != 'undefined') { %>
+                <li class="<%= navbar == 'Visits' ? 'active' : '' %>">
+                    <a href="/visits">
+                        <i class="pe-7s-users"></i>
+                        <p>Visits</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.stock != 'undefined') { %>
+                <li class="<%= navbar == 'Stock' ? 'active' : '' %>">
+                    <a href="/stock">
+                        <i class="pe-7s-menu"></i>
+                        <p>Stock</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.expense != 'undefined') { %>
+                <li class="<%= navbar == 'Expenses' ? 'active' : '' %>">
+                    <a href="/expense">
+                        <i class="pe-7s-credit"></i>
+                        <p>Expenses</p>
+                    </a>
+                </li>
+            <% } %>
+
+            <% if(typeof user.accessLevel.admin != 'undefined') { %>
+                <li class="<%= navbar == 'Admin' ? 'active' : '' %>">
+                    <a href="/admin">
+                        <i class="pe-7s-add-user"></i>
+                        <p>Admin</p>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</div>

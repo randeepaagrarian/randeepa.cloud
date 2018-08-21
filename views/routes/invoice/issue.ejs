@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <% get_total = function(mileage) {
+            return 50 * mileage;
+        } %>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <form action="/routes/invoice/issue" method="post">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <th>Select</th>
+                                                        <th>#</th>
+                                                        <th>Vehicle Number</th>
+                                                        <th>Start Time</th>
+                                                        <th>End Time</th>
+                                                        <th>Start Meter</th>
+                                                        <th>End Meter</th>
+                                                        <th>Mileage</th>
+                                                        <th>Total</th>
+                                                        <th>Start Location</th>
+                                                        <th>End Location</th>
+                                                        <th>Cloud Time</th>
+                                                        <th>Rate(KM)</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% routes.forEach(function(route) { %>
+                                                            <tr>
+                                                                <td><input type="checkbox" name="invoice_routes" value="<%= route.id %>"></td>
+                                                                <td><%= route.id %></td>
+                                                                <td><%= route.vehicle_number %></td>
+                                                                <td><%= route.route_start_time %></td>
+                                                                <td><%= route.route_end_time %></td>
+                                                                <td><%= route.start_meter %></td>
+                                                                <td><%= route.end_meter %></td>
+                                                                <td><%= route.mileage %></td>
+                                                                <td><b>LKR <%= get_total(route.mileage) %></b></td>
+                                                                <td><%= route.start_location %></td>
+                                                                <td><%= route.end_location %></td>
+                                                                <td><%= route.sys_time %></td>
+                                                                <td><input type="text" name="<%= route.id %>"</td>
+                                                            </tr>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <input type="submit" name="sumit" value="Issue Invoice">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

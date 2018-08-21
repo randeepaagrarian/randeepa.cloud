@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ./layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ./layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+
+                        <% if(user.accessLevel.sale == 10) { %>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">My Profile</h4>
+                                    </div>
+                                    <div class="content">
+                                        <div class="dropdown">
+
+                                            <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                                Show
+                                                <span class="caret"></span>
+                                            </button>
+
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale-m/myprofile/today">Today</a></li>
+                                                <li role="presentation" class="divider"></li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale-m/myprofile/all">All</a></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <% if(user.accessLevel.sale == 8) { %>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">Quick Links</h4>
+                                    </div>
+                                    <div class="content">
+                                        <div class="dropdown">
+
+                                            <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                                Show
+                                                <span class="caret"></span>
+                                            </button>
+
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Today</a></li>
+                                                <li role="presentation" class="divider"></li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/today/sysdate">Cloud Date</a></li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/today/actualdate">Actual Date</a></li>
+                                                <li role="presentation" class="divider"></li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/all">All Sales</a></li>
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">Sales reports</h4>
+                                    </div>
+                                    <div class="content">
+                                        <ul role="tablist" class="nav nav-tabs">
+                                            <li role="presentation" class="active">
+                                                <a href="#by_date" data-toggle="tab">By Date</a>
+                                            </li>
+                                            <li>
+                                                <a href="#by_month" data-toggle="tab">By Month</a>
+                                            </li>
+                                            <li>
+                                                <a href="#by_year" data-toggle="tab">By Year</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="by_date" class="tab-pane active">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">All</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/all/sysdate" method="get">
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/all/actualdate" method="get">
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">Region</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/region/sysdate" method="get">
+                                                                    <select class="form-control" name="region">
+                                                                        <% regions.forEach(function(region) { %>
+                                                                            <option value="<%= region.id %>"><%= region.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/region/actualdate" method="get">
+                                                                    <select class="form-control" name="region">
+                                                                        <% regions.forEach(function(region) { %>
+                                                                            <option value="<%= region.id %>"><%= region.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">Officer</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/officer/sysdate" method="get">
+                                                                    <select class="form-control" name="officer">
+                                                                        <% users.forEach(function(user) { %>
+                                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/date/officer/actualdate" method="get">
+                                                                    <select class="form-control" name="officer">
+                                                                        <% users.forEach(function(user) { %>
+                                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="date">
+                                                                        <% for(let i = 1; i <= 31; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="by_month" class="tab-pane">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">All</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/all/sysdate" method="get">
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/all/actualdate" method="get">
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">Region</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/region/sysdate" method="get">
+                                                                    <select class="form-control" name="region">
+                                                                        <% regions.forEach(function(region) { %>
+                                                                            <option value="<%= region.id %>"><%= region.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/region/actualdate" method="get">
+                                                                    <select class="form-control" name="region">
+                                                                        <% regions.forEach(function(region) { %>
+                                                                            <option value="<%= region.id %>"><%= region.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6 class="title">Officer</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/officer/sysdate" method="get">
+                                                                    <select class="form-control" name="officer">
+                                                                        <% users.forEach(function(user) { %>
+                                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <h5 class="title">Actual Date</h5>
+                                                            <div class="content">
+                                                                <form class="form-inline" action="/sale/month/officer/actualdate" method="get">
+                                                                    <select class="form-control" name="officer">
+                                                                        <% users.forEach(function(user) { %>
+                                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="year">
+                                                                        <option name="2017">2017</option>
+                                                                        <option name="2018">2018</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <select class="form-control" name="month">
+                                                                        <% for(let i = 1; i <= 12; i++) { %>
+                                                                            <option name="<%= i %>"><%= i %></option>
+                                                                        <% } %>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="by_year" class="tab-pane">
+                                                <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h6 class="title">All</h6>
+                                                        <h5 class="title">Cloud Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/all/sysdate" method="get">
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <h5 class="title">Actual Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/all/actualdate" method="get">
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6 class="title">Region</h6>
+                                                        <h5 class="title">Cloud Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/region/sysdate" method="get">
+                                                                <select class="form-control" name="region">
+                                                                    <% regions.forEach(function(region) { %>
+                                                                        <option value="<%= region.id %>"><%= region.name %></option>
+                                                                    <% }) %>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <h5 class="title">Actual Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/region/actualdate" method="get">
+                                                                <select class="form-control" name="region">
+                                                                    <% regions.forEach(function(region) { %>
+                                                                        <option value="<%= region.id %>"><%= region.name %></option>
+                                                                    <% }) %>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6 class="title">Officer</h6>
+                                                        <h5 class="title">Cloud Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/officer/sysdate" method="get">
+                                                                <select class="form-control" name="officer">
+                                                                    <% users.forEach(function(user) { %>
+                                                                        <option value="<%= user.id %>"><%= user.name %></option>
+                                                                    <% }) %>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <h5 class="title">Actual Date</h5>
+                                                        <div class="content">
+                                                            <form class="form-inline" action="/sale/year/officer/actualdate" method="get">
+                                                                <select class="form-control" name="officer">
+                                                                    <% users.forEach(function(user) { %>
+                                                                        <option value="<%= user.id %>"><%= user.name %></option>
+                                                                    <% }) %>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <select class="form-control" name="year">
+                                                                    <option name="2017">2017</option>
+                                                                    <option name="2018">2018</option>
+                                                                </select>
+                                                                <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                <div class="form-group">
+                                                                    <input class="btn btn-primary" type="submit" value="List">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ./layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ./layouts/pro/includes %>
+</html>

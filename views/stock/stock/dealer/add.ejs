@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../../layouts/pro/head %>
+        <style media="screen">
+            tr, td {
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        Add Dealer
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <form action="/stock/dealer/add" method="post">
+                                                    <table>
+                                                        <tr>
+                                                            <td>Type</td>
+                                                            <td>
+                                                                <select class="form-control" name="dealer_type">
+                                                                    <option value="2">Dealer</option>
+                                                                    <option value="3">Showroom</option>
+                                                                    <option value="1">Main Stock</option>
+                                                                    <option value="4">Importer</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td><input class="form-control" type="text" style="width: 300px;" name="dealer_name"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Telephone</td>
+                                                            <td><input class="form-control" type="text" style="width: 300px;" name="dealer_telephone"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Address</td>
+                                                            <td><input class="form-control" type="text" style="width: 300px;" name="dealer_address"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Territory</td>
+                                                            <td>
+                                                                <select class="form-control" name="territory">
+                                                                    <% territories.forEach(function(territory) { %>
+                                                                        <option value="<%= territory.id %>"><%= territory.name %></option>
+                                                                    <% }) %>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><input class="btn btn-primary" type="submit"></td>
+                                                        </tr>
+                                                    </table>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../../layouts/pro/includes %>
+</html>

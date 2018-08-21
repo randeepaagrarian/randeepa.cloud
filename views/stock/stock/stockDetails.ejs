@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        Current Location
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Delivery Document Id</th>
+                                                    <th>Delivery Document Type</th>
+                                                    <th>Date</th>
+                                                    <th>Dealer</th>
+                                                    <th>Primary Id</th>
+                                                    <th>Secondary Id</th>
+                                                    <th>Model</th>
+                                                    <th>Price</th>
+                                                    <th>Notes</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><%= currentLocation[0]['delivery_document_id'] %></td>
+                                                        <td><%= currentLocation[0]['delivery_document_type_name'] %></td>
+                                                        <td><%= currentLocation[0]['date'] %></td>
+                                                        <td><%= currentLocation[0]['dealer_name'] %></td>
+                                                        <td><%= currentLocation[0]['primary_id'] %></td>
+                                                        <td><%= currentLocation[0]['secondary_id'] %></td>
+                                                        <td><%= currentLocation[0]['model_name'] %></td>
+                                                        <td><%= currentLocation[0]['price'] %></td>
+                                                        <td><%= currentLocation[0]['notes'] %></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="header">
+                                        Stock History
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Delivery Document Id</th>
+                                                    <th>Delivery Document Type</th>
+                                                    <th>Date In</th>
+                                                    <th>Dealer</th>
+                                                    <th>Date Out</th>
+                                                    <th>Primary Id</th>
+                                                    <th>Secondary Id</th>
+                                                    <th>Model</th>
+                                                    <th>Price</th>
+                                                    <th>Notes</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% stockHistories.forEach(function(stockHistory) { %>
+                                                        <tr>
+                                                            <td><%= stockHistory.delivery_document_id %></td>
+                                                            <td><%= stockHistory.delivery_document_type_name %></td>
+                                                            <td><%= stockHistory.date_in %></td>
+                                                            <td><%= stockHistory.dealer_name %></td>
+                                                            <td><%= stockHistory.date_out %></td>
+                                                            <td><%= stockHistory.primary_id %></td>
+                                                            <td><%= stockHistory.secondary_id %></td>
+                                                            <td><%= stockHistory.model_name %></td>
+                                                            <td><%= stockHistory.price %></td>
+                                                            <td><%= stockHistory.notes %></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

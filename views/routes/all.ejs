@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> routes</p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Driver</th>
+                                                        <th>Supporter</th>
+                                                        <th>Vehicle Number</th>
+                                                        <th>Source Documents</th>
+                                                        <th>Route Start Time</th>
+                                                        <th>Route End Time</th>
+                                                        <th>Start Meter</th>
+                                                        <th>End Meter</th>
+                                                        <th>Start Location</th>
+                                                        <th>End Location</th>
+                                                        <th>Document Front</th>
+                                                        <th>System Time</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% routes.forEach(function(route) { %>
+                                                        <tr>
+                                                            <td> <%= route.id %> </td>
+                                                            <td> <%= route.driver_first_name %> <%= route.driver_last_name %> </td>
+                                                            <td> <%= route.supporter_first_name %> <%= route.supporter_last_name %> </td>
+                                                            <td> <%= route.vehicle_number %> </td>
+                                                            <td> <%= route.source_documents %> </td>
+                                                            <td> <%= route.route_start_time %> </td>
+                                                            <td> <%= route.route_end_time %> </td>
+                                                            <td> <%= route.start_meter %> </td>
+                                                            <td> <%= route.end_meter %> </td>
+                                                            <td> <%= route.start_location %> </td>
+                                                            <td> <%= route.end_location %> </td>
+                                                            <td><a href="<%= route.document_front %>" target="_blank">View Image</a></td>
+                                                            <td><%= route.sys_time %>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

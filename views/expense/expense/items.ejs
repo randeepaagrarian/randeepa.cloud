@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <% if(warning_msg != '') { %>
+                                    <div class='alert alert-warning'><%= warning_msg %></div>
+                                <% } %>
+
+                                <% if(success_msg != '') { %>
+                                    <div class='alert alert-success'><%= success_msg %></div>
+                                <% } %>
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>#</th>
+                                                    <th>Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Description</th>
+                                                    <th>Bill Received</th>
+                                                    <th>Bill Received Date</th>
+                                                    <th>Bill Paid</th>
+                                                    <th>Bill Paid Date</th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    <% expenseItems.forEach(function(expenseItem) { %>
+                                                        <% if(expenseItem.rejected == 0) { %>
+                                                            <tr>
+                                                                <td> <%= expenseItem.expense_id %> </td>
+                                                                <td> <%= expenseItem.name %> </td>
+                                                                <td> <%= expenseItem.amount %> </td>
+                                                                <td> <%= expenseItem.description %> </td>
+                                                                <% if(expenseItem.bill_received == 0) { %>
+                                                                    <td><a href="/expense/markBillReceived?expenseItemId=<%= expenseItem.id %>&continue=<%= url %>">Bill Received</a></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_received_date %> </td>
+                                                                <% if(expenseItem.bill_paid == 0) { %>
+                                                                    <td><a href="/expense/markBillPaid?expenseItemId=<%= expenseItem.id %>&continue=<%= url %>">Bill Paid</a></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_paid_date %> </td>
+                                                                <td> <a href="/expense/markBillRejected?expenseItemId=<%= expenseItem.id %>&continue=<%= url %>">Reject Bill</a> </td>
+                                                            </tr>
+                                                        <% } else { %>
+                                                            <tr class="warning">
+                                                                <td> <%= expenseItem.expense_id %> </td>
+                                                                <td> <%= expenseItem.name %> </td>
+                                                                <td> <%= expenseItem.amount %> </td>
+                                                                <td> <%= expenseItem.description %> </td>
+                                                                <% if(expenseItem.bill_received == 0) { %>
+                                                                    <td></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_received_date %> </td>
+                                                                <% if(expenseItem.bill_paid == 0) { %>
+                                                                    <td></td>
+                                                                <% } else { %>
+                                                                    <td> <font color='green'>&#x2713;</font> </td>
+                                                                <% } %>
+                                                                <td> <%= expenseItem.bill_paid_date %> </td>
+                                                                <td></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> sales</p>
+                                        <p class="category">Year: <b><%= date %> </b></p>
+                                        <a class="category" href="/sale/excel<%= url %>"><u>Download Excel</u></a>
+                                    </div>
+                                    <div class="content">
+                                        <ul role="tablist" class="nav nav-tabs">
+                                            <li role="presentation" class="active">
+                                                <a href="#details" data-toggle="tab">Details</a>
+                                            </li>
+                                            <li>
+                                                <a href="#model_summary" data-toggle="tab">Model Summary</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="details" class="tab-pane active">
+                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <th>#</th>
+                                                            <th>Officer</th>
+                                                            <th>Region</th>
+                                                            <th>Date</th>
+                                                            <th>Cloud Date</th>
+                                                            <th>Showroom/ Dealer</th>
+                                                            <th>Chassis No</th>
+                                                            <th>Customer Name</th>
+                                                            <th>Customer Address</th>
+                                                            <th>Customer Contact</th>
+                                                            <th>Model Name</th>
+                                                            <th>Price</th>
+                                                            <th>Sale Type</th>
+                                                            <th>Institute</th>
+                                                            <th>Advance</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% sales.forEach(function(sale) { %>
+                                                                <tr>
+                                                                    <td> <%= sale.id %> </td>
+                                                                    <td> <%= sale.officer %> </td>
+                                                                    <td> <%= sale.region %> </td>
+                                                                    <td> <%= sale.date %> </td>
+                                                                    <td> <%= sale.sys_date %> </td>
+                                                                    <td> <%= sale.location %> </td>
+                                                                    <td> <%= sale.chassis_no %> </td>
+                                                                    <td> <%= sale.customer_name %> </td>
+                                                                    <td> <%= sale.customer_address %> </td>
+                                                                    <td> <%= sale.customer_contact %> </td>
+                                                                    <td> <%= sale.model_name %> </td>
+                                                                    <td> <%= sale.price %> </td>
+                                                                    <td> <%= sale.sale_type %> </td>
+                                                                    <td> <%= sale.institute %> </td>
+                                                                    <td> <%= sale.advance %> </td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div id="model_summary" class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <th>Model</th>
+                                                        <th>Sales</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% modelSummary.forEach(function(modelItem) { %>
+                                                            <% if(modelItem.model == undefined) { %>
+
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td> <%= modelItem.model %> </td>
+                                                                    <td> <%= modelItem.sales %> </td>
+                                                                </tr>
+                                                            <% } %>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

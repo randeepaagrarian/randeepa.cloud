@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Username</th>
+                                                        <th>Email</th>
+                                                        <th>Active</th>
+                                                        <th>Name</th>
+                                                        <th>Region</th>
+                                                        <th>Territory</th>
+                                                        <th>Profile Picture</th>
+                                                        <th>Birthday</th>
+                                                        <th>Designation</th>
+                                                        <th>Profile</th>
+                                                        <th>Active Modules</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% users.forEach(function(user) { %>
+
+                                                        <% if(user.active == 0) { %>
+                                                            <tr class='warning'>
+                                                                <td><%= user.id %></td>
+                                                                <td><a href='/admin/editUser?userId=<%= user.id %>'><%= user.username %></a></td>
+                                                                <td><%= user.email %></td>
+                                                                <td><%= user.active %></td>
+                                                                <td><%= user.name %></td>
+                                                                <td><%= user.region %></td>
+                                                                <td><%= user.territory %></td>
+
+                                                                <% if(user.profile_pic){ %>
+                                                                    <td><img src='<%= user.profile_pic %>' style='width: 30px'></td>
+                                                                <% } else { %>
+                                                                    <td>Hello</td>
+                                                                <% } %>
+
+
+                                                                <td><%= user.birthday %></td>
+                                                                <td><%= user.designation %></td>
+                                                                <td><%= user.profile %></td>
+
+                                                                <% if(user.active_modules == 0) { %>
+                                                                    <td><a href="/admin/setAccess?userId=<%= user.id %>">Set Access</a></td>
+                                                                <% } else { %>
+                                                                    <td><%= user.active_modules %></td>
+                                                                <% } %>
+
+                                                            </tr>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td><%= user.id %></td>
+                                                                <td><a href='/admin/editUser?userId=<%= user.id %>'><%= user.username %></a></td>
+                                                                <td><%= user.email %></td>
+                                                                <td><%= user.active %></td>
+                                                                <td><%= user.name %></td>
+                                                                <td><%= user.region %></td>
+                                                                <td><%= user.territory %></td>
+                                                                <% if(user.profile_pic){ %>
+                                                                    <td><img src='<%= user.profile_pic %>' style='width: 30px'></td>
+                                                                <% } else { %>
+                                                                    <td>Hello</td>
+                                                                <% } %>
+                                                                <td><%= user.birthday %></td>
+                                                                <td><%= user.designation %></td>
+                                                                <td><%= user.profile %></td>
+
+                                                                <% if(user.active_modules == 0) { %>
+                                                                    <td><a href="/admin/setAccess?userId=<%= user.id %>">Set Access</a></td>
+                                                                <% } else { %>
+                                                                    <td><%= user.active_modules %></td>
+                                                                <% } %>
+
+                                                            </tr>
+                                                        <% } %>
+
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

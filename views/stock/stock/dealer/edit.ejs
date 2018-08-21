@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <p class="category"><b><%= dealer[0]['name'] %></b>&nbsp;&mdash;&nbsp;<%= dealer[0]['dealer_type_name'] %></p>
+                                        <p class="category"><%= dealer[0]['address'] %></p>
+                                        <br>
+                                        <form action="/stock/dealer/edit/<%= dealerId %>" method="post">
+                                            <table>
+                                                <tr>
+                                                    <td>Address</td>
+                                                    <td><textarea class="form-control" type="text" style="width: 300px;" name="address"><%= dealer[0]['address'] %></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Telephone</td>
+                                                    <td><input class="form-control" type="text" style="width: 300px;" name="telephone" value="<%= dealer[0]['telephone'] %>"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Territory</td>
+                                                    <td>
+                                                        <select class="form-control" name="territory_id">
+                                                            <% territories.forEach(function(territory) { %>
+                                                                <% if(dealer[0]['territory_id'] == territory.id) { %>
+                                                                    <option value="<%= territory.id %>" selected><%= territory.name %></option>
+                                                                <% } else { %>
+                                                                    <option value="<%= territory.id %>"><%= territory.name %></option>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><input class="btn btn-primary" type="submit" value="Update Details"></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../../layouts/pro/includes %>
+</html>

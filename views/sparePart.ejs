@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ./layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ./layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <% if(user.accessLevel.sparePart == 8) { %>
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="header">
+                                            <h4 class="title">Packing List</h4>
+                                        </div>
+                                        <div class="content">
+                                            <div class="dropdown">
+
+                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                                    Packing List
+                                                    <span class="caret"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/sparePart/packingList">Issue</a></li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <% } %>
+
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ./layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ./layouts/pro/includes %>
+</html>

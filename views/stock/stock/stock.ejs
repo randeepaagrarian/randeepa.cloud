@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        Stock
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="category">Main Stocks</p>
+                                                <form action="/stock/viewStock" method="get">
+                                                    <select class="form-control" name="stockLocation">
+                                                        <% mainStocks.forEach(function(mainStock){ %>
+                                                            <option value="<%= mainStock.id %>"><%= mainStock.name %></option>
+                                                        <% }) %>
+                                                    </select>
+                                                    <br>
+                                                    <input class="btn btn-primary" type="submit" value="Show Stock">
+                                                    <br>
+                                                    <br>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="category">Showroom/Dealer</p>
+                                                <form class="" action="/stock/viewStock" method="get">
+                                                    <select class="form-control" name="stockLocation">
+                                                        <% dealersAndShowrooms.forEach(function(dealerAndShowroom){ %>
+                                                            <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                        <% }) %>
+                                                    </select>
+                                                    <br>
+                                                    <input class="btn btn-primary" type="submit" value="Show Stock">
+                                                    <br>
+                                                    <br>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

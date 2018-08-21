@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> bankings</p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Bank</th>
+                                                        <th>Branch</th>
+                                                        <th>Amount</th>
+                                                        <th>Banking Date</th>
+                                                        <th>Cloud Date</th>
+                                                        <th>Chassis Number</th>
+                                                        <th>Receipt Number</th>
+                                                        <th>Payment Type</th>
+                                                        <th>Invoice Number</th>
+                                                        <th>Source Document</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% bankings.forEach(function(banking) { %>
+
+                                                        <tr>
+                                                            <td><%= banking.id %></td>
+                                                            <td><%= banking.bank %></td>
+                                                            <td><%= banking.branch %></td>
+                                                            <td><%= banking.amount %></td>
+                                                            <td><%= banking.date %></td>
+                                                            <td><%= banking.sys_date %></td>
+                                                            <td><%= banking.chassis_no %></td>
+                                                            <td><%= banking.receipt_number %></td>
+                                                            <td><%= banking.name %></td>
+                                                            <td><%= banking.invoice_number %></td>
+                                                            <td><a href="<%= banking.source_document %>">View Image</a></td>
+                                                        </tr>
+
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

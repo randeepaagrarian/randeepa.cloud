@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            th, tr, td {
+                padding: 5px;
+            }
+        </style>
+        <script>
+            $(document).ready(function(){
+                $(".addRow").click(function(){
+                    $("#packingList").append('<tr><td><select class="form-control" name="model"><% models.forEach(function(model) { %><option value="<%= model.id %>"><%= model.name %></option><% }) %></select></td><td><input class="form-control" type="text" name="primaryNumber" value=""></td><td><input class="form-control" type="text" name="secondaryNumber" value=""></td><td><input class="form-control" type="text" name="price" value=""></td><td><a href="javascript:void(0);" class="remRow">Remove</a></td></tr>');
+                });
+                $("#packingList").on('click','.remRow',function(){
+                    $(this).parent().parent().remove();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        Packing List
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="responseMessgae"></div>
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p class="category">Importer</p>
+                                                            <select class="form-control" name="fromStock">
+                                                                <% importers.forEach(function(importer){ %>
+                                                                    <option value="<%= importer.id %>"><%= importer.name %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p class="category">Main Stock</p>
+                                                            <select class="form-control" name="mainStock">
+                                                                <% mainStocks.forEach(function(mainStock){ %>
+                                                                    <option value="<%= mainStock.id %>"><%= mainStock.name %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Officer Responsible:</td>
+                                                                    <td><input class="form-control" type="text" name="officerResponsible"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Officer Telephone:</td>
+                                                                    <td><input class="form-control" type="text" name="officerTelephone"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Vehicle No:</td>
+                                                                    <td><input class="form-control" type="text" name="vehicleNo"></td>
+                                                                </tr>
+                                                            </table>
+                                                            <a class="addRow" href="javascript:void(0)">Add Row</a>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Driver Name:</td>
+                                                                    <td><input class="form-control" type="text" name="driverName"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Driver Nic:</td>
+                                                                    <td><input class="form-control" type="text" name="driverNic"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Driver Telephone:</td>
+                                                                    <td><input class="form-control" type="text" name="driverTelephone"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <table id="packingList">
+                                                                <thead>
+                                                                    <th>Model</th>
+                                                                    <th>Primary Number</th>
+                                                                    <th>Secondary Number</th>
+                                                                    <th>Price</th>
+                                                                    <th></th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <select class="form-control" name="model">
+                                                                                <% models.forEach(function(model) { %>
+                                                                                    <option value="<%= model.id %>"><%= model.name %></option>
+                                                                                <% }) %>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td><input class="form-control" type="text" name="primaryNumber" value=""></td>
+                                                                        <td><input class="form-control" type="text" name="secondaryNumber" value=""></td>
+                                                                        <td><input class="form-control" type="text" name="price" value=""></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            Notes:
+                                                            <textarea class="form-control" name="notes" rows="6" cols="60"></textarea>
+                                                            <br>
+                                                            <button class="btn btn-primary" id="submitPackingList">Issue Packing List</button>
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.ajaxSetup({traditional: true});
+        $("#submitPackingList").click(function(){
+            $("#responseMessgae").html("<br><div class='alert alert-info'>Issuing packing list please wait...Do not refresh or close the tab</div>");
+            $.post("/stock/packingList",
+                {
+                    mainStock: $('select[name="mainStock"]').val(),
+                    fromStock: $('select[name="fromStock"]').val(),
+                    model: $('select[name="model"]').map(function(){ return this.value }).get(),
+                    primaryNumber: $('input[name="primaryNumber"]').map(function(){ return this.value }).get(),
+                    secondaryNumber: $('input[name="secondaryNumber"]').map(function(){ return this.value }).get(),
+                    price: $('input[name="price"]').map(function(){ return this.value }).get(),
+                    officerResponsible: $('input[name="officerResponsible"]').val(),
+                    officerTelephone: $('input[name="officerTelephone"]').val(),
+                    vehicleNo: $('input[name="vehicleNo"]').val(),
+                    driverName: $('input[name="driverName"]').val(),
+                    driverNic: $('input[name="driverNic"]').val(),
+                    driverTelephone: $('input[name="driverTelephone"]').val(),
+                    notes: $('textarea[name="notes"]').val()
+                },
+                function(data, status) {
+                    $("#responseMessgae").html(data);
+            });
+        });
+    </script>
+
+</html>

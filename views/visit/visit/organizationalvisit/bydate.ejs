@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">Date : <%= date %></p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Cloud Date</th>
+                                                    <th>Officer</th>
+                                                    <th>Start Meter</th>
+                                                    <th>End Meter</th>
+                                                    <th>Organiation Type</th>
+                                                    <th>Organiation Name</th>
+                                                    <th>Stocks</th>
+                                                    <th>Location</th>
+                                                    <th>Purpose</th>
+                                                    <th>Outcome</th>
+                                                    <th>Contact Person</th>
+                                                    <th>Contact Number</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% organizationalVisits.forEach(function(organizationalVisit) { %>
+                                                        <tr>
+                                                            <td> <%= organizationalVisit.id %> </td>
+                                                            <td> <%= organizationalVisit.date %> </td>
+                                                            <td> <%= organizationalVisit.sys_date %> </td>
+                                                            <td> <%= organizationalVisit.officer %> </td>
+                                                            <td> <%= organizationalVisit.start_meter %> </td>
+                                                            <td> <%= organizationalVisit.end_meter %> </td>
+                                                            <td> <%= organizationalVisit.name %> </td>
+                                                            <td> <%= organizationalVisit.organization_name %> </td>
+                                                            <td><a href="/visit/organizationalvisit/stocks/<%= organizationalVisit.id %>"><%= organizationalVisit.stocks %></a></td>                                                            <td> <%= organizationalVisit.location %> </td>
+                                                            <td> <%= organizationalVisit.purpose %> </td>
+                                                            <td> <%= organizationalVisit.outcome %> </td>
+                                                            <td> <%= organizationalVisit.contact_person %> </td>
+                                                            <td> <%= organizationalVisit.contact_number %> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../../layouts/pro/includes %>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ./layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ./layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <% if(user.accessLevel.sale == 8) { %>
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="header">
+                                            Sales This Month
+                                        </div>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="header">
+                                                        <p class="category">By Region</p>
+                                                    </div>
+                                                    <div id="salesChart" class="ct-chart "></div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="header">
+                                                        <p class="category">By Officer</p>
+                                                    </div>
+                                                    <div id="topOfficersChart" class="ct-chart"></div>
+                                                    <!-- <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">#</th>
+                                                                    <th>Officer</th>
+                                                                    <th>Region</th>
+                                                                    <th>Sales</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for(let i = 0; i < top_officers.length; i++) {%>
+                                                                    <tr>
+                                                                        <td><%= i + 1 %></td>
+                                                                        <td><%= top_officers[i]['name'] %></td>
+                                                                        <td><%= top_officers[i]['region_name'] %></td>
+                                                                        <td><%= top_officers[i]['sales'] %></td>
+                                                                    </tr>
+                                                                <% } %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="header">
+                                                        <p class="category">By Model</p>
+                                                    </div>
+                                                    <!-- <div id="salesByModelsChart" class="ct-chart">
+
+                                                    </div> -->
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">#</th>
+                                                                    <th>Model</th>
+                                                                    <th>Sales</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for(let i = 0; i < by_models.length; i++) {%>
+                                                                    <tr>
+                                                                        <td><%= i + 1 %></td>
+                                                                        <td><%= by_models[i]['name'] %></td>
+                                                                        <td><%= by_models[i]['sales'] %></td>
+                                                                    </tr>
+                                                                <% } %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                <div class="header">
+                                                    <p class="category">By Officer</p>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">#</th>
+                                                                <th>Officer</th>
+                                                                <th>Region</th>
+                                                                <th>Sales</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% for(let i = 0; i < by_officers.length; i++) {%>
+                                                                <tr>
+                                                                    <td><%= i + 1 %></td>
+                                                                    <td><%= by_officers[i]['name'] %></td>
+                                                                    <td><%= by_officers[i]['region_name'] %></td>
+                                                                    <td><%= by_officers[i]['sales'] %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <% } else { %>
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="header">
+                                            Welcome to new Dashboard
+                                        </div>
+                                        <div class="content">
+                                            <p>This page is still under construction. Once this page is comleted, you will be able to see insights about your performance in the company. In the meantime, please use the side bar on the left side of the screen if you are using a computer or click on the menu icon on the top right hand side corner if you are on a mobile device to access your reports. Have a good day!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <% } %>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ./layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ./layouts/pro/includes %>
+    <script type="text/javascript">
+
+        let salesChartData = {
+            labels: [
+                <% for(let i = 0; i < top_regions.length; i++) { %>
+                    "<%= top_regions[i]['name'] %>",
+                <% } %>
+            ],
+            series: [[
+                <% for(let i = 0; i < top_regions.length; i++) { %>
+                    "<%= top_regions[i]['sales'] %>",
+                <% } %>]
+            ]
+        };
+        let salesChartDimensions = {
+                seriesBarDistance: 10,
+                reverseData: true,
+                horizontalBars: true,
+                axisY: {
+                    offset: 70
+                }
+        };
+
+        new Chartist.Bar('#salesChart', salesChartData, salesChartDimensions);
+
+        new Chartist.Bar('#topOfficersChart', {
+            labels: [
+                <% for(let i = 0; i < top_officers.length; i++) { %>
+                    "<%= top_officers[i]['name'] %>",
+                <% } %>
+            ],
+            series: [
+                <% for(let i = 0; i < top_officers.length; i++) { %>
+                    "<%= top_officers[i]['sales'] %>",
+                <% } %>
+            ]
+        }, {
+            distributeSeries: true
+        });
+
+	</script>
+</html>

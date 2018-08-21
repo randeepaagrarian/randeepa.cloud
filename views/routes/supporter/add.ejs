@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <style>
+            table {
+                font-size: 12px;
+                border-collapse: collapse;
+            }
+
+            table, th, td {
+                padding: 5px;
+            }
+        </style>
+    </head>
+
+    <body style="font-family: Arial, Helvetica, sans-serif;">
+        <p>Hello <b><%= user.name %></b> &nbsp; &nbsp; &nbsp; &nbsp; <a href='/'>Dashboard</a> &nbsp; &nbsp; &nbsp; &nbsp; <a href='/signout'>Sign out</a></p>
+        <h2>Add Supporter</h2>
+
+        <p><%= warning_msg %></p>
+
+        <form action="/routes/supporter/add" method="post" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>First Name &nbsp; &nbsp;</td>
+                    <td><input type='text', name='first_name' /></td>
+                </tr>
+                <tr>
+                    <td>Last Name &nbsp; &nbsp;</td>
+                    <td><input type='text', name='last_name' /></td>
+                </tr>
+                <tr>
+                    <td>Telephone No &nbsp; &nbsp;</td>
+                    <td><input type='text', name='telephone_no' /></td>
+                </tr>
+                <tr>
+                    <td>Emergency Contact Name &nbsp; &nbsp;</td>
+                    <td><input type='text', name='emergency_contact_name' /></td>
+                </tr>
+                <tr>
+                    <td>Emergency Contact Relation &nbsp; &nbsp;</td>
+                    <td><input type='text', name='emergency_contact_relation' /></td>
+                </tr>
+                <tr>
+                    <td>Date of Birth &nbsp; &nbsp;</td>
+                    <td><input type='text', placeholder='YYYY-MM-DD', name='dob' /></td>
+                </tr>
+                <tr>
+                    <td>Image &nbsp; &nbsp;</td>
+                    <td><input type='file', name='image' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button>Submit</button></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">Page <%= page %></p>
+                                    </div>
+
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Delivery Document Id</th>
+                                                    <th>Delivery Document Type</th>
+                                                    <th>Date</th>
+                                                    <th>Dealer Name</th>
+                                                    <th>Issuer</th>
+                                                    <th>Notes</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% deliveryNotes.forEach(function(deliveryNote) { %>
+                                                        <tr>
+                                                            <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= deliveryNote.id %>"><%= deliveryNote.id %></a></td>
+                                                            <td><%= deliveryNote.delivery_document_type_name %></td>
+                                                            <td><%= deliveryNote.date %></td>
+                                                            <td><%= deliveryNote.dealer_name %></td>
+                                                            <td><%= deliveryNote.issuer %></td>
+                                                            <td><%= deliveryNote.notes %></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <% if(prev != -1) { %>
+                                                <a href="/stock/allDeliveryDocuments?page=<%= prev %>">< Previous</a>&nbsp;&nbsp;
+                                            <% } %>
+                                            <a href="/stock/allDeliveryDocuments?page=<%= next %>">Next ></a>&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

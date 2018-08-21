@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            th, tr, td {
+                padding: 5px;
+            }
+        </style>
+        <script>
+            $.ajaxSetup({traditional: true});
+            $(document).ready(function(){
+                $(".addRow").click(function(){
+                    $("#transferNote").append('<tr><td id="model"></td><td><input class="form-control" type="text" onkeyup="getSecondaryNumberModel(this.value) " name="primaryNumber" value=""></td><td id="secondary_number"></td><td><input class="form-control" type="text" name="price" value=""></td><td></td><td><a href="javascript:void(0);" class="remRow">Remove</a></td></tr>');
+                });
+                $("#transferNote").on('click','.remRow',function(){
+                    $(this).parent().parent().remove();
+                });
+                $(document).on('keyup', 'input[name="primaryNumber"]', function () {
+                    let element = this;
+                    $.post("/stock/getSecondaryIdModelName", {
+                        primaryNumber: $(this).val()
+                    }, function(data, status) {
+                        let response = $.parseJSON(data);
+                        $(element).parent().parent().find('#model').html(response.modelName);
+                        $(element).parent().parent().find('#secondary_number').html(response.secondaryId);
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        Transfer Note
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="responseMessgae"></div>
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p class="category">From </p>
+                                                            <select class="form-control" name="fromDealerOrShowroom">
+                                                                <% dealersAndShowrooms.forEach(function(dealerAndShowroom){ %>
+                                                                    <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p class="category">To</p>
+                                                            <select class="form-control" name="toDealerOrShowroom">
+                                                                <% dealersAndShowrooms.forEach(function(dealerAndShowroom){ %>
+                                                                    <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                                <% }) %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Officer Responsible:</td>
+                                                                    <td><input class="form-control" type="text" name="officerResponsible"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Officer Telephone:</td>
+                                                                    <td><input class="form-control" type="text" name="officerTelephone"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Vehicle No:</td>
+                                                                    <td><input class="form-control" type="text" name="vehicleNo"></td>
+                                                                </tr>
+                                                            </table>
+                                                            <a class="addRow" href="javascript:void(0)">Add Row</a>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Driver Name:</td>
+                                                                    <td><input class="form-control" type="text" name="driverName"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Driver Nic:</td>
+                                                                    <td><input class="form-control" type="text" name="driverNic"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Driver Telephone:</td>
+                                                                    <td><input class="form-control" type="text" name="driverTelephone"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <table id="transferNote">
+                                                                <thead>
+                                                                    <th>Model</th>
+                                                                    <th>Primary Number</th>
+                                                                    <th>Secondary Number</th>
+                                                                    <th>Price</th>
+                                                                    <th></th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td id="model"></td>
+                                                                        <td><input class="form-control" type="text" name="primaryNumber" value=""></td>
+                                                                        <td id="secondary_number"></td>
+                                                                        <td><input class="form-control" type="text" name="price" value=""></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            Notes:
+                                                            <textarea class="form-control" name="notes" rows="6" cols="60"></textarea>
+                                                            <br>
+                                                            <button class="btn btn-primary" id="submitTransferNote">Issue Transfer Note</button>
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.ajaxSetup({traditional: true});
+        $("#submitTransferNote").click(function(){
+            $("#responseMessgae").html("<br><div class='alert alert-info'>Issuing transfer note please wait...Do not refresh or close the tab</div>");
+            $.post("/stock/transferNote",
+                {
+                    fromDealerOrShowroom: $('select[name="fromDealerOrShowroom"]').val(),
+                    toDealerOrShowroom: $('select[name="toDealerOrShowroom"]').val(),
+                    primaryNumber: $('input[name="primaryNumber"]').map(function(){ return this.value }).get(),
+                    price: $('input[name="price"]').map(function(){ return this.value }).get(),
+                    officerResponsible: $('input[name="officerResponsible"]').val(),
+                    officerTelephone: $('input[name="officerTelephone"]').val(),
+                    vehicleNo: $('input[name="vehicleNo"]').val(),
+                    driverName: $('input[name="driverName"]').val(),
+                    driverNic: $('input[name="driverNic"]').val(),
+                    driverTelephone: $('input[name="driverTelephone"]').val(),
+                    notes: $('textarea[name="notes"]').val()
+                },
+                function(data, status) {
+                    $("#responseMessgae").html(data);
+            });
+        });
+    </script>
+
+</html>

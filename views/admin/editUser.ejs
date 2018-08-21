@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <table>
+                                            <tr>
+                                                <td><img src="<%= userDetails[0]['profile_pic'] %>" style='width: 80px;'></td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                        <form method="POST" action="/admin/editUserProfilePicture?userId=<%= userId %>" enctype="multipart/form-data">
+                                            <table>
+                                                <tr>
+                                                    <tr>
+                                                        <td>Profile Picture &nbsp; &nbsp;</td>
+                                                        <td><input class="form-control" type='file' name='profile_pic' /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td><button class="btn btn-primary">Change Picture</button></td>
+                                                    </tr>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                        <form method="POST" action="/admin/editUser?userId=<%= userId %>">
+                                            <table>
+
+                                                <tr>
+                                                    <td>Username &nbsp; &nbsp;</td>
+                                                    <td><%= userDetails[0]['username'] %></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email &nbsp; &nbsp;</td>
+                                                    <td><%= userDetails[0]['email'] %></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Active &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="active">
+                                                            <% if(userDetails[0]['active'] == 1) { %>
+                                                                <option value='1' selected>Active</option>
+                                                                <option value='0'>Suspended</option>
+                                                            <% } else { %>
+                                                                <option value='1'>Active</option>
+                                                                <option value='0' selected>Suspended</option>
+                                                            <% } %>
+
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Name &nbsp; &nbsp;</td>
+                                                    <td><%= userDetails[0]['name'] %></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Region &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="region">
+                                                            <% regions.forEach(function(region){ %>
+                                                                <% if(region.id == userDetails[0]['region']){ %>
+                                                                    <option value="<%= region.id %>" selected><%= region.name %></option>
+                                                                <% } else { %>
+                                                                    <option value="<%= region.id %>"><%= region.name %></option>
+                                                                <% } %>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Territory &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="territory">
+                                                            <% territories.forEach(function(territory){ %>
+                                                                <% if(territory.id == userDetails[0]['territory']){ %>
+                                                                    <option value="<%= territory.id %>" selected><%= territory.name %></option>
+                                                                <% } else { %>
+                                                                    <option value="<%= territory.id %>"><%= territory.name %></option>
+                                                                <% } %>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Birthday &nbsp; &nbsp;</td>
+                                                    <td><%= userDetails[0]['birthday'] %></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Designation &nbsp; &nbsp;</td>
+                                                    <td><%= userDetails[0]['designation'] %></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Profile &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="profile">
+                                                            <% if(userDetails[0]['profile'] == 1){ %>
+                                                                <option value="1" selected>Yes</option>
+                                                                <option value="0">No</option>
+                                                            <% } else { %>
+                                                                <option value="1">Yes</option>
+                                                                <option value="0" selected>No</option>
+                                                            <% } %>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Submit</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

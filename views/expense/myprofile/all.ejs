@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div>
+                                            This Month Expense Claim
+                                            <h3 style="margin: 0">LKR. <%= monthlyTotal[0]['total'] %></h4>
+                                        </div>
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Cloud Date</th>
+                                                    <th>Description</th>
+                                                    <th>Expense Amount</th>
+                                                    <th>Bills</th>
+                                                    <th>Bills Received</th>
+                                                    <th>Bills Paid</th>
+                                                    <th>Amount Paid</th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    <% expenses.forEach(function(expense) { %>
+                                                        <% if(expense.expense_amount == expense.amount_paid) { %>
+                                                            <tr class="success">
+                                                                <td> <%= expense.id %> </td>
+                                                                <td> <%= expense.date %> </td>
+                                                                <td> <%= expense.sys_date %> </td>
+                                                                <td> <%= expense.description %> </td>
+                                                                <td> <%= expense.expense_amount %> </td>
+                                                                <td> <%= expense.bills %> </td>
+                                                                <td> <%= expense.bills_received %> </td>
+                                                                <td> <%= expense.bills_paid %> </td>
+                                                                <td> <%= expense.amount_paid %> </td>
+                                                                <td>
+                                                                    <a href="/expense/myprofile/expenseItems?expenseId=<%= expense.id %>">Open</a>
+                                                                </td>
+                                                            </tr>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td> <%= expense.id %> </td>
+                                                                <td> <%= expense.date %> </td>
+                                                                <td> <%= expense.sys_date %> </td>
+                                                                <td> <%= expense.description %> </td>
+                                                                <td> <%= expense.expense_amount %> </td>
+                                                                <td> <%= expense.bills %> </td>
+                                                                <% if(expense.bills != expense.bills_received) { %>
+                                                                    <td> <font color='red'><%= expense.bills_received %></font> </td>
+                                                                <% } else { %>
+                                                                    <td><%= expense.bills_received %></td>
+                                                                <% } %>
+                                                                <td> <%= expense.bills_paid %> </td>
+                                                                <td> <%= expense.amount_paid %> </td>
+                                                                <td>
+                                                                    <a href="/expense/myprofile/expenseItems?expenseId=<%= expense.id %>">Open</a>
+                                                                </td>
+                                                            </tr>
+                                                        <% } %>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

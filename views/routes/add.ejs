@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <form method="POST" action="/routes/add" enctype="multipart/form-data">
+                                            <table>
+                                                <tr>
+                                                    <td>Driver &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="driver_id">
+                                                            <% drivers.forEach(function(driver){ %>
+                                                                <option value="<%= driver.id %>"><%= driver.first_name %> <%= driver.last_name %></option>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Supporter &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="supporter_id">
+                                                            <% supporters.forEach(function(supporter){ %>
+                                                                <option value="<%= supporter.id %>"><%= supporter.first_name %> <%= supporter.last_name %></option>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vehicle Number &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='vehicle_number' placeholder='LM5699' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Route Pass ID &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='route_pass_id' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Source Document(s) &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='source_documents' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Route Start Time &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='route_start_time' placeholder='YYYY-MM-DD HH:MM:SS' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Route End Time &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='route_end_time' placeholder='YYYY-MM-DD HH:MM:SS' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Start Meter &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='start_meter' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>End Meter &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='end_meter' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Start Location &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='start_location' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>End Location &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text', name='end_location' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Document Front &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='file', name='document_front' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Submit</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
