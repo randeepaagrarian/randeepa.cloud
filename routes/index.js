@@ -10,8 +10,8 @@ const MDate = require('../functions/mdate')
 const Auth = require('../functions/auth')
 
 const User = require('../models/user/user')
+const Region = require('../models/region/region')
 const ReportUser = require('../models/dashboard/report_user')
-const ReportRegion = require('../models/dashboard/report_region')
 const Driver = require('../models/routes/driver')
 const Supporter = require('../models/routes/supporter')
 const Sale = require('../models/dashboard/sale')
@@ -49,7 +49,7 @@ router.get('/', Auth.signedIn, function(req, res) {
 router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
 	async.series([
 		function(callback) {
-			ReportRegion.all(callback)
+			Region.getAllRegions(callback)
 		}, function(callback) {
 			ReportUser.all(callback)
 		}
