@@ -60,3 +60,18 @@ Sales.byOfficerMonth = function(year, month, callback) {
         })
     })
 }
+
+Sales.lastYear = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT YEAR(sys_date) as ysysdate, MONTH(sys_date) as msysdate, DATE_FORMAT(sys_date, "%Y-%c") as ymonth, DATE_FORMAT(sys_date, "%Y-%b") as dismonth, COUNT(*) as sales FROM sale GROUP BY ymonth, msysdate, ysysdate, dismonth ORDER BY ysysdate DESC, msysdate DESC LIMIT 12',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}

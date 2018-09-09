@@ -29,8 +29,11 @@ router.get('/', Auth.signedIn, function(req, res) {
 			Sale.byModelMonth(new Date().getFullYear(), new Date().getMonth() + 1, callback)
 		}, function(callback) {
 			Sale.byOfficerMonth(new Date().getFullYear(), new Date().getMonth() + 1, callback)
+		}, function(callback) {
+			Sale.lastYear(callback)
 		}
 	], function(err, data) {
+		console.log(data[4])
 		res.render('dashboard_pro', {
 			title: 'Dashboard',
 			navbar: 'Dashboard',
@@ -39,6 +42,7 @@ router.get('/', Auth.signedIn, function(req, res) {
 			top_officers: data[1],
 			by_models: data[2],
 			by_officers: data[3],
+			last_year: data[4],
 			today: MDate.getDate('/')
 		})
 	})
