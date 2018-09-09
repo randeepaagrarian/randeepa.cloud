@@ -1,4 +1,4 @@
-const MySql = require('../comms/mySqlCon2')
+const MySql = require('../comms/mySqlCon')
 const MDate = require('../../functions/mdate')
 const Admin = module.exports = {}
 

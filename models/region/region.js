@@ -1,4 +1,4 @@
-const MySql = require('../comms/mySqlCon2')
+const MySql = require('../comms/mySqlCon')
 const Region = module.exports = {}
 
 Region.getAllRegions = function(callback) {

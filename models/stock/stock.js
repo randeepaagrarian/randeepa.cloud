@@ -1,4 +1,4 @@
-const MySql = require('../comms/mySqlCon2')
+const MySql = require('../comms/mySqlCon')
 const Stock = module.exports = {}
 
 Stock.newPackingList = function(deliveryDocument, machines, callback) {
