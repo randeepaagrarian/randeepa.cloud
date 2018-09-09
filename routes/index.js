@@ -11,7 +11,6 @@ const Auth = require('../functions/auth')
 
 const User = require('../models/user/user')
 const Region = require('../models/region/region')
-const ReportUser = require('../models/dashboard/report_user')
 const Driver = require('../models/routes/driver')
 const Supporter = require('../models/routes/supporter')
 const Sale = require('../models/dashboard/sale')
@@ -51,7 +50,7 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 		function(callback) {
 			Region.getAllRegions(callback)
 		}, function(callback) {
-			ReportUser.all(callback)
+			User.getActiveUsers(callback)
 		}
 	], function(err, data) {
 		res.render('sales', {
@@ -93,7 +92,7 @@ router.get('/vehicle-routes', Auth.signedIn, Auth.validRouteDashboardUser, funct
 router.get('/visits', Auth.signedIn, Auth.validVisitDashboardUser, function(req, res) {
 	async.series([
 		function(callback) {
-			ReportUser.all(callback)
+			User.getActiveUsers(callback)
 		}
 	], function(err, data) {
 		res.render('visits', {

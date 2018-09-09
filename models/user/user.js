@@ -20,6 +20,21 @@ User.getUserByUsername = function(username, callback) {
     })
 }
 
+User.getActiveUsers = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT username as id, name, active FROM user WHERE active = 1', function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
 User.getUserById = function(id, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         connection.release()
