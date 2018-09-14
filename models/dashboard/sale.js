@@ -66,12 +66,102 @@ Sales.lastYear = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT YEAR(sys_date) as ysysdate, MONTH(sys_date) as msysdate, DATE_FORMAT(sys_date, "%Y-%c") as ymonth, DATE_FORMAT(sys_date, "%Y-%b") as dismonth, COUNT(*) as sales FROM sale GROUP BY ymonth, msysdate, ysysdate, dismonth ORDER BY ysysdate DESC, msysdate DESC LIMIT 12',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
             }
-            callback(err, rows)
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearCentral = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 20) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearRajarata = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 21) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearNorthWest = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 22) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearRuhuna = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 23) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearIndustrial = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 24) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
+        })
+    })
+}
+
+Sales.lastYearNorth = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 25) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows[2])
         })
     })
 }

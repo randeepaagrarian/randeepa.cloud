@@ -31,9 +31,20 @@ router.get('/', Auth.signedIn, function(req, res) {
 			Sale.byOfficerMonth(new Date().getFullYear(), new Date().getMonth() + 1, callback)
 		}, function(callback) {
 			Sale.lastYear(callback)
+		}, function(callback) {
+			Sale.lastYearCentral(callback)
+		}, function(callback) {
+			Sale.lastYearRajarata(callback)
+		}, function(callback) {
+			Sale.lastYearNorthWest(callback)
+		}, function(callback) {
+			Sale.lastYearRuhuna(callback)
+		}, function(callback) {
+			Sale.lastYearIndustrial(callback)
+		}, function(callback) {
+			Sale.lastYearNorth(callback)
 		}
 	], function(err, data) {
-		console.log(data[4])
 		res.render('dashboard_pro', {
 			title: 'Dashboard',
 			navbar: 'Dashboard',
@@ -43,6 +54,12 @@ router.get('/', Auth.signedIn, function(req, res) {
 			by_models: data[2],
 			by_officers: data[3],
 			last_year: data[4],
+			last_year_central: data[5],
+			last_year_rajarata: data[6],
+			last_year_north_west: data[7],
+			last_year_ruhuna: data[8],
+			last_year_industrial: data[9],
+			last_year_north: data[10],
 			today: MDate.getDate('/')
 		})
 	})

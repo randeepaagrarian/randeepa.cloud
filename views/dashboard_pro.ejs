@@ -164,32 +164,112 @@
             type: 'line',
             data: {
                 labels: [
-                    <% for(let i = last_year.length - 1; i >= 0; i--) { %>
-                        "<%= last_year[i]['dismonth'] %>",
+                    <% for(let i = 0; i < last_year.length; i++) { %>
+                        "<%= last_year[i]['year'] %>-<%= last_year[i]['month'] %>",
                     <% } %>
                 ],
                 datasets: [{
                     label: 'Sales',
                     data: [
-                        <% for(let i = last_year.length - 1; i >= 0; i--) { %>
+                        <% for(let i = 0; i < last_year.length; i++) { %>
                             "<%= last_year[i]['sales'] %>",
                         <% } %>
                     ],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(153, 255, 153, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(153, 255, 153, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Central',
+                    data: [
+                        <% for(let i = 0; i < last_year_central.length; i++) { %>
+                            "<%= last_year_central[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(102, 163, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(102, 163, 255,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Rajarata',
+                    data: [
+                        <% for(let i = 0; i < last_year_rajarata.length; i++) { %>
+                            "<%= last_year_rajarata[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 212, 128, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 212, 128,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'North-West',
+                    data: [
+                        <% for(let i = 0; i < last_year_north_west.length; i++) { %>
+                            "<%= last_year_north_west[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(51, 255, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(51, 255, 255,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Ruhuna',
+                    data: [
+                        <% for(let i = 0; i < last_year_ruhuna.length; i++) { %>
+                            "<%= last_year_ruhuna[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 153, 153, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 153, 153,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Industrial',
+                    data: [
+                        <% for(let i = 0; i < last_year_industrial.length; i++) { %>
+                            "<%= last_year_industrial[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(173, 173, 133, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(173, 173, 133,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'North',
+                    data: [
+                        <% for(let i = 0; i < last_year_north.length; i++) { %>
+                            "<%= last_year_north[i]['sales'] %>",
+                        <% } %>
+                    ],
+                    backgroundColor: [
+                        'rgba(204, 204, 0, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(204, 204, 0,1)'
                     ],
                     borderWidth: 1
                 }]

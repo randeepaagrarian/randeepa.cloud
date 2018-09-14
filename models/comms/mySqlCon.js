@@ -5,6 +5,7 @@ const MySql = module.exports = {}
 MySql.pool = mysql.createPool({
     host            :   '124.43.17.89',
     user            :   'raplapp',
+    multipleStatements: true,
     password        :   'raplapp@123',
     timezone        :   'UTC',
     database        :   'global_sys_copy',
