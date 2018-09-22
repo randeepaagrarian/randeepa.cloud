@@ -122,15 +122,35 @@ router.get('/organizationalvisit/bydate', function(req, res) {
 })
 
 router.get('/organizationalvisit/all', function(req, res) {
+
+    const pageNumber = req.query.page
+
+    if(isNaN(pageNumber) || pageNumber == 0) {
+        res.status(200).send('URL error')
+        return
+    }
+
+    let prev, next
+
+    if(pageNumber == 1) {
+        prev = -1
+        next = 2
+    } else {
+        prev = pageNumber - 1
+        next = eval(pageNumber) + 1
+    }
+
     async.series([
         function(callback) {
-            Visit.organizationalVisits(callback)
+            Visit.organizationalVisits(pageNumber, callback)
         }
     ], function(err, data) {
         res.render('visit/visit/organizationalvisit/all', {
             title: 'All Organizational Visits',
             navbar: 'Visits',
             user: req.user,
+            prev: prev,
+            next: next,
             organizationalVisits: data[0]
         })
     })

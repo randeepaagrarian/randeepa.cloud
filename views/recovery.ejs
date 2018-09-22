@@ -25,32 +25,12 @@
 
         <div class="panel panel-default" >
             <div class="panel-heading">
-                <div class="panel-title text-center">Sign in to Randeepa Cloud</div>
+                <div class="panel-title text-center">Account Recovery</div>
             </div>
 
             <div class="panel-body" >
 
-                <form name="form" id="form" class="form-horizontal" action="/signin" method="POST">
-
-						<% if (error != '') { %>
-							<div class="alert alert-warning">
-								<%= error %>
-							</div>
-						<% } else if (success_msg != '') { %>
-							<div class="alert alert-success">
-								<%= success_msg %>
-							</div>
-						<% } else {%>
-							<div class="alert alert-info">
-								Sign in below to access the cloud
-							</div>
-						<% } %>
-
-                        <% birthDays.forEach(function(birthDay) { %>
-                            <div class="alert alert-success">
-                                Hey, <%= birthDay.name %>! Happy <%= birthDay.age %> birthday wishes from Randeepa Family
-                            </div>
-                        <% }) %>
+                <form name="form" id="form" class="form-horizontal" action="/recovery" method="POST">
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -58,23 +38,21 @@
                     </div>
 
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-inbox	"></i></span>
+                        <input id="password" type="text" class="form-control" name="email" placeholder="Email">
                     </div>
 
                     <div class="form-group">
                         <!-- Button -->
                         <div class="col-sm-12 controls">
-                            <button type="submit" href="#" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-log-in"></i> Sign in</button>
+                            <button type="submit" href="#" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-log-in"></i> Recover</button>
                         </div>
                     </div>
 
                     <div class="form-group" style="padding: 0; margin: 0;">
                         <!-- Button -->
                         <div class="col-sm-12 controls">
-                            <a href="/recovery" style="text-align: right; float: right;">Account Recovery</a>
-                            <a href="javascript:void(0)" style="text-align: right; float: right;">&nbsp;&nbsp;&bull;&nbsp;&nbsp;</a>
-                            <a href="/privacy-policy" style="text-align: right; float: right;">Privacy Policy</a>
+                            <a href="/signin" style="text-align: right; float: right;">Sign in</a>
                         </div>
                     </div>
 

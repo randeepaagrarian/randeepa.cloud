@@ -66,6 +66,10 @@ router.get('/', Auth.signedIn, function(req, res) {
 
 })
 
+router.get('/recovery', function(req, res) {
+	res.render('recovery')
+})
+
 router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
 	async.series([
 		function(callback) {
