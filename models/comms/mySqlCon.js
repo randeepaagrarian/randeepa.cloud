@@ -8,7 +8,7 @@ MySql.pool = mysql.createPool({
     multipleStatements: true,
     password        :   'raplapp@123',
     timezone        :   'UTC',
-    database        :   'global_sys_copy',
+    database        :   'global_sys',
     connectionLimit :   15,
     queueLimit      :   30,
     acquireTimeout  :   1000000
