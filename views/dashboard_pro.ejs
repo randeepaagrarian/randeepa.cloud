@@ -121,10 +121,35 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="header">
-                                            Welcome to new Dashboard
+                                            My Day
                                         </div>
                                         <div class="content">
-                                            <p>This page is still under construction. Once this page is comleted, you will be able to see insights about your performance in the company. In the meantime, please use the side bar on the left side of the screen if you are using a computer or click on the menu icon on the top right hand side corner if you are on a mobile device to access your reports. Have a good day!</p>
+                                            <% myProfileToday[0].forEach(function(profileEntry) { %>
+
+                                                <% if(profileEntry.e_type == 'Banking') { %>
+                                                    <p style="  margin: 0;"><font color='green'><%= profileEntry.e_type %></font> reported on <font color='blue'><%= profileEntry.sys_date %></font> from <font color='#1b9bd6'><%= profileEntry.bank %></font></p>
+                                                    <p style="  margin: 0; color: #7a6456;"><%= profileEntry.branch %> &mdash; <%= profileEntry.amount %> &mdash; <%= profileEntry.chassis_no %></p>
+                                                    <hr style="margin: 0; border-bottom: 1px #ccc;">
+                                                <% } else if(profileEntry.e_type == 'Expense Claim') { %>
+                                                    <p style="  margin: 0;"><font color='green'><%= profileEntry.e_type %></font> reported on <font color='blue'><%= profileEntry.sys_date %></font> visited <font color='#1b9bd6'><%= profileEntry.d_organization_name %></font></p>
+                                                    <p style="  margin: 0; color: #7a6456;"><%= profileEntry.start_meter %> &mdash; <%= profileEntry.end_meter %></p>
+                                                    <hr style="margin: 0; border-bottom: 1px #ccc;">
+                                                <% } else if(profileEntry.e_type == 'Field Visit') { %>
+                                                    <p style="  margin: 0;"><font color='green'><%= profileEntry.e_type %></font> reported on <font color='blue'><%= profileEntry.sys_date %></font> visited <font color='#1b9bd6'><%= profileEntry.location %></font></p>
+                                                    <p style="  margin: 0; color: #7a6456;"><%= profileEntry.start_meter %> &mdash; <%= profileEntry.end_meter %></p>
+                                                    <hr style="margin: 0; border-bottom: 1px #ccc;">
+                                                <% } else if(profileEntry.e_type == 'Organizational Visit') { %>
+                                                    <p style="  margin: 0;"><font color='green'><%= profileEntry.e_type %></font> reported on <font color='blue'><%= profileEntry.sys_date %></font> visited <font color='#1b9bd6'><% if(bf_organization_name) { %><%= profileEntry.bf_organization_name %><% } else if(d_organization_name) {%><%= profileEntry.d_organization_name %><% } %></font></p>
+                                                    <p style="  margin: 0; color: #7a6456;"><%= profileEntry.start_meter %> &mdash; <%= profileEntry.end_meter %></p>
+                                                    <hr style="margin: 0; border-bottom: 1px #ccc;">
+                                                <% } else if(profileEntry.e_type == 'Sale') { %>
+                                                    <p style="  margin: 0;"><font color='green'><%= profileEntry.e_type %></font> reported on <font color='blue'><%= profileEntry.sys_date %></font> from <font color='#1b9bd6'><%= profileEntry.d_organization_name %></font></p>
+                                                    <p style="  margin: 0; color: #7a6456;"><%= profileEntry.model_name %> &mdash; <%= profileEntry.chassis_no %></p>
+                                                    <hr style="margin: 0; border-bottom: 1px #ccc;">
+                                                <% } %>
+
+                                                <%=  %>
+                                            <% }) %>
                                         </div>
                                     </div>
                                 </div>
@@ -144,6 +169,8 @@
     </body>
     <% include ./layouts/pro/includes %>
     <script type="text/javascript">
+
+    <% if(user.accessLevel.sale == 8) { %>
 
         new Chartist.Bar('#topOfficersChart', {
             labels: [
@@ -345,6 +372,8 @@
             $('#salesByModel').DataTable();
             $('#salesByOfficer').DataTable();
         } );
+
+        <% } %>
 
 	</script>
 </html>
