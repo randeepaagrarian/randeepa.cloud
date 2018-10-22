@@ -73,7 +73,6 @@ router.get('/', Auth.signedIn, function(req, res) {
 				ProfileMyProfile.profile(req.user.username, MDate.getDate('-'), MDate.getDate('-'), callback)
 			}
 		], function(err, data) {
-			console.log(data[0])
 			res.render('dashboard_pro', {
 				title: 'Dashboard',
 				navbar: 'Dashboard',

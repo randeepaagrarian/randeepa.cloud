@@ -7,7 +7,7 @@ ProfileMyProfile.profile = function(username, start_date, end_date, callback) {
             return callback(pool_err, null)
         }
 
-        connection.query('CALL OfficerProfile(?, ?, ?);', [username, start_date, end_date], function(err, rows, fields) {
+        connection.query('CALL OfficerActivityLog(?, ?, ?);', [username, start_date, end_date], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
