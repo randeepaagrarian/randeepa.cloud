@@ -97,7 +97,22 @@ Admin.userDetails = function(userId, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('select username, email, active, name, region, territory, profile_pic, birthday, designation, profile from user where id = ?', userId, function(err, rows, fields) {
+        connection.query('select username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile, region.name as region_name, territory.name as territory_name from user left join region on user.region = region.id left join territory on user.territory = territory.id where user.id = ?', userId, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Admin.userDetailsByUsername = function(username, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('select username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile, region.name as region_name, territory.name as territory_name from user left join region on user.region = region.id left join territory on user.territory = territory.id where user.username = ?', username, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

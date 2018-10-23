@@ -17,6 +17,8 @@ const Sale = require('../models/dashboard/sale')
 const Stock = require('../models/stock/stock')
 const ProfileMyProfile = require('../models/profile/myprofile')
 
+const Admin = require('../models/admin/admin')
+
 const Default = require('../models/default')
 
 router.get('/', Auth.signedIn, function(req, res) {
@@ -86,6 +88,21 @@ router.get('/', Auth.signedIn, function(req, res) {
 
 router.get('/recovery', function(req, res) {
 	res.render('recovery')
+})
+
+router.get('/profile', Auth.signedIn, Auth.validProfileUser, function(req, res) {
+	async.series([
+        function(callback) {
+            Admin.allUsers(callback)
+        }
+    ], function(err, data) {
+        res.render('profile', {
+            title: 'Profile',
+            navbar: 'Profile',
+            users: data[0],
+            user: req.user
+        })
+    })
 })
 
 router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
