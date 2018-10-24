@@ -93,7 +93,8 @@ router.post('/addUser', multipart, function(req, res) {
         profile_pic: 'https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png',
         birthday: req.body.birthday,
         designation: req.body.designation,
-        profile: req.body.profile
+        profile: req.body.profile,
+        change_password: 1
     }
 
     async.series([
