@@ -40,8 +40,6 @@ Driver.monthlyRoutes = function(driver_id, year, month, callback) {
     const firstDate = year + '-' + month + '-01 00:00:00'
     const secondDate = year + '-' + month + '-' + daysInMonth + ' 23:59:59'
 
-    console.log(daysInMonth)
-
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
