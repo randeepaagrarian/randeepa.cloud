@@ -60,6 +60,21 @@ User.getUserById = function(id, callback) {
     })
 }
 
+User.changePassword = function(username, datetime, password, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE user SET password = ?, change_password = 0, last_password_change = ? WHERE username = ?', [password, datetime, username], function(err, result) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, true)
+        })
+    })
+}
+
 User.getAccessLayers = function(id, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         connection.release()

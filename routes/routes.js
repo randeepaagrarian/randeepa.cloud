@@ -319,8 +319,6 @@ router.post('/invoice/issue', function(req, res) {
         }
     ], function(err, details) {
 
-        console.log(req.body)
-
         var contents = []
 
         if(req.body.invoice_routes.constructor === Array) {
@@ -330,8 +328,6 @@ router.post('/invoice/issue', function(req, res) {
         } else {
             contents.push([details[0].insertId, req.body.invoice_routes, req.body[req.body.invoice_routes]])
         }
-
-        console.log(contents)
 
         async.series([
             function(callback) {

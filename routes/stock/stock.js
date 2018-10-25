@@ -365,7 +365,6 @@ router.get('/stock', function(req, res) {
 })
 
 router.get('/viewStock', function(req, res) {
-    console.log(req.originalUrl)
     async.series([
         function(callback) {
             Stock.getStock(req.query.stockLocation, callback)
@@ -485,7 +484,6 @@ router.post('/dealer/add', function(req, res) {
         }
     ], function(err, data) {
         if(err) {
-            console.log(err)
             req.flash('warning_msg', 'Error occurred while adding dealer.')
             res.redirect('/stock/dealer/add')
         } else {

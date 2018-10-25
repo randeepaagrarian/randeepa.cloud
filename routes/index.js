@@ -227,6 +227,77 @@ router.get('/signin', function(req, res) {
 	}
 })
 
+router.get('/changePassword', Auth.signedIn, function(req, res) {
+	res.render('changePassword', {
+		title: 'Change Password',
+		user: req.user
+	})
+})
+
+router.post('/changePassword', Auth.signedIn, function(req, res) {
+	if(req.body.password != req.body.confirm_password) {
+		req.flash('error', 'Your passwords do not match')
+		res.redirect('/changePassword')
+		return
+	}
+
+	if(req.body.password.length < 8) {
+		req.flash('error', 'Your password must contain at least 8 characters')
+		res.redirect('/changePassword')
+		return
+	}
+
+	if(req.body.password.search(/\d/) == -1) {
+		req.flash('error', 'Your password must contain at least 1 digit')
+		res.redirect('/changePassword')
+		return
+	}
+
+	if(req.body.password.search(/[a-zA-Z]/) == -1) {
+		req.flash('error', 'Your password cannot be all numbers')
+		res.redirect('/changePassword')
+		return
+	}
+
+	if(req.body.password.indexOf(req.user.username) != -1) {
+		req.flash('error', 'Your password cannot contain your username')
+		res.redirect('/changePassword')
+		return
+	}
+
+	User.getUserByUsername(req.user.username, function(err, user) {
+		if(err) {
+			req.flash('error', 'System Error')
+			res.redirect('/signout')
+			return
+		}
+
+		if(bcrypt.compareSync(req.body.password, user.password)) {
+			req.flash('error', 'Your password cannot be the current password')
+			res.redirect('/changePassword')
+			return
+		}
+
+		const salt = bcrypt.genSaltSync(10)
+	    const hash = bcrypt.hashSync(req.body.password, salt)
+
+		User.changePassword(req.user.username, MDate.getDateTime(), hash, function(err, data) {
+			if(err) {
+				req.flash('error', 'System Error')
+				res.redirect('/signout')
+				return
+			}
+
+			req.logout()
+
+			req.flash('success_msg', 'Your password updated. Please sign in below')
+			res.redirect('/signin')
+		})
+	})
+
+
+})
+
 router.get('/signout', function(req, res) {
 	req.logout()
 

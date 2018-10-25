@@ -14,6 +14,8 @@ const Region = require('../../models/region/region')
 
 const Validator = require('../../functions/validator')
 
+const args = require('yargs').argv;
+
 const multipart = multiparty()
 
 router.use(Auth.signedIn, Auth.validAdminUser, function(req, res, next) {
@@ -93,7 +95,8 @@ router.post('/addUser', multipart, function(req, res) {
         profile_pic: 'https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png',
         birthday: req.body.birthday,
         designation: req.body.designation,
-        profile: req.body.profile
+        profile: req.body.profile,
+        change_password: 1
     }
 
     async.series([
@@ -123,7 +126,7 @@ router.post('/addUser', multipart, function(req, res) {
                     secure: true,
                     auth: {
                         user: 'admin@randeepa.cloud',
-                        pass: 'RAPLSYS2013'
+                        pass: args.adminEmailPassword
                     }
                 })
 
@@ -205,7 +208,6 @@ router.post('/setAccess', function(req, res) {
                 }
             ], function(err, data) {
                 if(err) {
-                    console.log(err)
                     res.send("<br><div class='alert alert-warning'>Error</div>")
                 } else {
                     res.send("<br><div class='alert alert-success'>Access successfully set</div>")
@@ -213,7 +215,6 @@ router.post('/setAccess', function(req, res) {
             })
         }
     })
-    console.log(req.body)
 })
 
 router.get('/editUser', function(req, res) {

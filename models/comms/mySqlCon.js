@@ -2,14 +2,13 @@ const mysql = require('mysql')
 
 const MySql = module.exports = {}
 
+const args = require('yargs').argv;
+
 MySql.pool = mysql.createPool({
-    host            :   '124.43.17.89',
-    user            :   'raplapp',
+    host            :   args.dbIP,
+    user            :   args.dbUser,
     multipleStatements: true,
-    password        :   'raplapp@123',
+    password        :   args.dbPass,
     timezone        :   'UTC',
-    database        :   'global_sys',
-    connectionLimit :   15,
-    queueLimit      :   30,
-    acquireTimeout  :   1000000
+    database        :   args.dbName
 })

@@ -3,7 +3,11 @@ const Auth = module.exports = {}
 
 Auth.signedIn = function(req, res, next) {
     if(req.user) {
-        next()
+        if(req.user.change_password == 1 && req.url != '/changePassword') {
+            res.redirect('/changePassword')
+        } else {
+            next()
+        }
     } else {
         req.session.returnTo = req.originalUrl
         res.redirect('/signin')
