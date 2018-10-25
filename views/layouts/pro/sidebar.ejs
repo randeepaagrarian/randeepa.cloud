@@ -37,6 +37,15 @@
                 </a>
             </li>
 
+            <% if(typeof user.accessLevel.profile != 'undefined') { %>
+                <li class="<%= navbar == 'Profile' ? 'active' : '' %>">
+                    <a href="/profile">
+                        <i class="pe-7s-user"></i>
+                        <p>Profile</p>
+                    </a>
+                </li>
+            <% } %>
+
             <% if(typeof user.accessLevel.sale != 'undefined') { %>
                 <li class="<%= navbar == 'Sales' ? 'active' : '' %>">
                     <a href="/sales">

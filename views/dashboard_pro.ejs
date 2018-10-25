@@ -121,10 +121,80 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="header">
-                                            Welcome to new Dashboard
+                                            My Day
                                         </div>
                                         <div class="content">
-                                            <p>This page is still under construction. Once this page is comleted, you will be able to see insights about your performance in the company. In the meantime, please use the side bar on the left side of the screen if you are using a computer or click on the menu icon on the top right hand side corner if you are on a mobile device to access your reports. Have a good day!</p>
+
+                                            <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+
+                                                  <table id="salesByOfficer" style="font-size: 90%;" class="table table-striped display">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Entry Type</th>
+                                                              <th>Id</th>
+                                                              <th>User</th>
+                                                              <th>Date</th>
+                                                              <th>Cloud Date</th>
+                                                              <th>Region</th>
+                                                              <th>Territory</th>
+                                                              <th>Bank</th>
+                                                              <th>Branch</th>
+                                                              <th>Amount</th>
+                                                              <th>Source Document</th>
+                                                              <th>Chassis No</th>
+                                                              <th>Start Meter</th>
+                                                              <th>End Meter</th>
+                                                              <th>Location</th>
+                                                              <th>Model Name</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                         <% myProfileToday[0].forEach(function(profileEntry) { %>
+                                                             <tr>
+                                                                 <td><%= profileEntry.e_type %></td>
+                                                                 <td><%= profileEntry.id %></td>
+                                                                 <td><%= profileEntry.user %></td>
+                                                                 <td><%= profileEntry.date %></td>
+                                                                 <td><%= profileEntry.sys_date %></td>
+                                                                 <td><%= profileEntry.region %></td>
+                                                                 <td><%= profileEntry.territory %></td>
+                                                                 <td><%= profileEntry.bank %></td>
+                                                                 <td><%= profileEntry.branch %></td>
+                                                                 <td><%= profileEntry.amount %></td>
+                                                                 <td><%= profileEntry.source_document %></td>
+                                                                 <td><%= profileEntry.chassis_no %></td>
+                                                                 <td><%= profileEntry.start_meter %></td>
+                                                                 <td><%= profileEntry.end_meter %></td>
+                                                                 <% if(profileEntry.e_type == 'Field Visit') { %>
+                                                                     <td><%= profileEntry.location %></td>
+                                                                 <% } else if(profileEntry.e_type == 'Organizational Visit') { %>
+                                                                     <% if(profileEntry.organization_name) { %>
+                                                                         <td><%= profileEntry.organization_name %></td>
+                                                                     <% } else if (profileEntry.bf_organization_name) { %>
+                                                                         <td><%= profileEntry.bf_organization_name %></td>
+                                                                     <% } else if (profileEntry.d_organization_name) { %>
+                                                                         <td><%= profileEntry.d_organization_name %></td>
+                                                                     <% } else { %>
+                                                                         <td></td>
+                                                                     <% } %>
+                                                                 <% } else if(profileEntry.e_type == 'Sale') { %>
+                                                                     <% if(profileEntry.location) { %>
+                                                                        <td><%= profileEntry.location %></td>
+                                                                     <% } else if (profileEntry.d_organization_name) { %>
+                                                                         <td><%= profileEntry.d_organization_name %></td>
+                                                                     <% } else { %>
+                                                                         <td></td>
+                                                                     <% } %>
+                                                                 <% } else { %>
+                                                                     <td></td>
+                                                                 <% } %>
+                                                                 <td><%= profileEntry.model_name %></td>
+                                                             </tr>
+                                                         <% }) %>
+                                                      </tbody>
+                                                  </table>
+
+                                              </div>
                                         </div>
                                     </div>
                                 </div>
@@ -144,6 +214,8 @@
     </body>
     <% include ./layouts/pro/includes %>
     <script type="text/javascript">
+
+    <% if(user.accessLevel.sale == 8) { %>
 
         new Chartist.Bar('#topOfficersChart', {
             labels: [
@@ -345,6 +417,8 @@
             $('#salesByModel').DataTable();
             $('#salesByOfficer').DataTable();
         } );
+
+        <% } %>
 
 	</script>
 </html>

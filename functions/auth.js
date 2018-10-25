@@ -181,3 +181,11 @@ Auth.validAdminUser = function(req, res, next) {
         res.redirect('/')
     }
 }
+
+Auth.validProfileUser = function(req, res, next) {
+    if(req.user.accessLevel.profile == 8) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
