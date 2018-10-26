@@ -145,7 +145,6 @@ Profile.fieldVisitInquiries = function(username, start_date, end_date, callback)
 
         connection.query("SELECT FVI.field_visit_id, DATE_FORMAT(FV.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, FVI.customer_name, FVI.customer_address, FVI.customer_telephone, FVI.customer_nic, FVI.inquiry, model.name as model_name, FV.location FROM field_visit_inquiry FVI LEFT JOIN field_visit FV ON FVI.field_visit_id = FV.id LEFT JOIN model ON FVI.model = model.id WHERE FV.officer = ? AND DATE(FV.sys_date) BETWEEN ? AND ? ORDER BY FVI.field_visit_id DESC;", [username, start_date, end_date], function(err, rows, fields) {
             connection.release()
-            console.log(rows)
             if(err) {
                 return callback(err, null)
             } else {
