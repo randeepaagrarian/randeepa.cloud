@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
+const nodemailer = require('nodemailer')
 const async = require('async')
 const LocalStrategy = require('passport-local').Strategy
 
@@ -16,6 +17,8 @@ const Supporter = require('../models/routes/supporter')
 const Sale = require('../models/dashboard/sale')
 const Stock = require('../models/stock/stock')
 const ProfileMyProfile = require('../models/profile/myprofile')
+
+const args = require('yargs').argv
 
 const Admin = require('../models/admin/admin')
 
@@ -87,7 +90,97 @@ router.get('/', Auth.signedIn, function(req, res) {
 })
 
 router.get('/recovery', function(req, res) {
-	res.render('recovery')
+	if(req.user) {
+		res.redirect('/')
+	} else {
+		res.render('recovery')
+	}
+})
+
+router.post('/recovery', function(req, res) {
+	if(req.user) {
+		res.redirect('/')
+	} else {
+		if(!req.body.username && !req.body.email) {
+			req.flash('error', 'Missing credentials')
+			res.redirect('/recovery')
+			return
+		}
+
+		async.series([
+			function(callback) {
+				User.getUserByUsername(req.body.username, callback)
+			}
+		], function(err, data) {
+			if(data[0] == false) {
+				req.flash('error', 'Make sure your account recovery details are correct')
+				res.redirect('/recovery')
+				return
+			}
+
+			if(data[0]['email'] != req.body.email) {
+				req.flash('error', 'Make sure your account recovery details are correct')
+				res.redirect('/recovery')
+				return
+			}
+
+			const password = Math.random().toString(36).substring(7)
+		    const salt = bcrypt.genSaltSync(10)
+		    const hash = bcrypt.hashSync(password, salt)
+
+			let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || (req.connection.socket ? req.connection.socket.remoteAddress : null)
+
+			async.series([
+				function(callback) {
+					User.accountRecovery(req.body.username, hash, MDate.getDateTime(), ip, callback)
+				}
+			], function(err, recoveryData) {
+				if(err) {
+					req.flash('error', 'System Error')
+					res.redirect('/recovery')
+					return
+				} else if(recoveryData[0] == true) {
+
+					let transporter = nodemailer.createTransport({
+	                    host: 'smtp.zoho.com',
+	                    port: 465,
+	                    secure: true,
+	                    auth: {
+	                        user: 'admin@randeepa.cloud',
+	                        pass: args.adminEmailPassword
+	                    }
+	                })
+
+					const message = '<p>Dear ' + data[0]['name'] + ', <br> Please use the following credentials to recover your account, <br> Username - ' + req.body.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to recover the account.<br> If you did not make this requst, please immediately inform us by using Reply All to to this email or by contacting +94 70 3524 349. <br> Thank You,<br>Randeepa Cloud Team</p>'
+
+					const mailOptions = {
+	                    from: 'Randeepa Cloud <admin@randeepa.cloud>',
+	                    to: req.body.email+',shamal@randeepa.com',
+	                    subject: 'Account Recovery Details',
+	                    html: message
+	                }
+
+	                async.series([
+	                    function(callback) {
+	                        transporter.sendMail(mailOptions, callback)
+	                    }
+	                ], function(err, data) {
+	                    if(err) {
+	                        req.flash('error', 'Account recovered. But an internal error occured. Please contact administrator to fix the issue')
+	                        res.redirect('/recovery')
+	                        return
+	                    } else {
+	                        req.flash('success_msg', 'Account successfully recovered. Please check ' + req.body.email + ' for login credentials')
+	                        res.redirect('/recovery')
+	                        return
+	                    }
+	                })
+
+				}
+			})
+
+		})
+	}
 })
 
 router.get('/profile', Auth.signedIn, Auth.validProfileUser, function(req, res) {
