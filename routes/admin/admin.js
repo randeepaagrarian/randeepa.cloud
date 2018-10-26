@@ -14,7 +14,7 @@ const Region = require('../../models/region/region')
 
 const Validator = require('../../functions/validator')
 
-const args = require('yargs').argv;
+const args = require('yargs').argv
 
 const multipart = multiparty()
 
@@ -130,7 +130,7 @@ router.post('/addUser', multipart, function(req, res) {
                     }
                 })
 
-                const message = '<p>Dear ' + req.body.first_name + ' ' + req.body.last_name + ', <br> Your Randeepa Cloud account details are as follows, <br> Username - ' + user.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to access the cloud.<br> Please note that unathorized use of this credentials described in the employment agreement may lead to disciplinary action and or termination. <br> Thank You,<br>Randeepa Cloud Team</p>'
+                const message = '<p>Dear ' + req.body.first_name + ' ' + req.body.last_name + ', <br> Your Randeepa Cloud account details are as follows, <br> Username - ' + user.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to access the cloud.<br> You will be asked to change your password at first login. Please note that unathorized use of this credentials described in the employment agreement may lead to disciplinary action and or termination. <br> Thank You,<br>Randeepa Cloud Team</p>'
 
                 const mailOptions = {
                     from: 'Randeepa Cloud <admin@randeepa.cloud>',

@@ -20,6 +20,21 @@ User.getUserByUsername = function(username, callback) {
     })
 }
 
+User.accountRecovery = function(username, password, passwordResetRequestDate, passwordResetRequestIP, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE user SET password = ?, change_password = 1, password_reset_request_date = ?, password_reset_request_ip = ? WHERE username = ?', [password, passwordResetRequestDate, passwordResetRequestIP, username], function(err, result) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, true)
+        })
+    })
+}
+
 User.getActiveUsers = function(callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {

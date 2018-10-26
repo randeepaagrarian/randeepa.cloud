@@ -32,6 +32,16 @@
 
                 <form name="form" id="form" class="form-horizontal" action="/recovery" method="POST">
 
+                    <% if (error != '') { %>
+                        <div class="alert alert-warning">
+                            <%= error %>
+                        </div>
+                    <% } else if (success_msg != '') { %>
+                        <div class="alert alert-success">
+                            <%= success_msg %>
+                        </div>
+                    <% } %>
+
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input id="user" type="text" class="form-control" name="username" value="" placeholder="Username">
