@@ -23,6 +23,7 @@
     "mysql": "^2.16.0",
     "node-datetime": "^2.0.9",
     "nodemailer": "^4.6.8",
+    "npm-install-all": "^1.1.21",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.5.0",
