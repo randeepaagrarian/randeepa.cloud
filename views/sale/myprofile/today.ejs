@@ -58,7 +58,11 @@
                                                                     <td> <%= sale.id %> </td>
                                                                     <td> <%= sale.date %> </td>
                                                                     <td> <%= sale.sys_date %> </td>
+                                                                    <% if(sale.location){ %>
                                                                     <td> <%= sale.location %> </td>
+                                                                     <% } else if(sale.sd_location){ %>
+                                                                    <td> <%= sale.sd_location %> </td>
+                                                                     <% } %>
                                                                     <td> <%= sale.chassis_no %> </td>
                                                                     <td> <%= sale.customer_name %> </td>
                                                                     <td> <%= sale.customer_address %> </td>
