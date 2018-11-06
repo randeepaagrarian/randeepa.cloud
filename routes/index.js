@@ -391,6 +391,14 @@ router.post('/changePassword', Auth.signedIn, function(req, res) {
 
 })
 
+router.get('/accessDenied', Auth.signedIn, function(req, res) {
+	res.render('accessDenied', {
+		user: req.user,
+		title: 'Access Denied',
+		navbar: 'Access Denied'
+	})
+})
+
 router.get('/signout', function(req, res) {
 	req.logout()
 

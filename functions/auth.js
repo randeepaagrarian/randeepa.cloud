@@ -189,3 +189,15 @@ Auth.validProfileUser = function(req, res, next) {
         res.redirect('/')
     }
 }
+
+Auth.saleExcelDownloadAllowed = function(req, res, next) {
+    if(req.url.search('excel') == -1) {
+        next()
+    } else {
+        if(req.user.accessLevel.saleExcelDownload == 1) {
+            next()
+        } else {
+            res.redirect('/accessDenied?back=' + encodeURI(req.url))
+        }
+    }
+}
