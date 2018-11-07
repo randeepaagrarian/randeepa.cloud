@@ -8,7 +8,7 @@ const SalesFunctions = require('../../functions/sale')
 
 const Sale = require('../../models/sale/sale')
 
-router.use(Auth.signedIn, Auth.validSaleUser, function(req, res, next) {
+router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, function(req, res, next) {
     next()
 })
 
