@@ -61,29 +61,33 @@
                                                         </thead>
                                                         <tbody>
                                                             <% sales.forEach(function(sale) { %>
+                                                              <% if(sale.verified == 1) { %>
+                                                                <tr class="success">
+                                                              <% } else { %>
                                                                 <tr>
-                                                                    <td><%= sale.id %></td>
-                                                                    <td><%= sale.officer_name %></td>
-                                                                    <td><%= sale.region_name %></td>
-                                                                    <td><%= sale.territory_name %></td>
-                                                                    <td><%= sale.date %></td>
-                                                                    <td><%= sale.sys_date %></td>
-                                                                    <% if(sale.location){ %>
-                                                                        <td> <%= sale.location %> </td>
-                                                                    <% } else if(sale.sd_location){ %>
-                                                                        <td> <%= sale.sd_location %> </td>
-                                                                    <% } %>
-                                                                    <td><%= sale.chassis_no %></td>
-                                                                    <td><%= sale.customer_name %></td>
-                                                                    <td><%= sale.customer_address %></td>
-                                                                    <td><%= sale.customer_contact %></td>
-                                                                    <td><%= sale.model_name %></td>
-                                                                    <td><%= sale.invoice_no %></td>
-                                                                    <td><%= sale.price %></td>
-                                                                    <td><%= sale.sale_type_name %></td>
-                                                                    <td><%= sale.institute %></td>
-                                                                    <td><%= sale.advance %></td>
-                                                                </tr>
+                                                              <% } %>
+                                                                <td><%= sale.id %></td>
+                                                                <td><%= sale.officer_name %></td>
+                                                                <td><%= sale.region_name %></td>
+                                                                <td><%= sale.territory_name %></td>
+                                                                <td><%= sale.date %></td>
+                                                                <td><%= sale.sys_date %></td>
+                                                                <% if(sale.location){ %>
+                                                                    <td> <%= sale.location %> </td>
+                                                                <% } else if(sale.sd_location){ %>
+                                                                    <td> <%= sale.sd_location %> </td>
+                                                                <% } %>
+                                                                <td><%= sale.chassis_no %></td>
+                                                                <td><%= sale.customer_name %></td>
+                                                                <td><%= sale.customer_address %></td>
+                                                                <td><%= sale.customer_contact %></td>
+                                                                <td><%= sale.model_name %></td>
+                                                                <td><%= sale.invoice_no %></td>
+                                                                <td><%= sale.price %></td>
+                                                                <td><%= sale.sale_type_name %></td>
+                                                                <td><%= sale.institute %></td>
+                                                                <td><%= sale.advance %></td>
+                                                            </tr>
                                                             <% }) %>
                                                         </tbody>
                                                     </table>
