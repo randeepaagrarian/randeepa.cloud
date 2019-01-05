@@ -21,7 +21,7 @@
                                 <div class="card">
                                     <div class="header">
                                         <%= title %>
-                                        <p class="category">There are <b><%= results %> </b> sales</p>
+                                        <p class="category">There are <b><%= results %> </b> sales for this page</p>
                                         <a class="category" href="/sale/excel<%= url %>"><u>Download Excel</u></a>
                                     </div>
                                     <div class="content">
@@ -110,6 +110,10 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        <% if(prev != -1) { %>
+                                            <a href="/sale/all?page=<%= prev %>">< Previous</a>&nbsp;&nbsp;
+                                        <% } %>
+                                        <a href="/sale/all?page=<%= next %>">Next ></a>&nbsp;&nbsp;
 
 
                                     </div>

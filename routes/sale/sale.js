@@ -72,9 +72,27 @@ router.get('/excel/today/sysdate', function(req, res) {
 })
 
 router.get('/all', function(req, res) {
+
+    const pageNumber = req.query.page
+
+    if(isNaN(pageNumber) || pageNumber == 0) {
+        res.status(200).send('URL error')
+        return
+    }
+
+    let prev, next
+
+    if(pageNumber == 1) {
+        prev = -1
+        next = 2
+    } else {
+        prev = pageNumber - 1
+        next = eval(pageNumber) + 1
+    }
+
     async.series([
         function(callback) {
-            Sale.all(callback)
+            Sale.all(pageNumber, callback)
         }
     ], function(err, details) {
 
@@ -83,6 +101,8 @@ router.get('/all', function(req, res) {
             navbar: 'Sales',
             title: 'All Sales',
             user: req.user,
+            prev: prev,
+            next: next,
             sales: details[0],
             results: details[0].length,
             modelSummary: SalesFunctions.modelSummary(details[0])
