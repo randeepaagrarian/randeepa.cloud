@@ -50,7 +50,6 @@ router.get('/cloudIDInfo', function(req, res) {
       Sale.cloudIDInfo(req.query.cloudID, callback)
     }
   ], function(err, details) {
-    console.log(details[0])
     res.render('sale/cloudIDInfo', {
       navbar: 'Sale Info',
       title: 'Sale Info',
