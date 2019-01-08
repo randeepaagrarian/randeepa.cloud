@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+
+                                      <table class="table table-striped">
+                                        <tbody>
+                                          <tr>
+                                            <td><b>Cloud ID</b></td>
+                                            <td><b><%= sales[0]['id'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Officer</b></td>
+                                            <td><b><%= sales[0]['officer_name'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Region</td>
+                                            <td><%= sales[0]['region_name'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>ME Territory</b></td>
+                                            <td><b><%= sales[0]['territory_name'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Date</td>
+                                            <td><%= sales[0]['date'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Cloud Date</b></td>
+                                            <td><b><%= sales[0]['sys_date'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Showroom/Dealer</b></td>
+                                            <% if(sales[0]['location']){ %>
+                                                <td> <b><%= sales[0]['location'] %></b> </td>
+                                            <% } else if(sales[0]['sd_location']){ %>
+                                                <td> <b><%= sales[0]['sd_location'] %></b> </td>
+                                            <% } %>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Dealer/Showroom Territory Name</b></td>
+                                            <td><b><%= sales[0]['dealer_territory'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Chassis Number</b></td>
+                                            <td><b><%= sales[0]['chassis_no'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Customer Name</td>
+                                            <td><%= sales[0]['customer_name'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Customer Address</td>
+                                            <td><%= sales[0]['customer_address'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Customer Contact</td>
+                                            <td><%= sales[0]['customer_contact'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Model</b></td>
+                                            <td><b><%= sales[0]['model_name'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Invoice Number</td>
+                                            <td><%= sales[0]['invoice_no'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td><b>Price</b></td>
+                                            <td><b><%= sales[0]['price'] %></b></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Sale Type</td>
+                                            <td><%= sales[0]['sale_type_name'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Institute</td>
+                                            <td><%= sales[0]['institute'] %></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Advance</td>
+                                            <td><%= sales[0]['advance'] %></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

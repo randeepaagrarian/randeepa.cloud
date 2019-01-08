@@ -12,6 +12,61 @@ router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, fun
     next()
 })
 
+router.get('/searchByCloudId', function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.searchByCloudId(req.query.cloudID, callback)
+    }
+  ], function(err, details) {
+    res.render('sale/searchByCloudID', {
+      navbar: 'Info By Cloud ID',
+      title: 'Info By Cloud ID',
+      user: req.user,
+      sales: details[0],
+      results: details[0].length,
+    })
+  })
+})
+
+router.get('/searchByChassisNo', function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.searchByChassisNo(req.query.chassisNo, callback)
+    }
+  ], function(err, details) {
+    res.render('sale/searchByChassisNo', {
+      navbar: 'Info By Chassis No',
+      title: 'Info By Chassis No',
+      user: req.user,
+      sales: details[0],
+      results: details[0].length,
+    })
+  })
+})
+
+router.get('/cloudIDInfo', function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.cloudIDInfo(req.query.cloudID, callback)
+    }
+  ], function(err, details) {
+    res.render('sale/cloudIDInfo', {
+      navbar: 'Sale Info',
+      title: 'Sale Info',
+      user: req.user,
+      sales: details[0]
+    })
+  })
+})
+
+router.get('/cloudIDInfo', function(req, res) {
+
+})
+
+router.get('/infoByChassisNo', function(req, res) {
+  res.send(req.query.chassisNo)
+})
+
 router.get('/today/actualdate', function(req, res) {
     async.series([
         function(callback) {
@@ -72,9 +127,27 @@ router.get('/excel/today/sysdate', function(req, res) {
 })
 
 router.get('/all', function(req, res) {
+
+    const pageNumber = req.query.page
+
+    if(isNaN(pageNumber) || pageNumber == 0) {
+        res.status(200).send('URL error')
+        return
+    }
+
+    let prev, next
+
+    if(pageNumber == 1) {
+        prev = -1
+        next = 2
+    } else {
+        prev = pageNumber - 1
+        next = eval(pageNumber) + 1
+    }
+
     async.series([
         function(callback) {
-            Sale.all(callback)
+            Sale.all(pageNumber, callback)
         }
     ], function(err, details) {
 
@@ -83,6 +156,8 @@ router.get('/all', function(req, res) {
             navbar: 'Sales',
             title: 'All Sales',
             user: req.user,
+            prev: prev,
+            next: next,
             sales: details[0],
             results: details[0].length,
             modelSummary: SalesFunctions.modelSummary(details[0])

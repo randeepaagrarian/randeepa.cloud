@@ -21,8 +21,6 @@
                                 <div class="card">
                                     <div class="header">
                                         <%= title %>
-                                        <p class="category">There are <b><%= results %> </b> sales for this page</p>
-                                        <a class="category" href="/sale/excel<%= url %>"><u>Download Excel</u></a>
                                     </div>
                                     <div class="content">
 
@@ -30,9 +28,6 @@
                                         <ul role="tablist" class="nav nav-tabs">
                                             <li role="presentation" class="active">
                                                 <a href="#details" data-toggle="tab">Details</a>
-                                            </li>
-                                            <li>
-                                                <a href="#model_summary" data-toggle="tab">Model Summary</a>
                                             </li>
                                         </ul>
 
@@ -42,31 +37,21 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <th>#</th>
+                                                            <th>Chassis No</th>
                                                             <th>Officer</th>
                                                             <th>Region</th>
                                                             <th>Territory</th>
                                                             <th>Date</th>
                                                             <th>Cloud Date</th>
                                                             <th>Showroom/Dealer</th>
-                                                            <th>Chassis No</th>
                                                             <th>Customer Name</th>
-                                                            <th>Customer Address</th>
-                                                            <th>Customer Contact</th>
                                                             <th>Model</th>
-                                                            <th>Invoice Number</th>
-                                                            <th>Price</th>
-                                                            <th>Sale Type</th>
-                                                            <th>Institute</th>
-                                                            <th>Advance</th>
-                                                        </thead>
+                                                          </thead>
                                                         <tbody>
                                                             <% sales.forEach(function(sale) { %>
-                                                              <% if(sale.verified == 1) { %>
-                                                                <tr class="success">
-                                                              <% } else { %>
                                                                 <tr>
-                                                              <% } %>
                                                                     <td><a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>"><%= sale.id %></a></td>
+                                                                    <td><%= sale.chassis_no %></td>
                                                                     <td><%= sale.officer_name %></td>
                                                                     <td><%= sale.region_name %></td>
                                                                     <td><%= sale.territory_name %></td>
@@ -77,49 +62,15 @@
                                                                     <% } else if(sale.sd_location){ %>
                                                                         <td> <%= sale.sd_location %> </td>
                                                                     <% } %>
-                                                                    <td><%= sale.chassis_no %></td>
                                                                     <td><%= sale.customer_name %></td>
-                                                                    <td><%= sale.customer_address %></td>
-                                                                    <td><%= sale.customer_contact %></td>
                                                                     <td><%= sale.model_name %></td>
-                                                                    <td><%= sale.invoice_no %></td>
-                                                                    <td><%= sale.price %></td>
-                                                                    <td><%= sale.sale_type_name %></td>
-                                                                    <td><%= sale.institute %></td>
-                                                                    <td><%= sale.advance %></td>
                                                                 </tr>
                                                             <% }) %>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div id="model_summary" class="tab-pane">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <th>Model</th>
-                                                        <th>Sales</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        <% modelSummary.forEach(function(modelItem) { %>
-                                                            <% if(modelItem.model == undefined) { %>
-
-                                                            <% } else { %>
-                                                                <tr>
-                                                                    <td> <%= modelItem.model %> </td>
-                                                                    <td> <%= modelItem.sales %> </td>
-                                                                </tr>
-                                                            <% } %>
-                                                        <% }) %>
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
-                                        <% if(prev != -1) { %>
-                                            <a href="/sale/all?page=<%= prev %>">< Previous</a>&nbsp;&nbsp;
-                                        <% } %>
-                                        <a href="/sale/all?page=<%= next %>">Next ></a>&nbsp;&nbsp;
-
-
                                     </div>
                                 </div>
                             </div>

@@ -62,7 +62,7 @@
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/today/sysdate">Cloud Date</a></li>
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/today/actualdate">Actual Date</a></li>
                                                 <li role="presentation" class="divider"></li>
-                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/all">All Sales</a></li>
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/sale/all?page=1">All Sales</a></li>
 
                                             </ul>
 
@@ -70,6 +70,41 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title">Find Sale Info</h4>
+                                    </div>
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                            <div class="col-md-6">
+                                              <h5 class="title">Cloud ID</h5>
+                                              <form action="/sale/searchByCloudId" method="get">
+                                                <div class="form-group">
+                                                  <input class="form-control" type="text" name="cloudID" placeholder="Cloud ID">
+                                                </div>
+                                                <div class="form-group">
+                                                  <input class="btn btn-default" type="submit" value="Search">
+                                                </div>
+                                              </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <h5 class="title">Chassis Number</h5>
+                                              <form action="/sale/searchByChassisNo" method="get">
+                                                <div class="form-group">
+                                                  <input class="form-control" type="text" name="chassisNo" placeholder="Chassis Number">
+                                                </div>
+                                                <div class="form-group">
+                                                  <input class="btn btn-default" type="submit" value="Search">
+                                                </div>
+                                              </form>
+                                            </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
@@ -100,6 +135,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -125,6 +161,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -159,6 +196,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -190,6 +228,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -224,6 +263,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -255,6 +295,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -289,6 +330,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -308,6 +350,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -336,6 +379,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -361,6 +405,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -389,6 +434,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -414,6 +460,7 @@
                                                                     <select class="form-control" name="year">
                                                                         <option name="2017">2017</option>
                                                                         <option name="2018">2018</option>
+                                                                        <option name="2019">2019</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                     <select class="form-control" name="month">
@@ -442,6 +489,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
@@ -455,6 +503,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
@@ -477,6 +526,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
@@ -496,6 +546,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
@@ -518,6 +569,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
@@ -537,6 +589,7 @@
                                                                 <select class="form-control" name="year">
                                                                     <option name="2017">2017</option>
                                                                     <option name="2018">2018</option>
+                                                                    <option name="2019">2019</option>
                                                                 </select>
                                                                 <div style="display: inline-block;">&nbsp; &nbsp;</div>
                                                                 <div class="form-group">
