@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+
+
+                                        <ul role="tablist" class="nav nav-tabs">
+                                            <li role="presentation" class="active">
+                                                <a href="#details" data-toggle="tab">Details</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="details" class="tab-pane active">
+                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <th>#</th>
+                                                            <th>Chassis No</th>
+                                                            <th>Officer</th>
+                                                            <th>Region</th>
+                                                            <th>Territory</th>
+                                                            <th>Date</th>
+                                                            <th>Cloud Date</th>
+                                                            <th>Showroom/Dealer</th>
+                                                            <th>Customer Name</th>
+                                                            <th>Model</th>
+                                                          </thead>
+                                                        <tbody>
+                                                            <% sales.forEach(function(sale) { %>
+                                                                <tr>
+                                                                    <td><a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>"><%= sale.id %></a></td>
+                                                                    <td><%= sale.chassis_no %></td>
+                                                                    <td><%= sale.officer_name %></td>
+                                                                    <td><%= sale.region_name %></td>
+                                                                    <td><%= sale.territory_name %></td>
+                                                                    <td><%= sale.date %></td>
+                                                                    <td><%= sale.sys_date %></td>
+                                                                    <% if(sale.location){ %>
+                                                                        <td> <%= sale.location %> </td>
+                                                                    <% } else if(sale.sd_location){ %>
+                                                                        <td> <%= sale.sd_location %> </td>
+                                                                    <% } %>
+                                                                    <td><%= sale.customer_name %></td>
+                                                                    <td><%= sale.model_name %></td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
