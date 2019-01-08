@@ -358,7 +358,7 @@ Sale.searchByChassisNo = function(chassisNo, callback) {
   })
 }
 
-Sale.w = function(cloudID, callback) {
+Sale.cloudIDInfo = function(cloudID, callback) {
   MySql.pool.getConnection(function(pool_err, connection) {
       if(pool_err) {
           return callback(pool_err, null)
