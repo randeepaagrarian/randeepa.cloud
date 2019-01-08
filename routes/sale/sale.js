@@ -18,7 +18,7 @@ router.get('/searchByCloudId', function(req, res) {
       Sale.searchByCloudId(req.query.cloudID, callback)
     }
   ], function(err, details) {
-    res.render('sale/searchByCloudId', {
+    res.render('sale/searchByCloudID', {
       navbar: 'Info By Cloud ID',
       title: 'Info By Cloud ID',
       user: req.user,
