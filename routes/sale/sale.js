@@ -12,6 +12,43 @@ router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, fun
     next()
 })
 
+router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.verify(req.params.cloudID, req.user.username, MDate.getDateTime(), callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    } else {
+      res.send('Error')
+    }
+  })
+})
+
+router.post('/addComment/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+
+  const comment = {
+    sale_id: req.params.cloudID,
+    username: req.user.username,
+    date: MDate.getDateTime(),
+    text: req.body.comment
+  }
+
+  async.series([
+    function(callback) {
+      Sale.addComment(comment, callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    } else {
+      res.send('Error')
+    }
+  })
+
+})
+
 router.get('/searchByCloudId', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {
@@ -48,13 +85,17 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {
       Sale.cloudIDInfo(req.query.cloudID, callback)
+    }, function(callback) {
+      Sale.getComments(req.query.cloudID, callback)
     }
   ], function(err, details) {
+    console.log(details[1])
     res.render('sale/cloudIDInfo', {
       navbar: 'Sales',
       title: 'Sale Info',
       user: req.user,
-      sales: details[0]
+      sales: details[0],
+      comments: details[1]
     })
   })
 })

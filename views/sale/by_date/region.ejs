@@ -59,8 +59,12 @@
                                                             <th>Advance</th>
                                                         </thead>
                                                         <tbody>
-                                                            <% sales.forEach(function(sale) { %>
-                                                                <tr>
+                                                              <% sales.forEach(function(sale) { %>
+                                                                <% if(sale.verified == 1) { %>
+                                                                  <tr class="success">
+                                                                <% } else { %>
+                                                                  <tr>
+                                                                <% } %>
                                                                     <td><a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>"><%= sale.id %></a></td>
                                                                     <td><%= sale.officer_name %></td>
                                                                     <td><%= sale.territory_name %></td>
