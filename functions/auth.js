@@ -201,3 +201,11 @@ Auth.saleExcelDownloadAllowed = function(req, res, next) {
         }
     }
 }
+
+Auth.salesSearchAllowed = function(req, res, next) {
+  if(req.user.accessLevel.salesSearch == 1) {
+      next()
+  } else {
+      res.redirect('/')
+  }
+}
