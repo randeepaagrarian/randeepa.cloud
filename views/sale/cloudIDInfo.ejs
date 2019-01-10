@@ -21,6 +21,7 @@
                                 <div class="card">
                                     <div class="header">
                                         <%= title %>
+                                        <p><% if(sales[0]['verified'] == 1) { %><font color="green">Sale Verified</font><% } else { %><font color="red">Sale not verified</font> You can comment on this sale or verify it below<% } %></p>
                                     </div>
                                     <div class="content">
 
@@ -107,7 +108,34 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="card">
+                              <h5 class="header">Add a comment</h5>
+                              <div class="content">
+                                  <% if(sales[0]['verified'] == 0) { %>
+                                    <div>
+                                      <a href="/sale/verify/<%= sales[0]['id'] %>"><button class="success"><font color="black">Verify Sale</font></button></a>
+                                      <br><br>
+                                    </div>
+                                  <% } %>
+                                <form action="/sale/addComment/<%= sales[0]['id'] %>" method="post">
+                                  <div class="form-group">
+                                    <textarea class="form-control" rows="4" columns="50" name="comment" placeholder="Cloud ID"></textarea>
+                                  </div>
+                                  <div class="form-group">
+                                    <input class="btn btn-default" type="submit" value="Comment">
+                                  </div>
+                                </form>
+                                <% comments.forEach(function(comment) { %>
+                                  <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
+                                  <p><font color='blue'><%= comment.text %></font></p>
+                                <% }) %>
+                              </div>
+                            </div>
+                          </div>
                         </div>
 
 
