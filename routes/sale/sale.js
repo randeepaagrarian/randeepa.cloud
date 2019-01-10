@@ -12,14 +12,14 @@ router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, fun
     next()
 })
 
-router.get('/searchByCloudId', function(req, res) {
+router.get('/searchByCloudId', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {
       Sale.searchByCloudId(req.query.cloudID, callback)
     }
   ], function(err, details) {
     res.render('sale/searchByCloudID', {
-      navbar: 'Info By Cloud ID',
+      navbar: 'Sales',
       title: 'Info By Cloud ID',
       user: req.user,
       sales: details[0],
@@ -28,14 +28,14 @@ router.get('/searchByCloudId', function(req, res) {
   })
 })
 
-router.get('/searchByChassisNo', function(req, res) {
+router.get('/searchByChassisNo', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {
       Sale.searchByChassisNo(req.query.chassisNo, callback)
     }
   ], function(err, details) {
     res.render('sale/searchByChassisNo', {
-      navbar: 'Info By Chassis No',
+      navbar: 'Sales',
       title: 'Info By Chassis No',
       user: req.user,
       sales: details[0],
@@ -44,14 +44,14 @@ router.get('/searchByChassisNo', function(req, res) {
   })
 })
 
-router.get('/cloudIDInfo', function(req, res) {
+router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {
       Sale.cloudIDInfo(req.query.cloudID, callback)
     }
   ], function(err, details) {
     res.render('sale/cloudIDInfo', {
-      navbar: 'Sale Info',
+      navbar: 'Sales',
       title: 'Sale Info',
       user: req.user,
       sales: details[0]
@@ -59,12 +59,21 @@ router.get('/cloudIDInfo', function(req, res) {
   })
 })
 
-router.get('/cloudIDInfo', function(req, res) {
-
-})
-
-router.get('/infoByChassisNo', function(req, res) {
-  res.send(req.query.chassisNo)
+router.get('/search', Auth.salesSearchAllowed, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.search(req.query.skw, callback)
+    }
+  ], function(err, details) {
+    res.render('sale/search', {
+      navbar: 'Sales',
+      title: 'Sale Search',
+      user: req.user,
+      sales: details[0],
+      skw: req.query.skw,
+      modelSummary: SalesFunctions.modelSummary(details[0])
+    })
+  })
 })
 
 router.get('/today/actualdate', function(req, res) {
