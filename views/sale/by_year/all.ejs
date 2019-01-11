@@ -41,6 +41,7 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <th>#</th>
+                                                            <th>Comments</th>
                                                             <th>Officer</th>
                                                             <th>Region</th>
                                                             <th>Territory</th>
@@ -66,6 +67,7 @@
                                                                   <tr>
                                                                 <% } %>
                                                                     <td><a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>"><%= sale.id %></a></td>
+                                                                    <td><b><%= sale.sale_comments %></b></td>
                                                                     <td><%= sale.officer_name %></td>
                                                                     <td><%= sale.region_name %></td>
                                                                     <td><%= sale.territory_name %></td>

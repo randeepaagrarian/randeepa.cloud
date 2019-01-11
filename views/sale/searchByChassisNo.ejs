@@ -37,6 +37,7 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <th>#</th>
+                                                            <td>Comments</td>
                                                             <th>Chassis No</th>
                                                             <th>Officer</th>
                                                             <th>Region</th>
@@ -51,6 +52,7 @@
                                                             <% sales.forEach(function(sale) { %>
                                                                 <tr>
                                                                     <td><a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>"><%= sale.id %></a></td>
+                                                                    <td><b><%= sale.sale_comments %></b></td>
                                                                     <td><%= sale.chassis_no %></td>
                                                                     <td><%= sale.officer_name %></td>
                                                                     <td><%= sale.region_name %></td>
