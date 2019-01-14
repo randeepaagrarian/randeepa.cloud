@@ -89,7 +89,6 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       Sale.getComments(req.query.cloudID, callback)
     }
   ], function(err, details) {
-    console.log(details[1])
     res.render('sale/cloudIDInfo', {
       navbar: 'Sales',
       title: 'Sale Info',
