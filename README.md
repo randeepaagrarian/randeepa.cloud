@@ -7,4 +7,4 @@ Then, install dependencies
 
 Then, run the program using **node** by providing necessary arguments
 
-	node app.js --dbIP=[Database IP] --dbUser=[Database User] --dbPass=[Database Passwodr] --dbName=[Database Name] --adminEmailPassword=[Admin Email Password]
+	node app.js --dbIP=[Database IP] --dbUser=[Database User] --dbPass=[Database Password] --dbName=[Database Name] --adminEmailPassword=[Admin Email Password]
