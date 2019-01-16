@@ -9,6 +9,7 @@ const flash = require('connect-flash')
 const json2xls = require('json2xls')
 const dateTime = require('node-datetime')
 const favicon = require('serve-favicon')
+const async = require('async')
 // Routes files
 const index = require('./routes/index')
 
@@ -33,6 +34,9 @@ const expenseMyProfile = require('./routes/expense/myprofile')
 const admin = require('./routes/admin/admin')
 
 const profile = require('./routes/profile/profile')
+
+// Model files
+const Notification = require('./models/notification/notification')
 
 const app = express()
 
@@ -74,7 +78,19 @@ app.use(function(req, res, next){
     res.locals.error = req.flash('error')
     res.locals.success_msg = req.flash('success_msg')
     res.locals.warning_msg = req.flash('warning_msg')
-    next()
+    if(req.user != undefined) {
+      async.series([
+        function(callback) {
+          Notification.getUserNotifications(req.user.username, callback)
+        }
+      ], function(err, data) {
+        res.locals.notifications = data[0]
+        res.locals.notificationsCount = data[0].length
+        next()
+      })
+    } else {
+      next()
+    }
 })
 
 // Configuring routes with files

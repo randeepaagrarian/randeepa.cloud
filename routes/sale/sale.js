@@ -7,6 +7,7 @@ const MDate = require('../../functions/mdate')
 const SalesFunctions = require('../../functions/sale')
 
 const Sale = require('../../models/sale/sale')
+const Notification = require('../../models/notification/notification')
 
 router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, function(req, res, next) {
     next()
@@ -41,7 +42,41 @@ router.post('/addComment/:cloudID', Auth.salesSearchAllowed, function(req, res) 
     }
   ], function(err, data) {
     if(data[0] == true) {
-      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+
+      const notification = {
+        title: req.user.username + ' commented on sale ' + req.params.cloudID,
+        link: '/sale/cloudIDInfo?cloudID=' + req.params.cloudID,
+        user: req.user.username,
+        datetime: MDate.getDateTime()
+      }
+
+      async.series([
+        function(callback) {
+          Sale.getCommentNotifiers(callback)
+        }, function(callback) {
+          Notification.create(notification, callback)
+        }
+      ], function(err, data) {
+
+        const commentNotifiers = data[0]
+        const notificationID = data[1]
+
+        let commentUserNotifications = []
+
+        for(let i = 0; i < commentNotifiers.length; i++) {
+          if(req.user.username != commentNotifiers[i]['username']) {
+            commentUserNotifications.push([notificationID, commentNotifiers[i]['username']])
+          }
+        }
+
+        async.series([
+          function(callback) {
+            Notification.createUserNotifications(commentUserNotifications, callback)
+          }
+        ], function(err, data) {
+          res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+        })
+      })
     } else {
       res.send('Error')
     }

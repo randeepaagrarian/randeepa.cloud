@@ -388,6 +388,21 @@ Sale.search = function(skw, callback) {
   })
 }
 
+Sale.getCommentNotifiers = function(callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
+    connection.query('SELECT user.username FROM user_access LEFT JOIN user ON user_id = user.id WHERE access_layer_id = 12 AND access_level = 1', function(err, rows, fields) {
+      connection.release()
+      if(err) {
+          return callback(err, null)
+      }
+      callback(err, rows)
+    })
+  })
+}
+
 Sale.addComment = function(comment, callback) {
   MySql.pool.getConnection(function(pool_err, connection) {
     if(pool_err) {
