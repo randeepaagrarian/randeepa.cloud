@@ -17,6 +17,7 @@ const Supporter = require('../models/routes/supporter')
 const Sale = require('../models/dashboard/sale')
 const Stock = require('../models/stock/stock')
 const ProfileMyProfile = require('../models/profile/myprofile')
+const Notification = require('../models/notification/notification')
 
 const args = require('yargs').argv
 
@@ -318,6 +319,30 @@ router.get('/signin', function(req, res) {
 			})
 		})
 	}
+})
+
+router.get('/notificationClicked', Auth.signedIn, function(req, res) {
+	async.series([
+		function(callback) {
+				Notification.getUserNotificationDetails(req.query.id, callback)
+		}
+	], function(err, data) {
+		if(data[0][0].user == req.user.username) {
+			async.series([
+				function(callback) {
+					Notification.markChecked(req.query.id, MDate.getDateTime(), callback)
+				}
+			], function(err, markCheckedData) {
+				if(markCheckedData[0] == true) {
+					res.redirect(data[0][0].link)
+				} else {
+					res.redirect('/')
+				}
+			})
+		} else {
+			res.redirect('/')
+		}
+	})
 })
 
 router.get('/changePassword', Auth.signedIn, function(req, res) {
