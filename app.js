@@ -82,10 +82,13 @@ app.use(function(req, res, next){
       async.series([
         function(callback) {
           Notification.getUserNotifications(req.user.username, callback)
+        }, function(callback) {
+          Notification.getUnreadUserNotifications(req.user.username, callback)
         }
       ], function(err, data) {
         res.locals.notifications = data[0]
         res.locals.notificationsCount = data[0].length
+        res.locals.unreadNotificationsCount = data[1].length
         next()
       })
     } else {

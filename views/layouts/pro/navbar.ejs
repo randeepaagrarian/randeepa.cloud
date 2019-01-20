@@ -22,12 +22,17 @@
               <li class="dropdown nav-item">
                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                       <i class="nc-icon nc-planet"></i>
-                      <span class="d-lg-none"><font color='blue'><b><%= notificationsCount %></b></font> Notifications</span>
+                      <span class="d-lg-none"><font color='blue'><b><%= unreadNotificationsCount %></b></font> Notifications</span>
                   </a>
                   <ul class="dropdown-menu dropdown-with-icons" style="height: 300px; width: 150px; overflow: scroll;">
                     <% notifications.forEach(function(notification) { %>
-                      <p><a href="/notificationClicked?id=<%= notification.id %>"><font color='blue'><b><%= notification.title %></b></font></a></p>
-                      <hr style='margin: 0; border-color: #262f3d;'>
+                      <% if(notification.checked == 0) { %>
+                        <p><a href="/notificationClicked?id=<%= notification.id %>"><font color='blue'><b><%= notification.title %></b></font></a></p>
+                        <hr style='margin: 0; border-color: #262f3d;'>
+                      <% } else { %>
+                        <p><a href="<%= notification.link %>"><font color='ash'><%= notification.title %></font></a></p>
+                        <hr style='margin: 0; border-color: #262f3d;'>
+                      <% } %>
                     <% }) %>
                   </ul>
               </li>
