@@ -18,6 +18,22 @@ Profile.officerPerformanceSummary = function(username, start_date, end_date, cal
     })
 }
 
+Profile.companyOfficerPerformanceSummary = function(start_date, end_date, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+      return callback(pool_err, null)
+    }
+
+    connection.query('CALL CompanyOfficerPerformanceSummary(?, ?);', [start_date, end_date], function(err, rows, fields) {
+      if(err) {
+        return callback(err, null)
+      } else {
+        callback(err, rows)
+      }
+    })
+  })
+}
+
 Profile.salesUnitDetails = function(username, start_date, end_date, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {

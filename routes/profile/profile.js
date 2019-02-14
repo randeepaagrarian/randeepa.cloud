@@ -16,7 +16,24 @@ router.use(Auth.signedIn, Auth.validProfileUser, function(req, res, next) {
     next()
 })
 
-router.get('/view', function(req, res) {
+router.get('/overallPerformanceView', function(req, res) {
+  async.series([
+    function(callback) {
+      Profile.companyOfficerPerformanceSummary(req.query.startDate, req.query.endDate, callback)
+    }
+  ], function(err, data) {
+    res.render('profile/overallPerformanceView', {
+      navbar: 'Profile',
+      user: req.user,
+      title: 'Overall Performance View',
+      start_date: req.query.startDate,
+      end_date: req.query.endDate,
+      performanceSummaries: data[0][0]
+    })
+  })
+})
+
+router.get('/officerProfileView', function(req, res) {
     async.series([
         function(callback) {
             Admin.userDetailsByUsername(req.query.userId, callback)
@@ -40,7 +57,7 @@ router.get('/view', function(req, res) {
             Profile.fieldVisitInquiries(req.query.userId, req.query.startDate, req.query.endDate, callback)
         }
     ], function(err, data) {
-        res.render('profile/view', {
+        res.render('profile/officerProfileView', {
             navbar: 'Profile',
             user: req.user,
             title: 'Profile',
