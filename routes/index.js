@@ -218,10 +218,20 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 })
 
 router.get('/bankings', Auth.signedIn, Auth.validBankingDashboardUser, function(req, res) {
-	res.render('bankings', {
-		title: 'Banking',
-		navbar: 'Banking',
-		user: req.user,
+	async.series([
+		function(callback) {
+			Region.getAllRegions(callback)
+		}, function(callback) {
+			User.getActiveUsers(callback)
+		}
+	], function(err, data) {
+		res.render('bankings', {
+			title: 'Banking',
+			navbar: 'Banking',
+			regions: data[0],
+			users: data[1],
+			user: req.user,
+		})
 	})
 })
 

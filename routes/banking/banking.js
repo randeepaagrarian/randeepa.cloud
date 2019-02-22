@@ -14,7 +14,7 @@ router.use(Auth.signedIn, Auth.validBankingUser, function(req, res, next) {
 router.get('/today', function(req, res) {
     async.series([
         function(callback) {
-            Banking.today(MDate.getDate('-'), callback)
+            Banking.byDateRangeAll(MDate.getDate('-'), MDate.getDate('-'), callback)
         }
     ], function(err, details) {
         res.render('banking/today', {
@@ -31,7 +31,7 @@ router.get('/today', function(req, res) {
 router.get('/excel/today', function(req, res) {
     async.series([
         function(callback) {
-            Banking.today(MDate.getDate('-'), callback)
+            Banking.byDateRangeAll(MDate.getDate('-'), MDate.getDate('-'), callback)
         }
     ], function(err, details) {
         res.xls('Today.xlsx', details[0])
@@ -68,7 +68,7 @@ router.get('/excel/all', function(req, res) {
 router.get('/date', function(req, res) {
     async.series([
         function(callback) {
-            Banking.today(req.query.date, callback)
+            Banking.byDateRangeAll(req.query.startDate, req.query.endDate, callback)
         }
     ], function(err, details) {
         res.render('banking/by_date/all', {
@@ -86,10 +86,66 @@ router.get('/date', function(req, res) {
 router.get('/excel/date', function(req, res) {
     async.series([
         function(callback) {
-            Banking.today(req.query.date, callback)
+            Banking.byDateRangeAll(req.query.startDate, req.query.endDate, callback)
         }
     ], function(err, details) {
-        res.xls(req.query.date + '.xlsx', details[0])
+        res.xls(req.query.startDate + ' to ' + req.query.endDate + ' All Bankings' + '.xlsx', details[0])
+    })
+})
+
+router.get('/byregion/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Banking.byDateRangeRegion(req.query.startDate, req.query.endDate, req.query.region, callback)
+        }
+    ], function(err, details) {
+        res.render('banking/by_date/all', {
+            navbar: 'Banking',
+            title: 'Banking By Date Region',
+            url: req.url,
+            date: req.query.date,
+            bankings: details[0],
+            results: details[0].length,
+            user: req.user
+        })
+    })
+})
+
+router.get('/excel/byregion/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Banking.byDateRangeRegion(req.query.startDate, req.query.endDate, req.query.region, callback)
+        }
+    ], function(err, details) {
+        res.xls(req.query.startDate + ' to ' + req.query.endDate + ' Regional Bankings' + '.xlsx', details[0])
+    })
+})
+
+router.get('/byofficer/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Banking.byDateRangeOfficer(req.query.startDate, req.query.endDate, req.query.officer, callback)
+        }
+    ], function(err, details) {
+        res.render('banking/by_date/all', {
+            navbar: 'Banking',
+            title: 'Banking By Date Region',
+            url: req.url,
+            date: req.query.date,
+            bankings: details[0],
+            results: details[0].length,
+            user: req.user
+        })
+    })
+})
+
+router.get('/excel/byofficer/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Banking.byDateRangeOfficer(req.query.startDate, req.query.endDate, req.query.officer, callback)
+        }
+    ], function(err, details) {
+        res.xls(req.query.startDate + ' to ' + req.query.endDate + ' Officer Bankings' + '.xlsx', details[0])
     })
 })
 
