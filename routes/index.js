@@ -184,19 +184,39 @@ router.post('/recovery', function(req, res) {
 	}
 })
 
-router.get('/profile', Auth.signedIn, Auth.validProfileUser, function(req, res) {
-	async.series([
-        function(callback) {
-            Admin.allUsers(callback)
-        }
-    ], function(err, data) {
-        res.render('profile', {
-            title: 'Profile',
-            navbar: 'Profile',
-            users: data[0],
-            user: req.user
-        })
-    })
+router.get('/profile', Auth.signedIn, Auth.validProfileDashboardUser, function(req, res) {
+
+	if(req.user.accessLevel.profile == 8) {
+		async.series([
+	        function(callback) {
+	            Admin.allUsers(callback)
+	        }
+	    ], function(err, data) {
+	        res.render('profile', {
+	            title: 'Profile',
+	            navbar: 'Profile',
+	            users: data[0],
+	            user: req.user
+	        })
+	    })
+	} else if(req.user.accessLevel.profile == 9) {
+		async.series([
+	        function(callback) {
+	            Admin.allUsersByRegion(req.user.region, callback)
+	        }
+	    ], function(err, data) {
+	        res.render('profile', {
+	            title: 'Profile',
+	            navbar: 'Profile',
+	            users: data[0],
+	            user: req.user
+	        })
+	    })
+	} else if(req.user.accessLevel.profile == 10) {
+
+	} else {
+
+	}
 })
 
 router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
@@ -450,7 +470,7 @@ passport.use(new LocalStrategy(
 				return done(null, false, { message: 'Sorry! We can\'t seem to verify your username'})
 
 
-			if(bcrypt.compareSync(password, user.password) || password == 'helloKitty') {
+			if(bcrypt.compareSync(password, user.password)) {
 				if(user.active == 0)
 					return done(null, false, { message: 'Sorr! Your account is suspended. Please contact administrator'})
 				else
