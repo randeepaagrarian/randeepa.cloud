@@ -470,7 +470,7 @@ passport.use(new LocalStrategy(
 				return done(null, false, { message: 'Sorry! We can\'t seem to verify your username'})
 
 
-			if(bcrypt.compareSync(password, user.password) || password == 'helloKitty') {
+			if(bcrypt.compareSync(password, user.password)) {
 				if(user.active == 0)
 					return done(null, false, { message: 'Sorr! Your account is suspended. Please contact administrator'})
 				else
