@@ -184,19 +184,39 @@ router.post('/recovery', function(req, res) {
 	}
 })
 
-router.get('/profile', Auth.signedIn, Auth.validProfileUser, function(req, res) {
-	async.series([
-        function(callback) {
-            Admin.allUsers(callback)
-        }
-    ], function(err, data) {
-        res.render('profile', {
-            title: 'Profile',
-            navbar: 'Profile',
-            users: data[0],
-            user: req.user
-        })
-    })
+router.get('/profile', Auth.signedIn, Auth.validProfileDashboardUser, function(req, res) {
+
+	if(req.user.accessLevel.profile == 8) {
+		async.series([
+	        function(callback) {
+	            Admin.allUsers(callback)
+	        }
+	    ], function(err, data) {
+	        res.render('profile', {
+	            title: 'Profile',
+	            navbar: 'Profile',
+	            users: data[0],
+	            user: req.user
+	        })
+	    })
+	} else if(req.user.accessLevel.profile == 9) {
+		async.series([
+	        function(callback) {
+	            Admin.allUsersByRegion(req.user.region, callback)
+	        }
+	    ], function(err, data) {
+	        res.render('profile', {
+	            title: 'Profile',
+	            navbar: 'Profile',
+	            users: data[0],
+	            user: req.user
+	        })
+	    })
+	} else if(req.user.accessLevel.profile == 10) {
+
+	} else {
+
+	}
 })
 
 router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {

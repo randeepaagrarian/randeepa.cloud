@@ -182,8 +182,24 @@ Auth.validAdminUser = function(req, res, next) {
     }
 }
 
+Auth.validProfileDashboardUser = function(req, res, next) {
+    if(req.user.accessLevel.profile) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
 Auth.validProfileUser = function(req, res, next) {
     if(req.user.accessLevel.profile == 8) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
+Auth.validProfileAreaUser = function(req, res, next) {
+    if(req.user.accessLevel.profile == 9) {
         next()
     } else {
         res.redirect('/')

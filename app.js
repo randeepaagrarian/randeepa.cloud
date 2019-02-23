@@ -34,6 +34,7 @@ const expenseMyProfile = require('./routes/expense/myprofile')
 const admin = require('./routes/admin/admin')
 
 const profile = require('./routes/profile/profile')
+const profileAreaProfile = require('./routes/profile/areaprofile')
 
 // Model files
 const Notification = require('./models/notification/notification')
@@ -119,6 +120,7 @@ app.use('/stock', stock)
 
 app.use('/admin', admin)
 
+app.use('/profile/areaprofile', profileAreaProfile)
 app.use('/profile', profile)
 
 app.get('*', function(req, res) {

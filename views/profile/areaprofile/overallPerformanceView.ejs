@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Officer</th>
+                                                    <th>Region</th>
+                                                    <th>Territory</th>
+                                                    <th>Sales Units</th>
+                                                    <th>Dealer Visits</th>
+                                                    <th>Sales Value</th>
+                                                    <th>Bankings</th>
+                                                    <th>Institute/Other Visits</th>
+                                                    <th>Stock Reports</th>
+                                                    <th>Dealer Inquiries</th>
+                                                    <th>Field Visits</th>
+                                                    <th>Field Visit Inquiries</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% performanceSummaries.forEach(function(performanceSummary) { %>
+                                                        <tr>
+                                                            <td><a href="/profile/areaprofile/officerProfileView?userId=<%= performanceSummary.username %>&startDate=<%= start_date %>&endDate=<%= end_date %>"><%= performanceSummary.name %></a></td>
+                                                            <td> <%= performanceSummary.region_name %> </td>
+                                                            <td> <%= performanceSummary.territory_name %> </td>
+                                                            <td> <%= performanceSummary.sales_units %> </td>
+                                                            <td> <%= performanceSummary.dealer_visits %> </td>
+                                                            <td> <%= performanceSummary.sales_value %> </td>
+                                                            <td> <%= performanceSummary.bankings %> </td>
+                                                            <td> <%= performanceSummary.institute_and_other_visits %> </td>
+                                                            <td> <%= performanceSummary.stock_reports %> </td>
+                                                            <td> <%= performanceSummary.dealer_inquiries %> </td>
+                                                            <td> <%= performanceSummary.field_visits %> </td>
+                                                            <td> <%= performanceSummary.field_visit_inquiries %> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>
