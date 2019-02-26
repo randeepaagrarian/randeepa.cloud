@@ -38,6 +38,8 @@ const profileAreaProfile = require('./routes/profile/areaprofile')
 
 const dealerProfile = require('./routes/dealerProfile/dealerProfile')
 
+const sale_SYSEDIT = require('./routes/sale_SYSEDIT')
+
 // Model files
 const Notification = require('./models/notification/notification')
 
@@ -126,6 +128,8 @@ app.use('/profile/areaprofile', profileAreaProfile)
 app.use('/profile', profile)
 
 app.use('/dealerProfile', dealerProfile)
+
+app.use('/sale_SYSEDIT', sale_SYSEDIT)
 
 app.get('*', function(req, res) {
     res.status(404).send('What???')

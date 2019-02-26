@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title></title>
+    <script type="text/javascript">
+      function updateSale(saleID) {
+        event.preventDefault();
+
+        var selectedValue = document.getElementById('dealer_id_' + saleID.toString()).value;
+        document.getElementById('sale_' + saleID.toString()).innerHTML = "<p id=' " + 'sale_' + saleID.toString() + " '>Changing....</p>";
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById('sale_' + saleID.toString()).innerHTML = this.responseText;
+          }
+        };
+
+        xhttp.open("GET", "/sale_SYSEDIT/edit?saleID=" + saleID + "&dealerID=" + selectedValue, true);
+        xhttp.send();
+      }
+
+      function goToPage() {
+        page = document.getElementById('gotToPage').value;
+        window.location.href = "/sale_SYSEDIT?page=" + page;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Sales location SYSEDIT</h1>
+    <h2>Page Number <%= pageNo %></h2>
+    <p>Logged in as <b><%= user.username %></b> <a href="/signout">Logout</a></p>
+    <table>
+      <thead>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Dealer Showroom</th>
+        <td></td>
+      </thead>
+      <tbody>
+        <% sales.forEach(function(sale) { %>
+          <tr id="sale_<%= sale.id %>">
+            <td><%= sale.id %></td>
+            <td><%= sale.location %></td>
+            <td>
+              <select id="dealer_id_<%= sale.id %>">
+                    <% dealersAndShowrooms.forEach(function(dealerAndShowroom){ %>
+                      <% if(dealerAndShowroom.id == sale.location_fk) { %>
+                        <option value="<%= dealerAndShowroom.id %>" selected><%= dealerAndShowroom.name %></option>
+                      <% } else { %>
+                        <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                      <% } %>
+                    <% }) %>
+                </select>
+            </td>
+            <td><button class="btn btn-primary" onclick="updateSale(<%= sale.id %>)">Update</button></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <% if(prev != -1) { %>
+        <a href="/sale_SYSEDIT?page=<%= prev %>">< Previous</a>&nbsp;&nbsp;
+    <% } %>
+    <a href="/sale_SYSEDIT?page=<%= next %>">Next ></a>&nbsp;&nbsp;
+    <input type="text" id="gotToPage" value="<%= pageNo %>"><button name="GTP" onClick="goToPage()">Go</button>
+  </body>
+</html>
