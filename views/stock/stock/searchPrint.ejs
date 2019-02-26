@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/head %>
+
+        <style>
+        .nopadding {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        @media print {
+            a[href]:after {
+                content: none !important;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <% include ../../layouts/invoice_header_agrarian_delivery_note %>
+
+        <div class="container">
+
+            <h4 style="padding: 0px; margin: 0px">Search - <%= keyword %></h3>
+
+
+
+            <table class="table table-hover">
+                <thead>
+                    <th>Delivery Document Id</th>
+                    <th>Model Name</th>
+                    <th>Dealer</th>
+                    <th>Primary ID</th>
+                    <th>Secondary ID</th>
+                    <th>Mark Sold</th>
+                    <th>Notes</th>
+                </thead>
+                <tbody>
+                    <% results.forEach(function(result) { %>
+                        <% if(result.sold == 1) { %>
+                            <tr class="success">
+                                <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= result.delivery_document_id %>"><%= result.delivery_document_id %></a></td>
+                                <td><%= result.model_name %></td>
+                                <td><a href="/stock/viewStock?stockLocation=<%= result.dealer_id %>"><%= result.name %></a></td>
+                                <td><a href="/stock/stockDetails?primaryId=<%= result.primary_id %>"><%= result.primary_id %></a></td>
+                                <td><%= result.secondary_id %></td>
+                                <td></td>
+                                <td><%= result.notes %></td>
+                            </tr>
+                        <% } else { %>
+                            <tr>
+                                <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= result.delivery_document_id %>"><%= result.delivery_document_id %></a></td>
+                                <td><%= result.model_name %></td>
+                                <td><a href="/stock/viewStock?stockLocation=<%= result.dealer_id %>"><%= result.name %></a></td>
+                                <td><a href="/stock/stockDetails?primaryId=<%= result.primary_id %>"><%= result.primary_id %></a></td>
+                                <td><%= result.secondary_id %></td>
+                                <td><a href="/stock/markSold?primaryId=<%= result.primary_id %>&continue=<%= url %>">Mark Sold</a></td>
+                                <td><%= result.notes %></td>
+                            </tr>
+                        <% } %>
+                    <% }) %>
+                </tbody>
+            </table>
+
+
+
+            <p><i>This is a computer generated document and is valid without manual signature.</i></p>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <br>
+                    <hr class="nopadding" style="border-style: dotted;" />
+                    <p class="nopadding">Approved By</p>
+                </div>
+                <div class="col-xs-6">
+
+                </div>
+            </div>
+
+
+            <% include ../../layouts/footer %>
+        </div>
+    </body>
+</html>

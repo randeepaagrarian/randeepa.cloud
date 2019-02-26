@@ -560,6 +560,23 @@ router.get('/search', function(req, res) {
     })
 })
 
+router.get('/search/print', function(req, res) {
+    async.series([
+        function(callback) {
+            Stock.search(req.query.skw, callback)
+        }
+    ], function(err, data) {
+        res.render('stock/stock/searchPrint', {
+            title: 'Search',
+            navbar: 'Stock',
+            results: data[0],
+            keyword: req.query.skw,
+            url: encodeURIComponent(req.originalUrl),
+            user: req.user
+        })
+    })
+})
+
 router.get('/markSold', function(req, res) {
     async.series([
         function(callback) {
