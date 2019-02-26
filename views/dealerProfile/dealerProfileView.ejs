@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="content">
+                                        <div class="row">
+                                            <div class="col-md-3 item" style="width: 140px;">
+                                                <img src="https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png" style="width: 120px; height: 120px; border-radius: 50%;">
+                                            </div>
+                                            <div class="col-md-3 item">
+                                                <p style="font-size: 20px; font-weight: bold;"><%= dealerDetails[0]['name'] %></p>
+                                                <p><%= dealerDetails[0]['address'] %><br><%= dealerDetails[0]['telephone'] %></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="header">
+                                                <p style="font-size: 15px;">Profile from <%= startDate %> to <%= endDate %></p>
+                                                <p style="color: #70c2e5;">Performace Summary</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <% dealerPerformanceSummary[0].forEach(function(performance) { %>
+                                                <div class="col-md-3">
+                                                    <% if(performance.currency == 1) { %>
+                                                        <p><font style="font-size: 30px; color: #1a7736;">LKR <% if(performance.summary) { %><%= performance.summary.toLocaleString() %><% } else { %>0<% } %></font> <%= performance.summary_constraint %></p>
+                                                    <% } else { %>
+                                                        <p><font style="font-size: 30px; color: #1a7736;"><%= performance.summary %></font> <%= performance.summary_constraint %></p>
+                                                    <% } %>
+                                                </div>
+                                            <% }) %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="content">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <p><font style="font-size: 30px; color: #1a7736;"><%= dealerPerformanceSummary[0][0]['summary'] %></font> <%= dealerPerformanceSummary[0][0]['summary_constraint'] %></p>
+                                                    </div>
+                                                </div>
+
+                                                <ul role="tablist" class="nav nav-tabs">
+                                                    <li role="presentation" class="active">
+                                                        <a href="#details" data-toggle="tab">Details</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#model_summary" data-toggle="tab">Model Summary</a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="tab-content">
+                                                    <div id="details" class="tab-pane active">
+                                                        <div style="max-width: 100%; max-height: 500px; overflow: auto;" class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <th>#</th>
+                                                                    <th>Officer</th>
+                                                                    <th>Region</th>
+                                                                    <th>Territory</th>
+                                                                    <th>Date</th>
+                                                                    <th>Cloud Date</th>
+                                                                    <th>Showroom/Dealer</th>
+                                                                    <th>Chassis No</th>
+                                                                    <th>Customer Name</th>
+                                                                    <th>Customer Address</th>
+                                                                    <th>Customer Contact</th>
+                                                                    <th>Model</th>
+                                                                    <th>Invoice Number</th>
+                                                                    <th>Price</th>
+                                                                    <th>Sale Type</th>
+                                                                    <th>Institute</th>
+                                                                    <th>Advance</th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% salesUnitDetail.forEach(function(sale) { %>
+                                                                        <tr>
+                                                                            <td><%= sale.id %></td>
+                                                                            <td><%= sale.officer_name %></td>
+                                                                            <td><%= sale.region_name %></td>
+                                                                            <td><%= sale.territory_name %></td>
+                                                                            <td><%= sale.date %></td>
+                                                                            <td><%= sale.sys_date %></td>
+                                                                            <% if(sale.location){ %>
+                                                                                <td> <%= sale.location %> </td>
+                                                                            <% } else if(sale.sd_location){ %>
+                                                                                <td> <%= sale.sd_location %> </td>
+                                                                            <% } %>
+                                                                            <td><%= sale.chassis_no %></td>
+                                                                            <td><%= sale.customer_name %></td>
+                                                                            <td><%= sale.customer_address %></td>
+                                                                            <td><%= sale.customer_contact %></td>
+                                                                            <td><%= sale.model_name %></td>
+                                                                            <td><%= sale.invoice_no %></td>
+                                                                            <td><%= sale.price %></td>
+                                                                            <td><%= sale.sale_type_name %></td>
+                                                                            <td><%= sale.institute %></td>
+                                                                            <td><%= sale.advance %></td>
+                                                                        </tr>
+                                                                    <% }) %>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="model_summary" class="tab-pane">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <th>Model</th>
+                                                                <th>Sales</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% modelSummary.forEach(function(modelItem) { %>
+                                                                    <% if(modelItem.model == undefined) { %>
+
+                                                                    <% } else { %>
+                                                                        <tr>
+                                                                            <td> <%= modelItem.model %> </td>
+                                                                            <td> <%= modelItem.sales %> </td>
+                                                                        </tr>
+                                                                    <% } %>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="content">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <p><font style="font-size: 30px; color: #1a7736;"><%= dealerPerformanceSummary[0][2]['summary'] %></font> <%= dealerPerformanceSummary[0][2]['summary_constraint'] %></p>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div style="max-width: 100%; max-height: 500px; overflow: auto;" class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <th>#</th>
+                                                                    <th>Date</th>
+                                                                    <th>Cloud Date</th>
+                                                                    <th>Officer</th>
+                                                                    <th>Region</th>
+                                                                    <th>Territory</th>
+                                                                    <th>Start Meter</th>
+                                                                    <th>End Meter</th>
+                                                                    <th>Organiation Type</th>
+                                                                    <th>Organiation Name</th>
+                                                                    <th>Stocks</th>
+                                                                    <th>Inquiries</th>
+                                                                    <th>Location</th>
+                                                                    <th>Purpose</th>
+                                                                    <th>Outcome</th>
+                                                                    <th>Contact Person</th>
+                                                                    <th>Contact Number</th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% dealerVisits.forEach(function(organizationalVisit) { %>
+                                                                        <tr>
+                                                                            <td> <%= organizationalVisit.id %> </td>
+                                                                            <td> <%= organizationalVisit.date %> </td>
+                                                                            <td> <%= organizationalVisit.sys_date %> </td>
+                                                                            <td> <%= organizationalVisit.officer_name %> </td>
+                                                                            <td> <%= organizationalVisit.region_name %> </td>
+                                                                            <td> <%= organizationalVisit.territory_name %> </td>
+                                                                            <td> <%= organizationalVisit.start_meter %> </td>
+                                                                            <td> <%= organizationalVisit.end_meter %> </td>
+                                                                            <td> <%= organizationalVisit.organization_type_name %> </td>
+                                                                            <% if(organizationalVisit.organization_name) { %>
+                                                                                <td> <%= organizationalVisit.organization_name %> </td>
+                                                                            <% } else if(organizationalVisit.d_organization_name){ %>
+                                                                                <td> <%= organizationalVisit.d_organization_name %> </td>
+                                                                            <% } else if(organizationalVisit.bf_organization_name){ %>
+                                                                                <td> <%= organizationalVisit.bf_organization_name %> </td>
+                                                                            <% } %>
+                                                                            <td><a href="/visit/organizationalvisit/stocks/<%= organizationalVisit.id %>"><%= organizationalVisit.stocks %></a></td>
+                                                                            <td><a href="/visit/organizationalvisit/stocks/<%= organizationalVisit.id %>"><%= organizationalVisit.inquiries %></a></td>
+                                                                            <td> <%= organizationalVisit.location %> </td>
+                                                                            <td> <%= organizationalVisit.purpose %> </td>
+                                                                            <td> <%= organizationalVisit.outcome %> </td>
+                                                                            <td> <%= organizationalVisit.contact_person %> </td>
+                                                                            <td> <%= organizationalVisit.contact_number %> </td>
+                                                                        </tr>
+                                                                    <% }) %>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="content">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <p><font style="font-size: 30px; color: #1a7736;"><%= dealerPerformanceSummary[0][3]['summary'] %></font> <%= dealerPerformanceSummary[0][3]['summary_constraint'] %></p>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div style="max-width: 100%; max-height: 500px; overflow: auto;" class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <th>Organizational Visit Id</th>
+                                                                    <th>Cloud Date</th>
+                                                                    <th>Officer</th>
+                                                                    <th>Location</th>
+                                                                    <th>Model</th>
+                                                                    <th>Chassis Number</th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% dealerStocks.forEach(function(dealerStock) { %>
+                                                                        <tr>
+                                                                            <td> <%= dealerStock.organizational_visit_id %> </td>
+                                                                            <td> <%= dealerStock.sys_date %> </td>
+                                                                            <td> <%= dealerStock.officer_name %> </td>
+                                                                            <% if(dealerStock.organization_name) { %>
+                                                                                <td> <%= dealerStock.organization_name %> </td>
+                                                                            <% } else if(dealerStock.d_organization_name){ %>
+                                                                                <td> <%= dealerStock.d_organization_name %> </td>
+                                                                            <% } else if(dealerStock.bf_organization_name){ %>
+                                                                                <td> <%= dealerStock.bf_organization_name %> </td>
+                                                                            <% } %>
+                                                                            <td> <%= dealerStock.model_name %> </td>
+                                                                            <td> <%= dealerStock.chassis_no %> </td>
+                                                                        </tr>
+                                                                    <% }) %>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="content">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <p><font style="font-size: 30px; color: #1a7736;"><%= dealerPerformanceSummary[0][4]['summary'] %></font> <%= dealerPerformanceSummary[0][4]['summary_constraint'] %></p>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div style="max-width: 100%; max-height: 500px; overflow: auto;" class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <th>Organizational Visit Id</th>
+                                                                    <th>Cloud Date</th>
+                                                                    <th>Officer</th>
+                                                                    <th>Customer Name</th>
+                                                                    <th>Customer Address</th>
+                                                                    <th>Customer Telephone</th>
+                                                                    <th>Customer NIC</th>
+                                                                    <th>Customer Inquiry</th>
+                                                                    <th>Model</th>
+                                                                    <th>Location</th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% dealerInquiries.forEach(function(dealerInquiry) { %>
+                                                                        <tr>
+                                                                            <td> <%= dealerInquiry.organizational_visit_id %> </td>
+                                                                            <td> <%= dealerInquiry.sys_date %> </td>
+                                                                            <td> <%= dealerInquiry.officer_name %> </td>
+                                                                            <td> <%= dealerInquiry.customer_name %> </td>
+                                                                            <td> <%= dealerInquiry.customer_address %> </td>
+                                                                            <td> <%= dealerInquiry.customer_telephone %> </td>
+                                                                            <td> <%= dealerInquiry.customer_nic %> </td>
+                                                                            <td> <%= dealerInquiry.inquiry %> </td>
+                                                                            <td> <%= dealerInquiry.model_name %> </td>
+                                                                            <% if(dealerInquiry.organization_name) { %>
+                                                                                <td> <%= dealerInquiry.organization_name %> </td>
+                                                                            <% } else if(dealerInquiry.d_organization_name){ %>
+                                                                                <td> <%= dealerInquiry.d_organization_name %> </td>
+                                                                            <% } else if(dealerInquiry.bf_organization_name){ %>
+                                                                                <td> <%= dealerInquiry.bf_organization_name %> </td>
+                                                                            <% } %>
+                                                                        </tr>
+                                                                    <% }) %>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

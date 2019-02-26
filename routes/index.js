@@ -334,6 +334,21 @@ router.get('/admin', Auth.signedIn, Auth.validAdminUser, function(req, res) {
 	})
 })
 
+router.get('/dealerProfile', Auth.signedIn, Auth.validDealerProfileDashboardUser, function(req, res) {
+	async.series([
+		function(callback) {
+			Stock.getDealersAndShowrooms(callback)
+		}
+	], function(err, data) {
+		res.render('dealerProfile', {
+			title: 'Dealer Profile',
+			navbar: 'Dealer Profile',
+			dealersAndShowrooms: data[0],
+			user: req.user
+		})
+	})
+})
+
 router.get('/signin', function(req, res) {
 	if(req.user) {
 		res.redirect('/')

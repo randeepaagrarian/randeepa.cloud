@@ -1,5 +1,4 @@
 const express = require('express')
-const bcrypt = require('bcryptjs')
 const async = require('async')
 
 const router = express.Router()

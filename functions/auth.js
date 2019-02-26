@@ -206,6 +206,22 @@ Auth.validProfileAreaUser = function(req, res, next) {
     }
 }
 
+Auth.validDealerProfileDashboardUser = function(req, res, next) {
+    if(req.user.accessLevel.dealerProfile) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
+Auth.validDealerProfileUser = function(req, res, next) {
+    if(req.user.accessLevel.dealerProfile == 8) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
 Auth.saleExcelDownloadAllowed = function(req, res, next) {
     if(req.url.search('excel') == -1) {
         next()
