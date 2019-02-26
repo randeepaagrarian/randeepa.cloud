@@ -649,7 +649,7 @@ Stock.getAllDealers = function(callback) {
             return callback(pool_err, null)
         }
 
-        connection.query('SELECT dealer.id, dealer.name, address, telephone, dealer_type.name AS dealer_type_name, territory.name as territory_name FROM dealer LEFT JOIN dealer_type ON dealer.dealer_type_id = dealer_type.id LEFT JOIN territory ON dealer.territory_id = territory.id ORDER BY name ASC', function(err, rows, fields) {
+        connection.query('SELECT dealer.id, dealer.name, address, telephone, dealer_type.name AS dealer_type_name, territory.name as territory_name, exclusive FROM dealer LEFT JOIN dealer_type ON dealer.dealer_type_id = dealer_type.id LEFT JOIN territory ON dealer.territory_id = territory.id ORDER BY name ASC', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -665,7 +665,7 @@ Stock.getDealerDetails = function(dealerId, callback) {
             return callback(pool_err, null)
         }
 
-        connection.query('SELECT dealer.name, address, telephone, territory_id, dealer_type.name AS dealer_type_name FROM dealer LEFT JOIN dealer_type ON dealer.dealer_type_id = dealer_type.id WHERE dealer.id = ?', dealerId, function(err, rows, fields) {
+        connection.query('SELECT dealer.name, address, telephone, territory_id, dealer_type.name AS dealer_type_name, exclusive FROM dealer LEFT JOIN dealer_type ON dealer.dealer_type_id = dealer_type.id WHERE dealer.id = ?', dealerId, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
