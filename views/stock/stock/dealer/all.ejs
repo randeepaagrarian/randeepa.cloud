@@ -36,6 +36,7 @@
                                                     <th>Dealer Address</th>
                                                     <th>Dealer Type</th>
                                                     <th>Territory</th>
+                                                    <th>Exclusive</th>
                                                     <th>Edit</th>
                                                 </thead>
                                                 <tbody>
@@ -46,6 +47,13 @@
                                                             <td><%= dealer.address %></td>
                                                             <td><%= dealer.dealer_type_name %></td>
                                                             <td><%= dealer.territory_name %></td>
+                                                            <td>
+                                                                <% if(dealer.exclusive == 1) { %>
+                                                                    YES
+                                                                <% } else { %>
+                                                                    NO
+                                                                <% } %>
+                                                            </td>
                                                             <td><a href="/stock/dealer/edit?dealerId=<%= dealer.id %>">Edit</a></td>
                                                         </tr>
                                                     <% }) %>

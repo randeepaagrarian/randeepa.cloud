@@ -49,6 +49,20 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Exclusive</td>
+                                                    <td>
+                                                        <select class="form-control" name="exclusive">
+                                                            <% if(dealer[0]['exclusive'] == 0){ %>
+                                                                <option value="1">YES</option>
+                                                                <option value="0" selected>NO</option>
+                                                            <% } else { %>
+                                                                <option value="1" selected>YES</option>
+                                                                <option value="0">NO</option>
+                                                            <% } %>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td></td>
                                                     <td><input class="btn btn-primary" type="submit" value="Update Details"></td>
                                                 </tr>
