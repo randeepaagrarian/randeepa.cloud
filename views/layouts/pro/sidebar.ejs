@@ -46,6 +46,15 @@
                 </li>
             <% } %>
 
+            <% if(typeof user.accessLevel.dealerProfile != 'undefined') { %>
+                <li class="<%= navbar == 'Dealer Profile' ? 'active' : '' %>">
+                    <a href="/dealerProfile">
+                        <i class="pe-7s-id"></i>
+                        <p>Dealer Profile</p>
+                    </a>
+                </li>
+            <% } %>
+
             <% if(typeof user.accessLevel.sale != 'undefined') { %>
                 <li class="<%= navbar == 'Sales' ? 'active' : '' %>">
                     <a href="/sales">

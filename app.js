@@ -36,6 +36,8 @@ const admin = require('./routes/admin/admin')
 const profile = require('./routes/profile/profile')
 const profileAreaProfile = require('./routes/profile/areaprofile')
 
+const dealerProfile = require('./routes/dealerProfile/dealerProfile')
+
 // Model files
 const Notification = require('./models/notification/notification')
 
@@ -122,6 +124,8 @@ app.use('/admin', admin)
 
 app.use('/profile/areaprofile', profileAreaProfile)
 app.use('/profile', profile)
+
+app.use('/dealerProfile', dealerProfile)
 
 app.get('*', function(req, res) {
     res.status(404).send('What???')

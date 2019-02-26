@@ -17,6 +17,26 @@
 
                             <% if(user.accessLevel.sale == 8) { %>
 
+                                <% if(user.accessLevel.dealerProfile) { %>
+                			      <div class="col-md-12">
+                				  <div class="card">
+                				      <div class="header">
+                                        Dealer Performance Summary Support
+                				      </div>
+                				      <div class="container-fluid">
+                					  <div class="row">
+                					      <div class="col-md-12">
+                						  <div class="header">
+                						      <p class="category"></p>
+                						  </div>
+                						  <p><font color='green'><b>New!</b> Dealer performance summary දැන් Dealer Profile menu හරහා ලබා ගත හැක.</font></p>
+                					      </div>
+                					  </div>
+                				      </div>
+                				  </div>
+                			      </div>
+                			    <% } %>
+
 			    <% if(user.accessLevel.profile) { %>
 			      <div class="col-md-12">
 				  <div class="card">
