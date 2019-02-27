@@ -8,7 +8,7 @@ sale_SYSEDIT.getAllSales = function(pageNumber, callback) {
           return callback(pool_err, null)
       }
 
-        const offset = (pageNumber - 1) * 50
+        const offset = (pageNumber - 1) * 100
 
       connection.query('SELECT id, location, location_fk FROM sale WHERE id <= 1374 LIMIT 100 offset ?', offset, function(err, rows, fields) {
           connection.release()
