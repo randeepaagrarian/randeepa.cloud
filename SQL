@@ -14,6 +14,24 @@ DESCRIBE organizational_visit;
 
 DESCRIBE sale;
 
+CREATE DEFINER=`raplsys`@`%` PROCEDURE `Calendar`()
+BEGIN
+  DECLARE month INT DEFAULT MONTH(CURDATE());
+  DECLARE year INT DEFAULT YEAR(CURDATE()) - 1;
+  DROP TABLE IF EXISTS CAL;
+  CREATE TEMPORARY TABLE CAL (month INT, year INT);
+  REPEAT
+    SET month = month + 1;
+    IF (month = 13) THEN
+      SET month = 1;
+      SET year = year + 1;
+    END IF;
+    INSERT INTO CAL VALUES (month, year);
+    UNTIL month = MONTH(CURDATE())
+  END REPEAT;
+  SELECT * FROM CAL;
+END
+
 SELECT 'Banking' as e_type, B.id, U.name as user, B.date, B.sys_date, R.name as region, T.name as territory, B.bank, B.branch, B.amount, B.source_document
 FROM banking B LEFT JOIN region R ON B.region = R.id LEFT JOIN territory T ON B.territory = T.id LEFT JOIN user U ON B.officer = U.username
 
@@ -157,6 +175,44 @@ SELECT 'Stock Reports By Officers' as summary_constraint, COUNT(stocks) as summa
 WHERE stock_reports.stocks >= 1;
 END //
 DELIMITER ;
+
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS CompanyDealerPerformanceSummary //
+CREATE PROCEDURE CompanyDealerPerformanceSummary(IN start_date DATE, IN end_date DATE, IN exclusive INT)
+BEGIN
+	CASE exclusive
+		WHEN -1 THEN
+			SELECT id, name, territory_id
+			, (SELECT COUNT(id) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_units
+			, (SELECT SUM(price) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_value
+			, (SELECT COUNT(*) FROM organizational_visit OV WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk=D.id) as visits_by_officers
+			, (SELECT COUNT(stocks) FROM (SELECT OV.id, OV.organization_name_fk, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date GROUP BY OV.id, officer) stock_reports
+			WHERE stock_reports.stocks >= 1 AND stock_reports.organization_name_fk = D.id) as stock_reports
+			, (SELECT COUNT(OVI.id) FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk = D.id) as inquiries
+			FROM dealer D ORDER BY sales_units DESC;
+		WHEN 1 THEN
+			SELECT id, name, territory_id
+			, (SELECT COUNT(id) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_units
+			, (SELECT SUM(price) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_value
+			, (SELECT COUNT(*) FROM organizational_visit OV WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk=D.id) as visits_by_officers
+			, (SELECT COUNT(stocks) FROM (SELECT OV.id, OV.organization_name_fk, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date GROUP BY OV.id, officer) stock_reports
+			WHERE stock_reports.stocks >= 1 AND stock_reports.organization_name_fk = D.id) as stock_reports
+			, (SELECT COUNT(OVI.id) FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk = D.id) as inquiries
+			FROM dealer D WHERE D.exclusive = 1 ORDER BY sales_units DESC;
+		WHEN 0 THEN
+			SELECT id, name, territory_id
+			, (SELECT COUNT(id) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_units
+			, (SELECT SUM(price) FROM sale S WHERE S.location_fk = D.id AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_value
+			, (SELECT COUNT(*) FROM organizational_visit OV WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk=D.id) as visits_by_officers
+			, (SELECT COUNT(stocks) FROM (SELECT OV.id, OV.organization_name_fk, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date GROUP BY OV.id, officer) stock_reports
+			WHERE stock_reports.stocks >= 1 AND stock_reports.organization_name_fk = D.id) as stock_reports
+			, (SELECT COUNT(OVI.id) FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_name_fk = D.id) as inquiries
+			FROM dealer D WHERE D.exclusive = 0 ORDER BY sales_units DESC;
+    END CASE;
+END //
+DELIMITER ;
+
 
 
 e_type
