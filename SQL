@@ -1,0 +1,180 @@
+-- bankings
+-- expense
+-- field visit
+-- organizational visit
+-- sale
+
+DESCRIBE banking;
+
+DESCRIBE expense;
+
+DESCRIBE field_visit;
+
+DESCRIBE organizational_visit;
+
+DESCRIBE sale;
+
+SELECT 'Banking' as e_type, B.id, U.name as user, B.date, B.sys_date, R.name as region, T.name as territory, B.bank, B.branch, B.amount, B.source_document
+FROM banking B LEFT JOIN region R ON B.region = R.id LEFT JOIN territory T ON B.territory = T.id LEFT JOIN user U ON B.officer = U.username
+
+SELECT 'Expense Claim' as e_type, E.id, U.name as user, E.date, E.sys_date
+FROM expense E LEFT JOIN user U ON E.username = U.username
+
+SELECT 'Field Visit' as e_type, FV.id, U.name as user, FV.date, FV.sys_date, R.name as region, T.name as territory, FV.start_meter, FV.end_meter, FV.location
+FROM field_visit FV LEFT JOIN region R ON FV.region = R.id LEFT JOIN territory T ON FV.territory = T.id LEFT JOIN user U ON FV.officer = U.username
+
+SELECT 'Organizational Visit' as e_type, OV.id, U.name as user, OV.date, OV.sys_date, R.name as region, T.name as territory, OV.start_meter, OV.end_meter, OV.organization_name, O.name as bf_organization_name, D.name as d_organization_name
+FROM organizational_visit OV LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id LEFT JOIN region R ON OV.region = R.id LEFT JOIN territory T ON OV.territory = T.id LEFT JOIN user U ON OV.officer = U.username LEFT JOIN organization O ON OV.organization_name_fk = O.id AND OV.organization_type_id IN (1, 2) AND OV.organization_name_fk <> 0 LEFT JOIN dealer D ON OV.organization_name_fk = D.id AND OV.organization_type_id IN (6, 7) AND OV.organization_name_fk <> 0
+
+SELECT 'Sale' as e_type, S.id, U.name as user, S.date, S.sys_date, R.name as region, T.name as territory, S.location, D.name as d_organization_name, M.name as model_name, S.chassis_no
+FROM sale S LEFT JOIN region R ON S.region = R.id LEFT JOIN territory T ON S.territory = T.id LEFT JOIN user U ON S.officer = U.username LEFT JOIN dealer D ON S.location_fk = D.id AND S.location_fk <> 0 LEFT JOIN model M on S.model = M.id
+
+
+
+SELECT 'Banking' as e_type, B.id, U.name as user, DATE_FORMAT(B.date, '%Y-%m-%d') as date, DATE_FORMAT(B.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, B.bank, B.branch, B.amount, B.source_document, NULL as start_meter, NULL as end_meter, NULL as location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM banking B LEFT JOIN region R ON B.region = R.id LEFT JOIN territory T ON B.territory = T.id LEFT JOIN user U ON B.officer = U.username
+UNION
+SELECT 'Expense Claim' as e_type, E.id, U.name as user, DATE_FORMAT(E.date, '%Y-%m-%d') as date, DATE_FORMAT(E.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, NULL as region, NULL as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document,  NULL as start_meter, NULL as end_meter, NULL as location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM expense E LEFT JOIN user U ON E.username = U.username
+UNION
+SELECT 'Field Visit' as e_type, FV.id, U.name as user, DATE_FORMAT(FV.date, '%Y-%m-%d') as date, DATE_FORMAT(FV.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, FV.start_meter, FV.end_meter, FV.location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM field_visit FV LEFT JOIN region R ON FV.region = R.id LEFT JOIN territory T ON FV.territory = T.id LEFT JOIN user U ON FV.officer = U.username
+UNION
+SELECT 'Organizational Visit' as e_type, OV.id, U.name as user, DATE_FORMAT(OV.date, '%Y-%m-%d') as date, DATE_FORMAT(OV.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, OV.start_meter, OV.end_meter, NULL as location, OV.organization_name, O.name as bf_organization_name, D.name as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM organizational_visit OV LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id LEFT JOIN region R ON OV.region = R.id LEFT JOIN territory T ON OV.territory = T.id LEFT JOIN user U ON OV.officer = U.username LEFT JOIN organization O ON OV.organization_name_fk = O.id AND OV.organization_type_id IN (1, 2) AND OV.organization_name_fk <> 0 LEFT JOIN dealer D ON OV.organization_name_fk = D.id AND OV.organization_type_id IN (6, 7) AND OV.organization_name_fk <> 0
+UNION
+SELECT 'Sale' as e_type, S.id, U.name as user, DATE_FORMAT(S.date, '%Y-%m-%d') as date, DATE_FORMAT(S.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, NULL as start_meter, NULL as end_meter, S.location, NULL as organization_name, NULL as bf_organization_name, D.name as d_organization_name, M.name as model_name, S.chassis_no
+FROM sale S LEFT JOIN region R ON S.region = R.id LEFT JOIN territory T ON S.territory = T.id LEFT JOIN user U ON S.officer = U.username LEFT JOIN dealer D ON S.location_fk = D.id AND S.location_fk <> 0 LEFT JOIN model M on S.model = M.id
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS OfficerActivityLog //
+CREATE PROCEDURE OfficerActivityLog(IN username VARCHAR(32), IN start_date DATE, IN end_date DATE)
+BEGIN
+SELECT * FROM (
+SELECT 'Banking' as e_type, B.id, U.name as user, DATE_FORMAT(B.date, '%Y-%m-%d') as date, DATE_FORMAT(B.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, B.bank, B.branch, B.amount, B.source_document, NULL as start_meter, NULL as end_meter, NULL as location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, MB.chassis_no
+FROM banking B LEFT JOIN region R ON B.region = R.id LEFT JOIN territory T ON B.territory = T.id LEFT JOIN user U ON B.officer = U.username LEFT JOIN machinery_banking MB on B.id = MB.banking_id WHERE B.officer = username AND DATE(B.sys_date) BETWEEN start_date AND end_date
+UNION
+SELECT 'Expense Claim' as e_type, E.id, U.name as user, DATE_FORMAT(E.date, '%Y-%m-%d') as date, DATE_FORMAT(E.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, NULL as region, NULL as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document,  NULL as start_meter, NULL as end_meter, NULL as location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM expense E LEFT JOIN user U ON E.username = U.username WHERE E.username = username AND DATE(E.sys_date) BETWEEN start_date AND end_date
+UNION
+SELECT 'Field Visit' as e_type, FV.id, U.name as user, DATE_FORMAT(FV.date, '%Y-%m-%d') as date, DATE_FORMAT(FV.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, FV.start_meter, FV.end_meter, FV.location, NULL as organization_name, NULL as bf_organization_name, NULL as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM field_visit FV LEFT JOIN region R ON FV.region = R.id LEFT JOIN territory T ON FV.territory = T.id LEFT JOIN user U ON FV.officer = U.username WHERE FV.officer = username AND DATE(FV.sys_date) BETWEEN start_date AND end_date
+UNION
+SELECT 'Organizational Visit' as e_type, OV.id, U.name as user, DATE_FORMAT(OV.date, '%Y-%m-%d') as date, DATE_FORMAT(OV.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, OV.start_meter, OV.end_meter, NULL as location, OV.organization_name, O.name as bf_organization_name, D.name as d_organization_name, NULL as model_name, NULL as chassis_no
+FROM organizational_visit OV LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id LEFT JOIN region R ON OV.region = R.id LEFT JOIN territory T ON OV.territory = T.id LEFT JOIN user U ON OV.officer = U.username LEFT JOIN organization O ON OV.organization_name_fk = O.id AND OV.organization_type_id IN (1, 2) AND OV.organization_name_fk <> 0 LEFT JOIN dealer D ON OV.organization_name_fk = D.id AND OV.organization_type_id IN (6, 7) AND OV.organization_name_fk <> 0 WHERE OV.officer = username AND DATE(OV.sys_date) BETWEEN start_date AND end_date
+UNION
+SELECT 'Sale' as e_type, S.id, U.name as user, DATE_FORMAT(S.date, '%Y-%m-%d') as date, DATE_FORMAT(S.sys_date, '%Y-%m-%d %H:%I:%S') as sys_date, R.name as region, T.name as territory, NULL as bank, NULL as branch, NULL as amount, NULL as source_document, NULL as start_meter, NULL as end_meter, S.location, NULL as organization_name, NULL as bf_organization_name, D.name as d_organization_name, M.name as model_name, S.chassis_no
+FROM sale S LEFT JOIN region R ON S.region = R.id LEFT JOIN territory T ON S.territory = T.id LEFT JOIN user U ON S.officer = U.username LEFT JOIN dealer D ON S.location_fk = D.id AND S.location_fk <> 0 LEFT JOIN model M on S.model = M.id WHERE S.officer = username AND DATE(S.sys_date) BETWEEN start_date AND end_date
+) AS summary ORDER BY sys_date DESC;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS OfficerPerformanceSummary //
+CREATE PROCEDURE OfficerPerformanceSummary(IN username VARCHAR(32), IN start_date DATE, IN end_date DATE)
+BEGIN
+SELECT 'Sales Units' as summary_constraint, COUNT(*) as summary, '0' as currency FROM sale WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username
+UNION
+SELECT 'Dealer Visits' as summary_constraint, COUNT(*) as summary, '0' as currency FROM organizational_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND organization_type_id = 6 AND officer=username
+UNION
+SELECT 'Sales Value' as summary_constraint, SUM(price) as summary, '1' as currency FROM sale WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username
+UNION
+SELECT 'Bankings' as summary_constraint, SUM(amount) as summary, '1' as currency FROM banking WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username
+UNION
+SELECT 'Institute & Other Visits' as summary_constraint, COUNT(*) as summary, '0' as currency FROM organizational_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND organization_type_id IN(1,2,3,7) AND officer=username
+UNION
+SELECT 'Stock Reports' as summary_constraint, COUNT(stocks) as summary, '0' as currency FROM
+(SELECT OV.id, OV.officer, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND officer = username GROUP BY OV.id, officer) stock_reports
+WHERE stock_reports.stocks >= 1
+UNION
+SELECT 'Dealer Inquiries' as summary_constraint, COUNT(OVI.id) as summary, '0' as currency FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE OV.organization_type_id = 6 AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.officer = username
+UNION
+SELECT 'Field Visits' as summary_constraint, COUNT(id) as summary, '0' as currency FROM field_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username
+UNION
+SELECT 'Field Visit Inquiries' as summary_constraint, COUNT(FVI.id) as summary, '0' as currency FROM field_visit_inquiry FVI LEFT JOIN field_visit FV on FVI.field_visit_id = FV.id WHERE DATE(FV.sys_date) BETWEEN start_date AND end_date AND officer = username;
+END //
+DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS CompanyOfficerPerformanceSummary //
+CREATE PROCEDURE CompanyOfficerPerformanceSummary(IN start_date DATE, IN end_date DATE)
+BEGIN
+SELECT username, U.name, R.name as region_name, T.name as territory_name, profile_pic
+, (SELECT COUNT(id) FROM sale S WHERE S.officer = U.username AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_units
+, (SELECT COUNT(id) FROM organizational_visit OV WHERE OV.officer = U.username AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_type_id = 6) as dealer_visits
+, (SELECT SUM(price) FROM sale S WHERE S.officer = U.username AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_value
+, (SELECT SUM(amount) FROM banking B WHERE B.officer = U.username AND DATE(B.sys_date) BETWEEN start_date AND end_date) as bankings
+, (SELECT COUNT(id) FROM organizational_visit OV WHERE OV.officer = U.username AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_type_id IN(1,2,3,7)) as institute_and_other_visits
+, (SELECT COUNT(stocks) FROM (SELECT OV.id, OV.officer, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date GROUP BY OV.id, officer) stock_reports
+WHERE stock_reports.stocks >= 1 AND stock_reports.officer = U.username) as stock_reports
+, (SELECT COUNT(OVI.id) FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE OV.organization_type_id = 6 AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.officer = U.username) as dealer_inquiries
+, (SELECT COUNT(id) FROM field_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username) as field_visits
+, (SELECT COUNT(FVI.id) FROM field_visit_inquiry FVI LEFT JOIN field_visit FV on FVI.field_visit_id = FV.id WHERE DATE(FV.sys_date) BETWEEN start_date AND end_date AND officer = U.username)  as field_visit_inquiries
+FROM user U
+LEFT JOIN region R ON U.region = R.id
+LEFT JOIN territory T ON U.territory = T.id
+WHERE U.profile = 1 AND U.active = 1
+GROUP BY username, U.name, region_name, territory_name, profile_pic;
+END //
+DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS RegionalOfficerPerformanceSummary //
+CREATE PROCEDURE RegionalOfficerPerformanceSummary(IN start_date DATE, IN end_date DATE, IN region INT)
+BEGIN
+SELECT username, U.name, R.name as region_name, T.name as territory_name, profile_pic
+, (SELECT COUNT(id) FROM sale S WHERE S.officer = U.username AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_units
+, (SELECT COUNT(id) FROM organizational_visit OV WHERE OV.officer = U.username AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_type_id = 6) as dealer_visits
+, (SELECT SUM(price) FROM sale S WHERE S.officer = U.username AND DATE(S.sys_date) BETWEEN start_date AND end_date) as sales_value
+, (SELECT SUM(amount) FROM banking B WHERE B.officer = U.username AND DATE(B.sys_date) BETWEEN start_date AND end_date) as bankings
+, (SELECT COUNT(id) FROM organizational_visit OV WHERE OV.officer = U.username AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.organization_type_id IN(1,2,3,7)) as institute_and_other_visits
+, (SELECT COUNT(stocks) FROM (SELECT OV.id, OV.officer, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date GROUP BY OV.id, officer) stock_reports
+WHERE stock_reports.stocks >= 1 AND stock_reports.officer = U.username) as stock_reports
+, (SELECT COUNT(OVI.id) FROM organizational_visit_inquiry OVI LEFT JOIN organizational_visit OV on OVI.organizational_visit_id = OV.id WHERE OV.organization_type_id = 6 AND DATE(OV.sys_date) BETWEEN start_date AND end_date AND OV.officer = U.username) as dealer_inquiries
+, (SELECT COUNT(id) FROM field_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND officer=username) as field_visits
+, (SELECT COUNT(FVI.id) FROM field_visit_inquiry FVI LEFT JOIN field_visit FV on FVI.field_visit_id = FV.id WHERE DATE(FV.sys_date) BETWEEN start_date AND end_date AND officer = U.username)  as field_visit_inquiries
+FROM user U
+LEFT JOIN region R ON U.region = R.id
+LEFT JOIN territory T ON U.territory = T.id
+WHERE U.profile = 1 AND U.active = 1 AND U.region = region
+GROUP BY username, U.name, region_name, territory_name, profile_pic;
+END //
+DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS DealerPerformanceSummary //
+CREATE PROCEDURE DealerPerformanceSummary(IN dealerID INT, IN start_date DATE, IN end_date DATE)
+BEGIN
+SELECT 'Sales Units' as summary_constraint, COUNT(*) as summary, '0' as currency FROM sale WHERE DATE(sys_date) BETWEEN start_date AND end_date AND location_fk=dealerID
+UNION
+SELECT 'Sales Value' as summary_constraint, SUM(price) as summary, '1' as currency FROM sale WHERE DATE(sys_date) BETWEEN start_date AND end_date AND location_fk=dealerID
+UNION
+SELECT 'Visits By Officers' as summary_constraint, COUNT(*) as summary, '0' as currency FROM organizational_visit WHERE DATE(sys_date) BETWEEN start_date AND end_date AND organization_name_fk=dealerID
+UNION
+SELECT 'Stock Reports By Officers' as summary_constraint, COUNT(stocks) as summary, '0' as currency FROM
+(SELECT OV.id, COUNT(OS.id) as stocks, COUNT(OI.id) as inquiries FROM organizational_visit OV LEFT JOIN organizational_visit_stock OS ON OV.id = OS.organizational_visit_id LEFT JOIN organizational_visit_inquiry OI ON OV.id = OI.organizational_visit_id WHERE DATE(OV.sys_date) BETWEEN start_date AND end_date AND organization_name_fk = dealerID GROUP BY OV.id) stock_reports
+WHERE stock_reports.stocks >= 1;
+END //
+DELIMITER ;
+
+
+e_type
+id
+user
+date
+sys_date
+region
+territory
+bank
+branch
+amount
+source_document
+start_meter
+end_meter
+location
+organization_name
+bf_organization_name
+d_organization_name
+model_name
+chassis_no
