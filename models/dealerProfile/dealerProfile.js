@@ -18,6 +18,22 @@ DealerProfile.dealerPerformanceSummary = function(dealerID, start_date, end_date
     })
 }
 
+DealerProfile.companyDealerPerformanceSummary = function(start_date, end_date, exclusivity, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+      return callback(pool_err, null)
+    }
+
+    connection.query('CALL CompanyDealerPerformanceSummary(?, ?, ?);', [start_date, end_date, exclusivity], function(err, rows, fields) {
+      if(err) {
+        return callback(err, null)
+      } else {
+        callback(err, rows)
+      }
+    })
+  })
+}
+
 DealerProfile.salesUnitDetails = function(dealerID, start_date, end_date, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {

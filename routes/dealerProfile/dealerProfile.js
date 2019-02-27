@@ -16,6 +16,24 @@ router.use(Auth.signedIn, Auth.validDealerProfileUser, function(req, res, next) 
     next()
 })
 
+router.get('/overallPerformanceView', function(req, res) {
+  async.series([
+    function(callback) {
+      DealerProfile.companyDealerPerformanceSummary(req.query.startDate, req.query.endDate, req.query.exclusive, callback)
+    }
+  ], function(err, data) {
+    res.render('dealerProfile/overallPerformanceView', {
+      navbar: 'Dealer Profile',
+      user: req.user,
+      title: 'Overall Dealer Performance View',
+      start_date: req.query.startDate,
+      end_date: req.query.endDate,
+      performanceSummaries: data[0][0]
+    })
+  })
+})
+
+
 router.get('/dealerProfileView', function(req, res) {
     async.series([
         function(callback) {

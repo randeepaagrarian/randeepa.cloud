@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Dealer</th>
+                                                    <th>Sales Units</th>
+                                                    <th>Sales Value</th>
+                                                    <th>Visits by Officers</th>
+                                                    <th>Stock Reports</th>
+                                                    <th>Inquiries</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% performanceSummaries.forEach(function(performanceSummary) { %>
+                                                        <tr>
+                                                            <td><a href="/dealerProfile/dealerProfileView?dealerID=<%= performanceSummary.id %>&startDate=<%= start_date %>&endDate=<%= end_date %>"><%= performanceSummary.name %></a></td>
+                                                            <td> <%= performanceSummary.sales_units %> </td>
+                                                            <td> <%= performanceSummary.sales_value %> </td>
+                                                            <td> <%= performanceSummary.visits_by_officers %> </td>
+                                                            <td> <%= performanceSummary.stock_reports %> </td>
+                                                            <td> <%= performanceSummary.inquiries %> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

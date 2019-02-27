@@ -16,6 +16,33 @@
                         <% if(user.accessLevel.profile == 8) { %>
                             <div class="row">
 
+                              <div class="col-md-12">
+                                  <div class="card">
+                                      <div class="header">
+                                          <h4 class="title">Overall Dealer Performance Summary</h4>
+                                      </div>
+                                      <div class="content">
+                                          <p><i>* Please use the date time picker when entering data to fields, <b>start date</b> and <b>end date</b>. If the date time picker is not available, please enter the date in the format, <b>YYYY-MM-DD</b></i></p>
+                                          <form class="form-inline" action="/dealerProfile/overallPerformanceView" method="get">
+                                              <b>Start Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                              <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                              <b>End Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                              <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                              <b>Exclusivity:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                              <select class="form-control" name="exclusive">
+                                                <option value="-1">-- NO FILTER --</option>
+                                                <option value="1">YES</option>
+                                                <option value="0">NO</option>
+                                              </select>
+                                              <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                              <div class="form-group">
+                                                  <input class="btn btn-primary" type="submit" value="View">
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="header">
