@@ -94,6 +94,7 @@ app.use(function(req, res, next){
         res.locals.notifications = data[0]
         res.locals.notificationsCount = data[0].length
         res.locals.unreadNotificationsCount = data[1].length
+        res.locals.pageURL = req.url
         next()
       })
     } else {

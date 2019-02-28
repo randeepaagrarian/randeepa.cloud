@@ -30,7 +30,7 @@
                         <p><a href="/notificationClicked?id=<%= notification.id %>"><font color='blue'><b><%= notification.title %></b></font></a></p>
                         <hr style='margin: 0; border-color: #262f3d;'>
                       <% } else { %>
-                        <p><a href="<%= notification.link %>"><font color='ash'><%= notification.title %></font></a></p>
+                        <p><a href="<%= notification.link %>"><font color='ash'><%= notification.title %></font></a>&nbsp;&nbsp;<a href="/markNotificationRead?id=<%= notification.id %>&back=<%= pageURL %>"><font style="color: #1d1e2b; font-size: 12.5px;"><b>Mark Unread</b></font></a></p>
                         <hr style='margin: 0; border-color: #262f3d;'>
                       <% } %>
                     <% }) %>

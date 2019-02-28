@@ -411,6 +411,31 @@ router.get('/notificationClicked', Auth.signedIn, function(req, res) {
 	})
 })
 
+router.get('/markNotificationRead', Auth.signedIn, function(req, res) {
+
+	async.series([
+		function(callback) {
+			Notification.getUserNotificationDetails(req.query.id, callback)
+		}
+	], function(err, data) {
+		if(data[0][0].user == req.user.username) {
+			async.series([
+				function(callback) {
+					Notification.markUnread(req.query.id, callback)
+				}
+			], function(err, markedUnread) {
+				if(markedUnread == true) {
+					res.redirect(req.pageURL)
+				} else {
+					res.redirect('/')
+				}
+			})
+		} else {
+			res.redirect('/')
+		}
+	})
+})
+
 router.get('/changePassword', Auth.signedIn, function(req, res) {
 	res.render('changePassword', {
 		title: 'Change Password',
