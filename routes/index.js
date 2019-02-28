@@ -53,6 +53,20 @@ router.get('/', Auth.signedIn, function(req, res) {
 				Sale.lastYearNorth(callback)
 			}, function(callback) {
 				ProfileMyProfile.profile(req.user.username, MDate.getDate('-'), MDate.getDate('-'), callback)
+			}, function(callback) {
+				Sale.lastYearByRevenue(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueCentral(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueRajarata(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueNorthWest(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueRuhuna(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueIndustrial(callback)
+			}, function(callback) {
+				Sale.lastYearByRevenueNorth(callback)
 			}
 		], function(err, data) {
 			res.render('dashboard_pro', {
@@ -70,6 +84,13 @@ router.get('/', Auth.signedIn, function(req, res) {
 				last_year_ruhuna: data[8],
 				last_year_industrial: data[9],
 				last_year_north: data[10],
+				last_year_by_revenue: data[12],
+				last_year_by_revenue_central: data[13],
+				last_year_by_revenue_rajarata: data[14],
+				last_year_by_revenue_north_west: data[15],
+				last_year_by_revenue_ruhuna: data[16],
+				last_year_by_revenue_industrial: data[17],
+				last_year_by_revenue_north: data[18],
 				today: MDate.getDate('/')
 			})
 		})
