@@ -10,6 +10,8 @@ const json2xls = require('json2xls')
 const dateTime = require('node-datetime')
 const favicon = require('serve-favicon')
 const async = require('async')
+const redis = require('redis')
+const redisStore = require('connect-redis')(session)
 // Routes files
 const index = require('./routes/index')
 
@@ -45,6 +47,8 @@ const Notification = require('./models/notification/notification')
 
 const app = express()
 
+const client = redis.createClient()
+
 app.use(favicon(__dirname + '/public/img/favicon.ico'))
 
 app.disable('x-powered-by')
@@ -60,7 +64,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({
     secret: 'secret',
     saveUninitialized: true,
-    resave: true
+    resave: true,
+    store: new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260 })
 }))
 
 app.use(passport.initialize())
