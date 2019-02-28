@@ -62,10 +62,10 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true,
-    store: new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260 })
+    secret: 'lakshf298ajdshf',
+    store: new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260 }),
+    saveUninitialized: false,
+    resave: false
 }))
 
 app.use(passport.initialize())
