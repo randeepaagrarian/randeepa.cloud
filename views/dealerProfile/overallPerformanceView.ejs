@@ -24,6 +24,7 @@
                                         <div style="max-width: 100%; overflow: auto;" class="table-responsive">
                                             <table class="table table-striped">
                                                 <thead>
+                                                    <th>#</th>
                                                     <th>Dealer</th>
                                                     <th>Sales Units</th>
                                                     <th>Sales Value</th>
@@ -32,8 +33,9 @@
                                                     <th>Inquiries</th>
                                                 </thead>
                                                 <tbody>
-                                                    <% performanceSummaries.forEach(function(performanceSummary) { %>
+                                                    <% performanceSummaries.forEach(function(performanceSummary, i) { %>
                                                         <tr>
+                                                            <td> <%= i+1 %> </td>
                                                             <td><a href="/dealerProfile/dealerProfileView?dealerID=<%= performanceSummary.id %>&startDate=<%= start_date %>&endDate=<%= end_date %>"><%= performanceSummary.name %></a></td>
                                                             <td> <%= performanceSummary.sales_units %> </td>
                                                             <td> <%= performanceSummary.sales_value %> </td>
