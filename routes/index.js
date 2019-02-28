@@ -411,7 +411,7 @@ router.get('/notificationClicked', Auth.signedIn, function(req, res) {
 	})
 })
 
-router.get('/markNotificationRead', Auth.signedIn, function(req, res) {
+router.get('/markNotificationUnread', Auth.signedIn, function(req, res) {
 
 	async.series([
 		function(callback) {
@@ -424,8 +424,8 @@ router.get('/markNotificationRead', Auth.signedIn, function(req, res) {
 					Notification.markUnread(req.query.id, callback)
 				}
 			], function(err, markedUnread) {
-				if(markedUnread == true) {
-					res.redirect(req.pageURL)
+				if(markedUnread[0] == true) {
+					res.redirect(req.query.back)
 				} else {
 					res.redirect('/')
 				}
