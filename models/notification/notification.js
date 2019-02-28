@@ -90,3 +90,18 @@ Notification.markChecked = function(notification_id, date, callback) {
     })
   })
 }
+
+Notification.markUnread = function(notification_id, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
+    connection.query('UPDATE user_notification SET checked = 0, read_on = NULL WHERE id = ?', [notification_id], function(err, results, fields) {
+        connection.release()
+        if(err) {
+            return callback(err, false)
+        }
+        callback(err, true)
+    })
+  })
+}
