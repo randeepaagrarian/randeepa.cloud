@@ -23,6 +23,7 @@ router.get('/overallPerformanceView', function(req, res) {
     }
   ], function(err, data) {
     res.render('dealerProfile/overallPerformanceView', {
+      url: req.url,
       navbar: 'Dealer Profile',
       user: req.user,
       title: 'Overall Dealer Performance View',
@@ -31,6 +32,16 @@ router.get('/overallPerformanceView', function(req, res) {
       performanceSummaries: data[0][0]
     })
   })
+})
+
+router.get('/excel/overallPerformanceView', function(req, res) {
+    async.series([
+        function(callback) {
+            DealerProfile.companyDealerPerformanceSummary(req.query.startDate, req.query.endDate, req.query.exclusive, callback)
+        }
+    ], function(err, details) {
+        res.xls('Company Dealer Performance Summary from ' + req.query.startDate + ' to ' + req.query.endDate + '.xlsx', details[0][0])
+    })
 })
 
 
