@@ -423,7 +423,7 @@ Sale.getComments = function(cloudID, callback) {
     if(pool_err) {
         return callback(pool_err, null)
     }
-    connection.query('SELECT SC.username, U.name, DATE_FORMAT(SC.date, \'%Y-%m-%d %H:%i:%S\') as date, SC.text FROM sale_comment SC LEFT JOIN user U ON SC.username = U.username WHERE sale_id = ? ORDER BY SC.date DESC', cloudID, function(err, rows, fields) {
+    connection.query('SELECT SC.username, U.name, DATE_FORMAT(SC.date, \'%Y-%m-%d %H:%i:%S\') as date, SC.text, SC.attachment FROM sale_comment SC LEFT JOIN user U ON SC.username = U.username WHERE sale_id = ? ORDER BY SC.date DESC', cloudID, function(err, rows, fields) {
         connection.release()
         if(err) {
             return callback(err, null)

@@ -1,5 +1,7 @@
 const express = require('express')
 const async = require('async')
+const Cloudinary = require('../../models/comms/cloudinary')
+const multiparty = require('connect-multiparty')
 const router = express.Router()
 
 const Auth = require('../../functions/auth')
@@ -8,6 +10,8 @@ const SalesFunctions = require('../../functions/sale')
 
 const Sale = require('../../models/sale/sale')
 const Notification = require('../../models/notification/notification')
+
+const multipart = multiparty()
 
 router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, function(req, res, next) {
     next()
@@ -27,60 +31,144 @@ router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
   })
 })
 
-router.post('/addComment/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+router.post('/addComment/:cloudID', multipart, Auth.salesSearchAllowed, function(req, res) {
 
-  const comment = {
-    sale_id: req.params.cloudID,
-    username: req.user.username,
-    date: MDate.getDateTime(),
-    text: req.body.comment
-  }
 
-  async.series([
-    function(callback) {
-      Sale.addComment(comment, callback)
+    if(req.body.comment == '') {
+      req.flash('warning_msg', 'Enter a comment')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      return
     }
-  ], function(err, data) {
-    if(data[0] == true) {
 
-      const notification = {
-        title: req.user.username + ' commented on sale ' + req.params.cloudID,
-        link: '/sale/cloudIDInfo?cloudID=' + req.params.cloudID,
-        user: req.user.username,
-        datetime: MDate.getDateTime()
+    if(req.files.attachment.originalFilename == '') {
+      const comment = {
+        sale_id: req.params.cloudID,
+        username: req.user.username,
+        date: MDate.getDateTime(),
+        text: req.body.comment
       }
 
       async.series([
         function(callback) {
-          Sale.getCommentNotifiers(callback)
-        }, function(callback) {
-          Notification.create(notification, callback)
+          Sale.addComment(comment, callback)
         }
       ], function(err, data) {
+        if(data[0] == true) {
 
-        const commentNotifiers = data[0]
-        const notificationID = data[1]
-
-        let commentUserNotifications = []
-
-        for(let i = 0; i < commentNotifiers.length; i++) {
-          if(req.user.username != commentNotifiers[i]['username']) {
-            commentUserNotifications.push([notificationID, commentNotifiers[i]['username']])
+          const notification = {
+            title: req.user.username + ' commented on sale ' + req.params.cloudID,
+            link: '/sale/cloudIDInfo?cloudID=' + req.params.cloudID,
+            user: req.user.username,
+            datetime: MDate.getDateTime()
           }
+
+          async.series([
+            function(callback) {
+              Sale.getCommentNotifiers(callback)
+            }, function(callback) {
+              Notification.create(notification, callback)
+            }
+          ], function(err, data) {
+
+            const commentNotifiers = data[0]
+            const notificationID = data[1]
+
+            let commentUserNotifications = []
+
+            for(let i = 0; i < commentNotifiers.length; i++) {
+              if(req.user.username != commentNotifiers[i]['username']) {
+                commentUserNotifications.push([notificationID, commentNotifiers[i]['username']])
+              }
+            }
+
+            async.series([
+              function(callback) {
+                Notification.createUserNotifications(commentUserNotifications, callback)
+              }
+            ], function(err, data) {
+              res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+            })
+          })
+        } else {
+          res.send('Error')
         }
-
-        async.series([
-          function(callback) {
-            Notification.createUserNotifications(commentUserNotifications, callback)
-          }
-        ], function(err, data) {
-          res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
-        })
       })
     } else {
-      res.send('Error')
+      const attachmentExtension = req.files.attachment.originalFilename.split('.').pop()
+
+      if(attachmentExtension == 'jpg' || attachmentExtension == 'jpeg' || attachmentExtension == 'png') {
+        async.series([
+          function(callback) {
+            Cloudinary.upload(req.files.attachment.path, callback)
+          }
+        ], function(err, uploadData) {
+
+          if(uploadData[0].error) {
+            req.flash('warning_msg', 'Something went wrong while uploading the file')
+            res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+            return
+          }
+
+          const comment = {
+            sale_id: req.params.cloudID,
+            username: req.user.username,
+            date: MDate.getDateTime(),
+            text: req.body.comment,
+            attachment: uploadData[0].url
+          }
+
+          async.series([
+            function(callback) {
+              Sale.addComment(comment, callback)
+            }
+          ], function(err, data) {
+            if(data[0] == true) {
+
+              const notification = {
+                title: req.user.username + ' commented on sale ' + req.params.cloudID,
+                link: '/sale/cloudIDInfo?cloudID=' + req.params.cloudID,
+                user: req.user.username,
+                datetime: MDate.getDateTime()
+              }
+
+              async.series([
+                function(callback) {
+                  Sale.getCommentNotifiers(callback)
+                }, function(callback) {
+                  Notification.create(notification, callback)
+                }
+              ], function(err, data) {
+
+                const commentNotifiers = data[0]
+                const notificationID = data[1]
+
+                let commentUserNotifications = []
+
+                for(let i = 0; i < commentNotifiers.length; i++) {
+                  if(req.user.username != commentNotifiers[i]['username']) {
+                    commentUserNotifications.push([notificationID, commentNotifiers[i]['username']])
+                  }
+                }
+
+                async.series([
+                  function(callback) {
+                    Notification.createUserNotifications(commentUserNotifications, callback)
+                  }
+                ], function(err, data) {
+                  res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+                })
+              })
+            } else {
+              res.send('Error')
+            }
+          })
+        })
+      } else {
+          req.flash('warning_msg', 'Allowed file types are jpg jpeg and png')
+          res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      }
+
     }
-  })
 
 })
 
