@@ -121,16 +121,33 @@
                                       <br><br>
                                     </div>
                                   <% } %>
-                                <form action="/sale/addComment/<%= sales[0]['id'] %>" method="post">
+                                  <p class="category"><font color='red'><%= warning_msg %></font></p>
+                                <form action="/sale/addComment/<%= sales[0]['id'] %>" method="post" enctype="multipart/form-data">
                                   <div class="form-group">
                                     <textarea class="form-control" rows="4" columns="50" name="comment" placeholder="Cloud ID"></textarea>
+                                  </div>
+                                  <div class="form-group">
+                                    <table>
+                                      <tr>
+                                        <td>Add attachment (Image): &nbsp;</td>
+                                        <td><input type="file" name="attachment" accept=".jpg, .jpeg, .png"></td>
+                                      </tr>
+                                      <tr>
+                                        <td></td>
+                                        <td>Maximum File Size (512KB)</td>
+                                      </tr>
+                                    </table>
                                   </div>
                                   <div class="form-group">
                                     <input class="btn btn-default" type="submit" value="Comment">
                                   </div>
                                 </form>
                                 <% comments.forEach(function(comment) { %>
-                                  <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
+                                  <% if(comment.attachment) { %>
+                                    <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b> &nbsp;&nbsp; <a href="javascript:window.open('<%= comment.attachment %>','mypopuptitle','width=900,height=900')"><font color='green'><b>Show Attachment</b></font></a></p>
+                                  <% } else { %>
+                                    <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
+                                  <% } %>
                                   <p><font color='blue'><%= comment.text %></font></p>
                                 <% }) %>
                               </div>
