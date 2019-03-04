@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ./layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ./layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <h4 class="title"><%= title %></h4>
+                                    </div>
+                                    <div class="content">
+
+                                        <ul role="tablist" class="nav nav-tabs">
+                                            <li role="presentation" class="active">
+                                                <a href="#today" data-toggle="tab">Today</a>
+                                            </li>
+                                            <li>
+                                                <a href="#overdue" data-toggle="tab">Overdue</a>
+                                            </li>
+                                            <li>
+                                                <a href="#upcoming" data-toggle="tab">Upcoming</a>
+                                            </li>
+                                            <li>
+                                                <a href="#completed" data-toggle="tab">Completed</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="today" class="tab-pane active">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <th>ID</th>
+                                                                <th>Comments</th>
+                                                                <th>Created</th>
+                                                                <th>Due</th>
+                                                                <th>Title</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% today_tasks.forEach(function(todayTask) { %>
+                                                                    <tr>
+                                                                        <td><a href='/task/view?id=<%= todayTask.id %>'><%= todayTask.id %></a></td>
+                                                                        <td><b><%= todayTask.task_comments %></b></td>
+                                                                        <td><%= todayTask.created %></td>
+                                                                        <td><%= todayTask.due %></td>
+                                                                        <td><%= todayTask.title %></td>
+                                                                    </tr>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="overdue" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <th>ID</th>
+                                                                <th>Comments</th>
+                                                                <th>Created</th>
+                                                                <th>Due</th>
+                                                                <th>Title</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% overdue_tasks.forEach(function(todayTask) { %>
+                                                                    <tr>
+                                                                        <td><a href='/task/view?id=<%= todayTask.id %>'><%= todayTask.id %></a></td>
+                                                                        <td><b><%= todayTask.task_comments %></b></td>
+                                                                        <td><%= todayTask.created %></td>
+                                                                        <td><%= todayTask.due %></td>
+                                                                        <td><%= todayTask.title %></td>
+                                                                    </tr>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="upcoming" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <th>ID</th>
+                                                                <th>Comments</th>
+                                                                <th>Created</th>
+                                                                <th>Due</th>
+                                                                <th>Title</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% upcoming_tasks.forEach(function(todayTask) { %>
+                                                                    <tr>
+                                                                        <td><a href='/task/view?id=<%= todayTask.id %>'><%= todayTask.id %></a></td>
+                                                                        <td><b><%= todayTask.task_comments %></b></td>
+                                                                        <td><%= todayTask.created %></td>
+                                                                        <td><%= todayTask.due %></td>
+                                                                        <td><%= todayTask.title %></td>
+                                                                    </tr>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="completed" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <th>ID</th>
+                                                                <th>Comments</th>
+                                                                <th>Created</th>
+                                                                <th>Due</th>
+                                                                <th>Title</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% completed_tasks.forEach(function(todayTask) { %>
+                                                                    <tr>
+                                                                        <td><a href='/task/view?id=<%= todayTask.id %>'><%= todayTask.id %></a></td>
+                                                                        <td><b><%= todayTask.tast_comments %></b></td>
+                                                                        <td><%= todayTask.created %></td>
+                                                                        <td><%= todayTask.due %></td>
+                                                                        <td><%= todayTask.title %></td>
+                                                                    </tr>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <% include ./layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ./layouts/pro/includes %>
+</html>

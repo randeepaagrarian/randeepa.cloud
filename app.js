@@ -42,6 +42,8 @@ const dealerProfile = require('./routes/dealerProfile/dealerProfile')
 
 const sale_SYSEDIT = require('./routes/sale_SYSEDIT')
 
+const task = require('./routes/task')
+
 // Model files
 const Notification = require('./models/notification/notification')
 
@@ -135,6 +137,8 @@ app.use('/profile', profile)
 app.use('/dealerProfile', dealerProfile)
 
 app.use('/sale_SYSEDIT', sale_SYSEDIT)
+
+app.use('/task', task)
 
 app.get('*', function(req, res) {
     res.status(404).send('What???')
