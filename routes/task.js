@@ -22,6 +22,14 @@ router.get('/', function(req, res) {
             Task.getUpcomingTasks(req.user.username, callback)
         }, function(callback) {
             Task.getCompletedTasks(req.user.username, callback)
+        }, function(callback) {
+            Task.getTodayTasksCount(req.user.username, callback)
+        }, function(callback) {
+            Task.getOverdueTasksCount(req.user.username, callback)
+        }, function(callback) {
+            Task.getUpcomingTasksCount(req.user.username, callback)
+        }, function(callback) {
+            Task.getCompletedTasksCount(req.user.username, callback)
         }
     ], function(err, data) {
         res.render('task', {
@@ -31,7 +39,11 @@ router.get('/', function(req, res) {
             today_tasks: data[0],
             overdue_tasks: data[1],
             upcoming_tasks: data[2],
-            completed_tasks: data[3]
+            completed_tasks: data[3],
+            today_tasks_count: data[4],
+            overdue_tasks_count: data[5],
+            upcoming_tasks_count: data[6],
+            completed_tasks_count: data[7]
         })
     })
 })
@@ -77,7 +89,41 @@ router.post('/add', function(req, res) {
 })
 
 router.get('/view', function(req, res) {
-    res.send('/task/view')
+    async.series([
+      function(callback) {
+        Task.getDetails(req.query.id, req.user.username, callback)
+      }, function(callback) {
+        Task.getTaskComments(req.query.id, req.user.username, callback)
+      }
+    ], function(err, data) {
+      res.render('task/view', {
+        title: 'Task Details',
+        navbar: 'Task',
+        user: req.user,
+        taskDetails: data[0],
+        taskComments: data[1]
+      })
+    })
+})
+
+router.post('/addComment/:taskID', function(req, res) {
+  let taskComment = {
+    task_id: req.params.taskID,
+    date: MDate.getDateTime('-'),
+    text: req.body.comment
+  }
+
+  async.series([
+    function(callback) {
+      Task.addComment(taskComment, callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/task/view?id=' + req.params.taskID)
+    } else {
+      res.send('Error')
+    }
+  })
 })
 
 router.get('/overdue', function(req, res) {

@@ -23,16 +23,16 @@
 
                                         <ul role="tablist" class="nav nav-tabs">
                                             <li role="presentation" class="active">
-                                                <a href="#today" data-toggle="tab">Today</a>
+                                                <a href="#today" data-toggle="tab">Today <b>(<%= today_tasks_count[0]['count'] %>)</b></a>
                                             </li>
                                             <li>
-                                                <a href="#overdue" data-toggle="tab">Overdue</a>
+                                                <a href="#overdue" data-toggle="tab">Overdue <b>(<%= overdue_tasks_count[0]['count'] %>)</b></a>
                                             </li>
                                             <li>
-                                                <a href="#upcoming" data-toggle="tab">Upcoming</a>
+                                                <a href="#upcoming" data-toggle="tab">Upcoming <b>(<%= upcoming_tasks_count[0]['count'] %>)</b></a>
                                             </li>
                                             <li>
-                                                <a href="#completed" data-toggle="tab">Completed</a>
+                                                <a href="#completed" data-toggle="tab">Completed <b>(<%= completed_tasks_count[0]['count'] %>)</b></a>
                                             </li>
                                         </ul>
 
