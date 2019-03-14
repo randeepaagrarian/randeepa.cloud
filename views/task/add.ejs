@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <form method="POST" action="/task/add">
+                                            <table>
+                                                <tr>
+                                                    <td>Task &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control" type='text' name='task_title' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Due &nbsp; &nbsp;</td>
+                                                    <td><input class="form-control datetimepicker" type='text' placeholder="YYYY-MM-DD" name='task_due' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Details &nbsp; &nbsp;</td>
+                                                    <td><textarea class="form-control" type='text' name='task_text' rows="8" cols="80"></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Add Task</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+    <script type="text/javascript">
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    </script>
+</html>

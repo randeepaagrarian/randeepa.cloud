@@ -222,6 +222,22 @@ Auth.validDealerProfileUser = function(req, res, next) {
     }
 }
 
+Auth.validTaskDashboardUser = function(req, res, next) {
+    if(req.user.accessLevel.task) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
+Auth.validTaskUser = function(req, res, next) {
+    if(req.user.accessLevel.task == 1) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
+
 Auth.saleExcelDownloadAllowed = function(req, res, next) {
     if(req.url.search('excel') == -1) {
         next()

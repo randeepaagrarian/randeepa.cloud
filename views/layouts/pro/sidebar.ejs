@@ -37,6 +37,15 @@
                 </a>
             </li>
 
+            <% if(typeof user.accessLevel.task != 'undefined') { %>
+                <li class="<%= navbar == 'Task' ? 'active' : '' %>">
+                    <a href="/task">
+                        <i class="pe-7s-note2"></i>
+                        <p>Task</p>
+                    </a>
+                </li>
+            <% } %>
+
             <% if(typeof user.accessLevel.profile != 'undefined') { %>
                 <li class="<%= navbar == 'Profile' ? 'active' : '' %>">
                     <a href="/profile">
