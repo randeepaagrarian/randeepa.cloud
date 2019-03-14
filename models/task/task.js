@@ -184,3 +184,33 @@ Task.addComment = function(taskComment, callback) {
       })
   })
 }
+
+Task.updateDueDate = function(dueDate, taskID, username, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+      connection.query('UPDATE task SET due = ? WHERE id = ? AND username = ?', [dueDate, taskID, username], function(err, result) {
+          connection.release()
+          if(err) {
+              return callback(err, false)
+          }
+          callback(err, true)
+      })
+  })
+}
+
+Task.updateStatus = function(taskID, complete, username, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+      connection.query('UPDATE task SET complete = ? WHERE id = ? AND username = ?', [complete, taskID, username], function(err, result) {
+          connection.release()
+          if(err) {
+              return callback(err, false)
+          }
+          callback(err, true)
+      })
+  })
+}

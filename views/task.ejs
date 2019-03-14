@@ -23,10 +23,10 @@
 
                                         <ul role="tablist" class="nav nav-tabs">
                                             <li role="presentation" class="active">
-                                                <a href="#today" data-toggle="tab">Today <b>(<%= today_tasks_count[0]['count'] %>)</b></a>
+                                                <a href="#today" data-toggle="tab">Today <b><font color="green">(<%= today_tasks_count[0]['count'] %>)</font></b></a>
                                             </li>
                                             <li>
-                                                <a href="#overdue" data-toggle="tab">Overdue <b>(<%= overdue_tasks_count[0]['count'] %>)</b></a>
+                                                <a href="#overdue" data-toggle="tab">Overdue <b><font color="red">(<%= overdue_tasks_count[0]['count'] %>)</font></b></a>
                                             </li>
                                             <li>
                                                 <a href="#upcoming" data-toggle="tab">Upcoming <b>(<%= upcoming_tasks_count[0]['count'] %>)</b></a>

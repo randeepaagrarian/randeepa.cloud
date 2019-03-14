@@ -138,4 +138,52 @@ router.get('/today', function(req, res) {
     res.send('/task/today')
 })
 
+router.get('/markComplete/:taskID/:complete', function(req, res) {
+  if(req.params.complete == 0) {
+    async.series([
+      function(callback) {
+        Task.updateStatus(req.params.taskID, 1, req.user.username, callback)
+      }
+    ], function(err, data) {
+      if(data[0] == false) {
+        req.flash('warning_msg', 'Error')
+        res.redirect('/task/view?id=' + req.params.taskID)
+      } else {
+        req.flash('warning_msg', 'Updated')
+        res.redirect('/task/view?id=' + req.params.taskID)
+      }
+    })
+  } else {
+    async.series([
+      function(callback) {
+        Task.updateStatus(req.params.taskID, 0, req.user.username, callback)
+      }
+    ], function(err, data) {
+      if(data[0] == false) {
+        req.flash('warning_msg', 'Error')
+        res.redirect('/task/view?id=' + req.params.taskID)
+      } else {
+        req.flash('warning_msg', 'Updated')
+        res.redirect('/task/view?id=' + req.params.taskID)
+      }
+    })
+  }
+})
+
+router.post('/changeDue/:taskID', function(req, res){
+  async.series([
+    function(callback) {
+      Task.updateDueDate(req.body.task_due, req.params.taskID, req.user.username, callback)
+    }
+  ], function(err, data) {
+    if(data[0] == false) {
+      req.flash('warning_msg', 'Error')
+      res.redirect('/task/view?id=' + req.params.taskID)
+    } else {
+      req.flash('warning_msg', 'Updated')
+      res.redirect('/task/view?id=' + req.params.taskID)
+    }
+  })
+})
+
 module.exports = router
