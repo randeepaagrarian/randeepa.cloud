@@ -62,7 +62,7 @@ Stock.newDeliveryNote = function(deliveryDocument, machines, prices, callback) {
                 return callback(err, null)
             }
 
-            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%s\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
+            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
                 if(err) {
                     return connection.rollback(function() {
                         connection.release()
@@ -159,7 +159,7 @@ Stock.newTransferNote = function(deliveryDocument, machines, prices, callback) {
                 return callback(err, null)
             }
 
-            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%s\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
+            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
                 if(err) {
                     return connection.rollback(function() {
                         connection.release()
@@ -255,7 +255,7 @@ Stock.newReturnNote = function(deliveryDocument, machines, prices, callback) {
                 return callback(err, null)
             }
 
-            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%s\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
+            connection.query('SELECT main_stock.*, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date FROM main_stock LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id WHERE dealer_id = ? AND primary_id IN (?) AND sold = 0', [deliveryDocument.from_dealer_id, machines], function(err, rows, fields) {
                 if(err) {
                     return connection.rollback(function() {
                         connection.release()

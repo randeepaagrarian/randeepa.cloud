@@ -7,7 +7,7 @@ Expense.all = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('select E.id, DATE_FORMAT(E.date, \'%Y-%m-%d\') AS date, DATE_FORMAT(E.sys_date, \'%Y-%m-%d %H:%i:%s\') AS sys_date, E.username, E.description, SUM(EI.amount) expense_amount, COUNT(EI.id) AS bills, COUNT(CASE EI.bill_received WHEN 1 THEN 1 ELSE NULL END) AS bills_received, COUNT(CASE EI.bill_paid WHEN 1 THEN 1 ELSE NULL END) AS bills_paid, SUM(CASE EI.bill_paid WHEN 1 THEN EI.amount ELSE NULL END) as amount_paid from expense E, expense_item EI where E.id = EI.expense_id AND EI.rejected = 0 group by E.id, E.date, E.sys_date, E.username, E.description order by id desc', function(err, rows, fields) {
+        connection.query('select E.id, DATE_FORMAT(E.date, \'%Y-%m-%d\') AS date, DATE_FORMAT(E.sys_date, \'%Y-%m-%d %H:%i:%S\') AS sys_date, E.username, E.description, SUM(EI.amount) expense_amount, COUNT(EI.id) AS bills, COUNT(CASE EI.bill_received WHEN 1 THEN 1 ELSE NULL END) AS bills_received, COUNT(CASE EI.bill_paid WHEN 1 THEN 1 ELSE NULL END) AS bills_paid, SUM(CASE EI.bill_paid WHEN 1 THEN EI.amount ELSE NULL END) as amount_paid from expense E, expense_item EI where E.id = EI.expense_id AND EI.rejected = 0 group by E.id, E.date, E.sys_date, E.username, E.description order by id desc', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

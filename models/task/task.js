@@ -22,7 +22,7 @@ Task.getTodayTasks = function(username, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%I:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) = DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
+        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%i:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) = DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -54,7 +54,7 @@ Task.getUpcomingTasks = function(username, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%I:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) > DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
+        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%i:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) > DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -84,7 +84,7 @@ Task.getOverdueTasks = function(username, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%I:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) < DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
+        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%i:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE DATE(due) < DATE(NOW()) AND complete = 0 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -114,7 +114,7 @@ Task.getCompletedTasks = function(username, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%I:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE complete = 1 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
+        connection.query('SELECT task.id, COUNT(TC.id) as task_comments, DATE_FORMAT(created, \'%Y-%m-%d %H:%i:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text FROM task LEFT JOIN task_comment TC ON task.id = TC.task_id WHERE complete = 1 AND username = ? GROUP BY task.id, created, due, complete, title, task.text;', username, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -145,7 +145,7 @@ Task.getDetails = function(taskId, username, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT task.id, DATE_FORMAT(created, \'%Y-%m-%d %H:%I:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text, complete FROM task WHERE task.id = ? AND task.username = ?', [taskId, username], function(err, rows, fields) {
+        connection.query('SELECT task.id, DATE_FORMAT(created, \'%Y-%m-%d %H:%i:%S\') as created, DATE_FORMAT(due, \'%Y-%m-%d\') as due, title, task.text, complete FROM task WHERE task.id = ? AND task.username = ?', [taskId, username], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
