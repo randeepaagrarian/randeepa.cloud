@@ -38,21 +38,63 @@
                                                     <th>Field Visit Inquiries</th>
                                                 </thead>
                                                 <tbody>
-                                                    <% performanceSummaries.forEach(function(performanceSummary) { %>
-                                                        <tr>
-                                                            <td><a href="/profile/officerProfileView?userId=<%= performanceSummary.username %>&startDate=<%= start_date %>&endDate=<%= end_date %>"><%= performanceSummary.name %></a></td>
-                                                            <td> <%= performanceSummary.region_name %> </td>
-                                                            <td> <%= performanceSummary.territory_name %> </td>
-                                                            <td> <%= performanceSummary.sales_units %> </td>
-                                                            <td> <%= performanceSummary.dealer_visits %> </td>
-                                                            <td> <%= performanceSummary.sales_value %> </td>
-                                                            <td> <%= performanceSummary.bankings %> </td>
-                                                            <td> <%= performanceSummary.institute_and_other_visits %> </td>
-                                                            <td> <%= performanceSummary.stock_reports %> </td>
-                                                            <td> <%= performanceSummary.dealer_inquiries %> </td>
-                                                            <td> <%= performanceSummary.field_visits %> </td>
-                                                            <td> <%= performanceSummary.field_visit_inquiries %> </td>
-                                                        </tr>
+                                                    <% regions.forEach(function(region){ %>
+                                                      <% var sales_units = 0, dealer_visits = 0, sales_value = 0, bankings = 0, ins_other_vists = 0, stock_reports = 0, dealer_inquiries = 0, field_visits = 0, field_visit_inquiries = 0 %>
+                                                      <tr>
+                                                        <td><b><%= region.name %></b></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                      </tr>
+                                                      <% performanceSummaries.forEach(function(performanceSummary) { %>
+                                                          <% if(performanceSummary.region_name == region.name) { %>
+                                                            <% var sales_units = sales_units + performanceSummary.sales_units %>
+                                                            <% dealer_visits = dealer_visits + performanceSummary.dealer_visits %>
+                                                            <% sales_value = sales_value + performanceSummary.sales_value %>
+                                                            <% bankings = bankings + performanceSummary.bankings %>
+                                                            <% ins_other_vists = ins_other_vists + performanceSummary.institute_and_other_visits %>
+                                                            <% stock_reports = stock_reports + performanceSummary.stock_reports %>
+                                                            <% dealer_inquiries = dealer_inquiries + performanceSummary.dealer_inquiries %>
+                                                            <% field_visits = field_visits + performanceSummary.field_visits %>
+                                                            <% field_visit_inquiries = field_visit_inquiries + performanceSummary.field_visit_inquiries %>
+                                                            <tr>
+                                                                <td><a href="/profile/officerProfileView?userId=<%= performanceSummary.username %>&startDate=<%= start_date %>&endDate=<%= end_date %>"><%= performanceSummary.name %></a></td>
+                                                                <td> <%= performanceSummary.region_name %> </td>
+                                                                <td> <%= performanceSummary.territory_name %> </td>
+                                                                <td> <%= performanceSummary.sales_units %> </td>
+                                                                <td> <%= performanceSummary.dealer_visits %> </td>
+                                                                <td> <%= performanceSummary.sales_value %> </td>
+                                                                <td> <%= performanceSummary.bankings %> </td>
+                                                                <td> <%= performanceSummary.institute_and_other_visits %> </td>
+                                                                <td> <%= performanceSummary.stock_reports %> </td>
+                                                                <td> <%= performanceSummary.dealer_inquiries %> </td>
+                                                                <td> <%= performanceSummary.field_visits %> </td>
+                                                                <td> <%= performanceSummary.field_visit_inquiries %> </td>
+                                                            </tr>
+                                                          <% } %>
+                                                      <% }) %>
+                                                      <tr>
+                                                        <td>Total</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td><b><%= sales_units %></b></td>
+                                                        <td><b><%= dealer_visits %></b></td>
+                                                        <td><b><%= sales_value %></b></td>
+                                                        <td><b><%= bankings %></b></td>
+                                                        <td><b><%= ins_other_vists %></b></td>
+                                                        <td><b><%= stock_reports %></b></td>
+                                                        <td><b><%= dealer_inquiries %></b></td>
+                                                        <td><b><%= field_visits %></b></td>
+                                                        <td><b><%= field_visit_inquiries %></b></td>
+                                                      </tr>
                                                     <% }) %>
                                                 </tbody>
                                             </table>

@@ -5,6 +5,7 @@ const router = express.Router()
 
 const Admin = require('../../models/admin/admin')
 const Profile = require('../../models/profile/profile')
+const Region = require('../../models/region/region')
 
 const MDate = require('../../functions/mdate')
 const Auth = require('../../functions/auth')
@@ -19,6 +20,8 @@ router.get('/overallPerformanceView', function(req, res) {
   async.series([
     function(callback) {
       Profile.companyOfficerPerformanceSummary(req.query.startDate, req.query.endDate, callback)
+    }, function(callback) {
+      Region.getAllRegions(callback)
     }
   ], function(err, data) {
     res.render('profile/overallPerformanceView', {
@@ -27,7 +30,8 @@ router.get('/overallPerformanceView', function(req, res) {
       title: 'Overall Performance View',
       start_date: req.query.startDate,
       end_date: req.query.endDate,
-      performanceSummaries: data[0][0]
+      performanceSummaries: data[0][0],
+      regions: data[1]
     })
   })
 })
