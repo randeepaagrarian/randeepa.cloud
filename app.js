@@ -10,8 +10,6 @@ const json2xls = require('json2xls')
 const dateTime = require('node-datetime')
 const favicon = require('serve-favicon')
 const async = require('async')
-const redis = require('redis')
-const redisStore = require('connect-redis')(session)
 // Routes files
 const index = require('./routes/index')
 
@@ -48,8 +46,6 @@ const task = require('./routes/task')
 const Notification = require('./models/notification/notification')
 
 const app = express()
-
-const client = redis.createClient()
 
 app.use(favicon(__dirname + '/public/img/favicon.ico'))
 
