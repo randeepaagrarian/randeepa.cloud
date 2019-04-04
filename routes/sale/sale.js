@@ -210,6 +210,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       Sale.cloudIDInfo(req.query.cloudID, callback)
     }, function(callback) {
       Sale.getComments(req.query.cloudID, callback)
+    }, function(callback) {
+      Sale.saleCompletedTypes(callback)
     }
   ], function(err, details) {
     res.render('sale/cloudIDInfo', {
@@ -217,9 +219,34 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       title: 'Sale Info',
       user: req.user,
       sales: details[0],
-      comments: details[1]
+      comments: details[1],
+      saleCompletedTypes: details[2]
     })
   })
+})
+
+router.post('/markComplete/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  const markComplete = {
+    sale_completed: 1,
+    sale_completed_type_id: req.body.sale_completed_type,
+    sale_completed_remarks: req.body.details,
+    sale_completed_by: req.user.username,
+    sale_completed_on: MDate.getDateTime()
+  }
+
+  async.series([
+    function(callback) {
+      Sale.markComplete(markComplete, req.params.cloudID, callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    } else {
+      req.flash('warning_msg', 'Error occurred')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    }
+  })
+
 })
 
 router.get('/search', Auth.salesSearchAllowed, function(req, res) {
