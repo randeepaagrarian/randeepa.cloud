@@ -61,8 +61,12 @@
                                                         </thead>
                                                         <tbody>
                                                               <% sales.forEach(function(sale) { %>
-                                                                <% if(sale.verified == 1) { %>
+                                                                <% if((sale.verified == 1) && (sale.sale_completed == 1)) { %>
+                                                                  <tr style="color: blue;" class="success">
+                                                                <% } else if((sale.verified == 1) && (sale.sale_completed == 0)) { %>
                                                                   <tr class="success">
+                                                                <% } else if((sale.verified == 0) && (sale.sale_completed == 1)) { %>
+                                                                  <tr style="color: blue;">
                                                                 <% } else { %>
                                                                   <tr>
                                                                 <% } %>
