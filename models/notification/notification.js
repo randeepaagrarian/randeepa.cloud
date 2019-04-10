@@ -36,6 +36,21 @@ Notification.getUserNotifications = function(user, callback) {
     if(pool_err) {
         return callback(pool_err, null)
     }
+    connection.query('SELECT user_notification.id, link, title, datetime, checked FROM user_notification LEFT JOIN notification ON notification_id = notification.id WHERE user_notification.user = ? ORDER BY datetime DESC LIMIT 100', user, function(err, rows, fields) {
+        connection.release()
+        if(err) {
+            return callback(err, null)
+        }
+        callback(err, rows)
+    })
+  })
+}
+
+Notification.getAllUserNotifications = function(user, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
     connection.query('SELECT user_notification.id, link, title, datetime, checked FROM user_notification LEFT JOIN notification ON notification_id = notification.id WHERE user_notification.user = ? ORDER BY datetime DESC', user, function(err, rows, fields) {
         connection.release()
         if(err) {
