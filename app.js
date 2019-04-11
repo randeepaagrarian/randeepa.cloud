@@ -10,6 +10,15 @@ const json2xls = require('json2xls')
 const dateTime = require('node-datetime')
 const favicon = require('serve-favicon')
 const async = require('async')
+
+const app = express()
+
+const http = require('http').createServer(app)
+
+const io = require('socket.io')(http)
+
+let activeUsers = []
+
 // Routes files
 const index = require('./routes/index')
 
@@ -44,8 +53,7 @@ const task = require('./routes/task')
 
 // Model files
 const Notification = require('./models/notification/notification')
-
-const app = express()
+const MDate = require('./functions/mdate')
 
 app.use(favicon(__dirname + '/public/img/favicon.ico'))
 
@@ -144,8 +152,53 @@ app.post('*', function(req, res) {
     res.status(404).send('What???')
 })
 
+io.on('connection', function(socket){
+
+  let userName
+
+  socket.on('user viewing', function(user){
+    let inActiveUsers = false
+
+    for(var x = 0; x < activeUsers.length; x++) {
+        if(activeUsers[x].username == user) {
+            inActiveUsers = true
+            activeUsers[x].last_activity = MDate.getDateTime()
+            break
+        }
+    }
+
+    if(!inActiveUsers) {
+        activeUsers.push({"username": user, "last_activity": MDate.getDateTime()})
+    }
+
+    userName = user
+
+    io.emit('active users', activeUsers)
+
+  })
+
+  socket.on('disconnect', function(){
+
+    let userIndex = -1
+
+    for(var x = 0; x < activeUsers.length; x++) {
+        if(activeUsers[x].username == userName) {
+            userIndex = x
+            break
+        }
+    }
+
+    if(userIndex != -1) {
+      activeUsers[x].last_activity = 'NULL'
+    }
+
+    io.emit('active users', activeUsers)
+  })
+
+})
+
 app.set('port', (process.env.PORT || 3000))
 
-app.listen(app.get('port'), function() {
+http.listen(app.get('port'), function() {
     console.log('Server started on port ' + app.get('port'))
 })

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+          var socket = io();
+          socket.on('active users', function(activeUsers){
+
+            document.getElementById('users').innerHTML = '';
+
+            for(var x = 0; x < activeUsers.length; x++) {
+              if(activeUsers[x].last_activity != 'NULL') {
+                  $('#users').append('<tr><td>' + activeUsers[x].username + '</td><td>' + activeUsers[x].last_activity + '</td></tr>');
+              }
+            }
+          });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <div id="activeUsers">
+                                          <table class="table table-striped">
+                                            <thead>
+                                              <th>User</th>
+                                              <th>Last Activity</th>
+                                            </thead>
+                                            <tbody id="users">
+
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
