@@ -241,6 +241,14 @@ router.get('/editUser', function(req, res) {
     })
 })
 
+router.get('/activeUsers', function(req, res) {
+  res.render('admin/activeUsers', {
+    title: 'Active Users',
+    navbar: 'Admin',
+    user: req.user
+  })
+})
+
 router.post('/editUser', function(req, res) {
     async.series([
         function(callback) {
