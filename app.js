@@ -195,6 +195,10 @@ io.on('connection', function(socket){
     io.emit('active users', activeUsers)
   })
 
+  socket.on('message', function(msg) {
+    io.emit('message', msg)
+  })
+
 })
 
 app.set('port', (process.env.PORT || 3000))
