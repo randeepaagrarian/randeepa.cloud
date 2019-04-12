@@ -19,4 +19,8 @@
 <script>
   var socket = io();
   socket.emit('user viewing', '<%= user.username %>');
+
+  socket.on('message', function(msg) {
+    alert(msg);
+  });
 </script>

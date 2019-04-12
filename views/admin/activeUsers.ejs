@@ -15,6 +15,15 @@
               }
             }
           });
+
+          socket.on('message', function(msg) {
+            alert(msg);
+          });
+
+          function sendMessage() {
+            var msg = document.getElementById('message').value;
+            socket.emit('message', msg);
+          }
         </script>
     </head>
     <body>
@@ -37,6 +46,16 @@
                                     </div>
                                     <div class="content">
                                         <div id="activeUsers">
+                                          <table>
+                                            <tr>
+                                              <td>Send Message: </td>
+                                              <td><input type='text' id='message'></td>
+                                            </tr>
+                                            <tr>
+                                              <td></td>
+                                              <td><button onclick='sendMessage()'>Send Message</button></td>
+                                            </tr>
+                                          </table>
                                           <table class="table table-striped">
                                             <thead>
                                               <th>User</th>
