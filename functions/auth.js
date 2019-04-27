@@ -257,3 +257,11 @@ Auth.salesSearchAllowed = function(req, res, next) {
       res.redirect('/')
   }
 }
+
+Auth.validSalesEditor = function(req, res, next) {
+  if(req.user.accessLevel.salesEdit == 1) {
+    next()
+  } else {
+    res.redirect('/')
+  }
+}

@@ -17,6 +17,42 @@ router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, fun
     next()
 })
 
+router.get('/edit', Auth.validSalesEditor, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.saleRawInfo(req.query.cloudID, callback)
+    }
+  ], function(err, data) {
+    res.render('sale/edit', {
+      navbar: 'Sales',
+      title: 'Edit Sale',
+      user: req.user,
+      sale: data[0][0]
+    })
+  })
+})
+
+router.post('/edit/:cloudID', Auth.validSalesEditor, function(req, res) {
+  let newSale = req.body
+
+  delete newSale.id
+
+  for(let key in newSale) {
+    if(newSale[key] == '') {
+      delete newSale[key]
+    }
+  }
+
+  async.series([
+    function(callback) {
+      Sale.edit(req.params.cloudID, newSale, callback)
+    }
+  ], function(err, data) {
+    console.log(data[0])
+  })
+
+})
+
 router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
   async.series([
     function(callback) {

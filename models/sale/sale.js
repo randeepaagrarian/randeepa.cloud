@@ -477,3 +477,33 @@ Sale.markComplete = function(complete, cloudID, callback) {
     })
   })
 }
+
+Sale.saleRawInfo = function(cloudID, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
+    connection.query('SELECT * FROM sale WHERE id = ?', [cloudID], function(err, rows, fields) {
+        connection.release()
+        if(err) {
+            return callback(err, null)
+        }
+        callback(err, rows)
+    })
+  })
+}
+
+Sale.edit = function(cloudID, newSale, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
+    connection.query('UPDATE sale SET ? WHERE id = ?', [newSale, cloudID], function(err, rows, fields) {
+        connection.release()
+        if(err) {
+            return callback(err, false)
+        }
+        callback(err, true)
+    })
+  })
+}

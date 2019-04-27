@@ -6,7 +6,7 @@ Default.getBirthDays = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('select name, timestampdiff(YEAR, birthday, CURDATE()) as age from user where MONTH(birthday) = MONTH(CURDATE()) and DAY(birthday) = DAY(CURDATE())', function(err, rows, fields) {
+        connection.query('select name, timestampdiff(YEAR, birthday, CURDATE()) as age from user where MONTH(birthday) = MONTH(CURDATE()) and DAY(birthday) = DAY(CURDATE()) and active = 1', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

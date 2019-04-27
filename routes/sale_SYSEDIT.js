@@ -9,7 +9,7 @@ const Stock = require('../models/stock/stock')
 const sys_EDIT = require('../models/sys_EDIT/sale_SYSEDIT')
 
 router.use(Auth.signedIn, function(req, res, next) {
-  if(req.user.username == 'anushi.kc' || req.user.username == 'samantha' || req.user.username == 'shamal' || req.user.username == 'chula') {
+  if(req.user.username == 'shamal') {
     next()
   } else {
     res.redirect('/')

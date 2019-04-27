@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                      <%= title %>
+                                    </div>
+                                    <div class="content">
+
+                                      <table class="table table-striped">
+                                        <tbody>
+
+                                          <form action="/sale/edit/<%= sale.id %>" method="post">
+                                            <% for(let key in sale) { %>
+                                              <% if(sale.hasOwnProperty(key)) { %>
+
+                                                <% if(key == 'deleted') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(sale[key] == 0) { %>
+                                                          <option value="0" selected>Active</option>
+                                                          <option value="1">Deleted</option>
+                                                        <% } else { %>
+                                                          <option value="0">Active</option>
+                                                          <option value="1" selected>Deleted</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td><textarea cols="50" rows="3" name="<%= key %>"><%= sale[key] %></textarea></td>
+                                                  </tr>
+                                                <% } %>
+
+                                              <% } %>
+                                            <% } %>
+                                            <tr>
+                                              <td></td>
+                                              <td><input type="submit" value="Edit"></td>
+                                            </tr>
+                                          </form>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
