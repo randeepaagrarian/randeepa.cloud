@@ -493,17 +493,114 @@ Sale.saleRawInfo = function(cloudID, callback) {
   })
 }
 
-Sale.edit = function(cloudID, newSale, callback) {
+Sale.edit = function(cloudID, newSale, user, datetime, callback) {
   MySql.pool.getConnection(function(pool_err, connection) {
     if(pool_err) {
-        return callback(pool_err, null)
+        return callback(pool_err, false)
     }
-    connection.query('UPDATE sale SET ? WHERE id = ?', [newSale, cloudID], function(err, rows, fields) {
-        connection.release()
+
+    connection.beginTransaction(function(err) {
+      if(err) {
+          connection.release()
+          return callback(err, false)
+      }
+
+      connection.query('INSERT INTO sale_history (id, deleted, officer, region, territory, date, sys_date, location, chassis_no, customer_name, customer_address, customer_contact, model, invoice_no, price, sale_type, institute, advance, latitude, longitude, location_fk, verified, verified_by, verified_on, sale_completed, sale_completed_type_id, sale_completed_remarks, sale_completed_by, sale_completed_on, date_in, modified_by) SELECT id, deleted, officer, region, territory, date, sys_date, location, chassis_no, customer_name, customer_address, customer_contact, model, invoice_no, price, sale_type, institute, advance, latitude, longitude, location_fk, verified, verified_by, verified_on, sale_completed, sale_completed_type_id, sale_completed_remarks, sale_completed_by, sale_completed_on, ?, ? FROM sale WHERE id = ?', [datetime, user, cloudID], function(err, rows, fields) {
+
         if(err) {
-            return callback(err, false)
+            return connection.rollback(function() {
+                connection.release()
+                callback(err, false)
+            })
         }
-        callback(err, true)
+
+        connection.query('UPDATE sale SET ? WHERE id = ?', [newSale, cloudID], function(err, rows, fields) {
+            if(err) {
+                return connection.rollback(function() {
+                    connection.release()
+                    callback(err, false)
+                })
+            }
+
+            connection.commit(function(err) {
+                if(err) {
+                    return connection.rollback(function() {
+                        connection.release()
+                        callback(err, false)
+                    })
+                }
+                connection.release()
+                callback(err, true)
+            })
+
+        })
+
+      })
+
     })
+  })
+}
+
+Sale.getSaleTypes = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('SELECT * FROM sale_type', function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Sale.getSaleCompletedTypes = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('SELECT * FROM sale_completed_type', function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Sale.getLogCurrent = function(cloudID, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+
+      connection.query('SELECT id, \'current\' as status, \'\' as date_in, \'\' as modified_by, deleted, officer, region, territory, date, sys_date, location, chassis_no, customer_name, customer_address, customer_contact, model, invoice_no, price, sale_type, institute, advance, latitude, longitude, location_fk, verified, verified_by, verified_on, sale_completed, sale_completed_type_id, sale_completed_remarks, sale_completed_by, sale_completed_on FROM sale WHERE id = ?', [cloudID], function(err, rows, fields) {
+          connection.release()
+          if(err) {
+              return callback(err, null)
+          }
+          callback(err, rows)
+      })
+  })
+}
+
+Sale.getLogLogs = function(cloudID, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+
+      connection.query('SELECT id, \'log\' as status, date_in, modified_by, deleted, officer, region, territory, date, sys_date, location, chassis_no, customer_name, customer_address, customer_contact, model, invoice_no, price, sale_type, institute, advance, latitude, longitude, location_fk, verified, verified_by, verified_on, sale_completed, sale_completed_type_id, sale_completed_remarks, sale_completed_by, sale_completed_on FROM sale_history WHERE id = ? ORDER BY date_in DESC', [cloudID], function(err, rows, fields) {
+          connection.release()
+          if(err) {
+              return callback(err, null)
+          }
+          callback(err, rows)
+      })
   })
 }

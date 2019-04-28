@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <style media="screen">
+      table {
+        border-collapse: collapse;
+      }
+
+      table, th, td {
+        border: 1px solid blue;
+      }
+      tr td {
+        white-space: nowrap;
+      }
+      td {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <th>id</th>
+        <th>status</th>
+        <th>date_in</th>
+        <th>modified_by</th>
+        <th>deleted</th>
+        <th>officer</th>
+        <th>region</th>
+        <th>territory</th>
+        <th>date</th>
+        <th>sys_date</th>
+        <th>location</th>
+        <th>chassis_no</th>
+        <th>customer_name</th>
+        <th>customer_address</th>
+        <th>customer_contact</th>
+        <th>model</th>
+        <th>invoice_no</th>
+        <th>price</th>
+        <th>sale_type</th>
+        <th>institute</th>
+        <th>advance</th>
+        <th>latitude</th>
+        <th>longitude</th>
+        <th>location_fk</th>
+        <th>verified</th>
+        <th>verified_by</th>
+        <th>verified_on</th>
+        <th>sale_completed</th>
+        <th>sale_completed_type_id</th>
+        <th>sale_completed_remarks</th>
+        <th>sale_completed_by</th>
+        <th>sale_completed_on</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= current[0]['id'] %></td>
+          <td><%= current[0]['status'] %></td>
+          <td><%= current[0]['date_in'] %></td>
+          <td><%= current[0]['modified_by'] %></td>
+          <td><%= current[0]['deleted'] %></td>
+          <td><%= current[0]['officer'] %></td>
+          <td><%= current[0]['region'] %></td>
+          <td><%= current[0]['territory'] %></td>
+          <td><%= current[0]['date'] %></td>
+          <td><%= current[0]['sys_date'] %></td>
+          <td><%= current[0]['location'] %></td>
+          <td><%= current[0]['chassis_no'] %></td>
+          <td><%= current[0]['customer_name'] %></td>
+          <td><%= current[0]['customer_address'] %></td>
+          <td><%= current[0]['customer_contact'] %></td>
+          <td><%= current[0]['model'] %></td>
+          <td><%= current[0]['invoice_no'] %></td>
+          <td><%= current[0]['price'] %></td>
+          <td><%= current[0]['sale_type'] %></td>
+          <td><%= current[0]['institute'] %></td>
+          <td><%= current[0]['advance'] %></td>
+          <td><%= current[0]['latitude'] %></td>
+          <td><%= current[0]['longitude'] %></td>
+          <td><%= current[0]['location_fk'] %></td>
+          <td><%= current[0]['verified'] %></td>
+          <td><%= current[0]['verified_by'] %></td>
+          <td><%= current[0]['verified_on'] %></td>
+          <td><%= current[0]['sale_completed'] %></td>
+          <td><%= current[0]['sale_completed_type_id'] %></td>
+          <td><%= current[0]['sale_completed_remarks'] %></td>
+          <td><%= current[0]['sale_completed_by'] %></td>
+          <td><%= current[0]['sale_completed_on'] %></td>
+        </tr>
+        <% logs.forEach(function(log) { %>
+          <tr>
+            <td><%= log.id %></td>
+            <td><%= log.status %></td>
+            <td><%= log.date_in %></td>
+            <td><%= log.modified_by %></td>
+            <td><%= log.deleted %></td>
+            <td><%= log.officer %></td>
+            <td><%= log.region %></td>
+            <td><%= log.territory %></td>
+            <td><%= log.date %></td>
+            <td><%= log.sys_date %></td>
+            <td><%= log.location %></td>
+            <td><%= log.chassis_no %></td>
+            <td><%= log.customer_name %></td>
+            <td><%= log.customer_address %></td>
+            <td><%= log.customer_contact %></td>
+            <td><%= log.model %></td>
+            <td><%= log.invoice_no %></td>
+            <td><%= log.price %></td>
+            <td><%= log.sale_type %></td>
+            <td><%= log.institute %></td>
+            <td><%= log.advance %></td>
+            <td><%= log.latitude %></td>
+            <td><%= log.longitude %></td>
+            <td><%= log.location_fk %></td>
+            <td><%= log.verified %></td>
+            <td><%= log.verified_by %></td>
+            <td><%= log.verified_on %></td>
+            <td><%= log.sale_completed %></td>
+            <td><%= log.sale_completed_type_id %></td>
+            <td><%= log.sale_completed_remarks %></td>
+            <td><%= log.sale_completed_by %></td>
+            <td><%= log.sale_completed_on %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </body>
+</html>

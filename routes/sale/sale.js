@@ -10,6 +10,9 @@ const SalesFunctions = require('../../functions/sale')
 
 const Sale = require('../../models/sale/sale')
 const Notification = require('../../models/notification/notification')
+const User = require('../../models/user/user')
+const Region = require('../../models/region/region')
+const Stock = require('../../models/stock/stock')
 
 const multipart = multiparty()
 
@@ -17,17 +20,53 @@ router.use(Auth.signedIn, Auth.validSaleUser, Auth.saleExcelDownloadAllowed, fun
     next()
 })
 
+router.get('/log', Auth.validSalesEditor, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.getLogCurrent(req.query.cloudID, callback)
+    }, function(callback) {
+      Sale.getLogLogs(req.query.cloudID, callback)
+    }
+  ], function(err, data) {
+    res.render('sale/log', {
+      current: data[0],
+      logs: data[1]
+    })
+  })
+})
+
 router.get('/edit', Auth.validSalesEditor, function(req, res) {
   async.series([
     function(callback) {
       Sale.saleRawInfo(req.query.cloudID, callback)
+    }, function(callback) {
+      User.getActiveUsers(callback)
+    }, function(callback) {
+      Region.getAllRegions(callback)
+    }, function(callback) {
+      Region.getAllTerritories(callback)
+    }, function(callback) {
+      Stock.getModels(callback)
+    }, function(callback) {
+      Sale.getSaleTypes(callback)
+    }, function(callback) {
+      Stock.getDealersAndShowrooms(callback)
+    }, function(callback) {
+      Sale.getSaleCompletedTypes(callback)
     }
   ], function(err, data) {
     res.render('sale/edit', {
       navbar: 'Sales',
       title: 'Edit Sale',
       user: req.user,
-      sale: data[0][0]
+      sale: data[0][0],
+      users: data[1],
+      regions: data[2],
+      territories: data[3],
+      models: data[4],
+      saleTypes: data[5],
+      dealers: data[6],
+      saleCompletedTypes: data[7]
     })
   })
 })
@@ -45,10 +84,18 @@ router.post('/edit/:cloudID', Auth.validSalesEditor, function(req, res) {
 
   async.series([
     function(callback) {
-      Sale.edit(req.params.cloudID, newSale, callback)
+      Sale.edit(req.params.cloudID, newSale, req.user.username, MDate.getDateTime(), callback)
     }
   ], function(err, data) {
-    console.log(data[0])
+    if(data[0] == true) {
+      req.flash('success_msg', 'Successfully Edited')
+      res.redirect('/sale/edit?cloudID=' + req.params.cloudID)
+      return
+    } else {
+      req.flash('error', 'Error occured')
+      res.redirect('/sale/edit?cloudID=' + req.params.cloudID)
+      return
+    }
   })
 
 })
