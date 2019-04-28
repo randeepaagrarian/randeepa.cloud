@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                      <%= title %>
+                                    </div>
+                                    <div class="content">
+
+                                      <a href="/sale/cloudIDInfo?cloudID=<%= sale.id %>">Go to Sale Info Page</a>
+
+                                      <% if (error != '') { %>
+                          							<div class="alert alert-warning">
+                          								<%= error %>
+                          							</div>
+                          						<% } else if (success_msg != '') { %>
+                          							<div class="alert alert-success">
+                          								<%= success_msg %>
+                          							</div>
+                          						<% } %>
+
+                                      <table class="table table-striped">
+                                        <tbody>
+
+                                          <form action="/sale/edit/<%= sale.id %>" method="post">
+                                            <% for(let key in sale) { %>
+                                              <% if(sale.hasOwnProperty(key)) { %>
+
+                                                <% if(key == 'deleted') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(sale[key] == 0) { %>
+                                                          <option value="0" selected>Active</option>
+                                                          <option value="1">Deleted</option>
+                                                        <% } else { %>
+                                                          <option value="0">Active</option>
+                                                          <option value="1" selected>Deleted</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'officer') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% users.forEach(function(user) { %>
+                                                          <% if(user.id == sale[key]) { %>
+                                                            <option value="<%= user.id %>" selected><%= user.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'region') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% regions.forEach(function(region) { %>
+                                                          <% if(region.id == sale[key]) { %>
+                                                            <option value="<%= region.id %>" selected><%= region.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= region.id %>"><%= region.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'territory') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% territories.forEach(function(territory) { %>
+                                                          <% if(territory.id == sale[key]) { %>
+                                                            <option value="<%= territory.id %>" selected><%= territory.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= territory.id %>"><%= territory.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'model') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% models.forEach(function(model) { %>
+                                                          <% if(model.id == sale[key]) { %>
+                                                            <option value="<%= model.id %>" selected><%= model.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= model.id %>"><%= model.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'sale_type') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% saleTypes.forEach(function(saleType) { %>
+                                                          <% if(saleType.id == sale[key]) { %>
+                                                            <option value="<%= saleType.id %>" selected><%= saleType.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= saleType.id %>"><%= saleType.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'location_fk') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% dealers.forEach(function(dealer) { %>
+                                                          <% if(dealer.id == sale[key]) { %>
+                                                            <option value="<%= dealer.id %>" selected><%= dealer.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= dealer.id %>"><%= dealer.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'verified') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(sale[key] == 0) { %>
+                                                          <option value="0" selected>Not Verified</option>
+                                                          <option value="1">Verified</option>
+                                                        <% } else { %>
+                                                          <option value="0">Not Verified</option>
+                                                          <option value="1" selected>Verified</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'verified_by') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        if(sale[key] == '') {
+                                                          <option value="" selected>Not Verified</option>
+                                                          <% users.forEach(function(user) { %>
+                                                              <option value="<%= user.id %>"><%= user.name %></option>
+                                                          <% }) %>
+                                                        } else {
+                                                          <option value="">Not Verified</option>
+                                                          <% users.forEach(function(user) { %>
+                                                            <% if(user.id == sale[key]) { %>
+                                                              <option value="<%= user.id %>" selected><%= user.name %></option>
+                                                            <% } else { %>
+                                                              <option value="<%= user.id %>"><%= user.name %></option>
+                                                            <% } %>
+                                                          <% }) %>
+                                                        }
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'sale_completed') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(sale[key] == 0) { %>
+                                                          <option value="0" selected>Sale Not Completed</option>
+                                                          <option value="1">Sale Completed</option>
+                                                        <% } else { %>
+                                                          <option value="0">Sale Not Completed</option>
+                                                          <option value="1" selected>Sale Completed</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'sale_completed_type_id') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        if(sale[key] == '') {
+                                                          <option value="" selected>Sale Not Completed</option>
+                                                          <% saleCompletedTypes.forEach(function(saleCompletedType) { %>
+                                                              <option value="<%= saleCompletedType.id %>"><%= saleCompletedType.name %></option>
+                                                          <% }) %>
+                                                        } else {
+                                                          <option value="">Sale Not Completed</option>
+                                                          <% saleCompletedTypes.forEach(function(saleCompletedType) { %>
+                                                            <% if(saleCompletedType.id == sale[key]) { %>
+                                                              <option value="<%= saleCompletedType.id %>" selected><%= saleCompletedType.name %></option>
+                                                            <% } else { %>
+                                                              <option value="<%= saleCompletedType.id %>"><%= saleCompletedType.name %></option>
+                                                            <% } %>
+                                                          <% }) %>
+                                                        }
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'sale_completed_by') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        if(sale[key] == '') {
+                                                          <option value="" selected>Sale Not Completed</option>
+                                                          <% users.forEach(function(user) { %>
+                                                              <option value="<%= user.id %>"><%= user.name %></option>
+                                                          <% }) %>
+                                                        } else {
+                                                          <option value="">Sale Not Completed</option>
+                                                          <% users.forEach(function(user) { %>
+                                                            <% if(user.id == sale[key]) { %>
+                                                              <option value="<%= user.id %>" selected><%= user.name %></option>
+                                                            <% } else { %>
+                                                              <option value="<%= user.id %>"><%= user.name %></option>
+                                                            <% } %>
+                                                          <% }) %>
+                                                        }
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td><textarea cols="50" rows="3" name="<%= key %>"><%= sale[key] %></textarea></td>
+                                                  </tr>
+                                                <% } %>
+
+                                              <% } %>
+                                            <% } %>
+                                            <tr>
+                                              <td></td>
+                                              <td><input type="submit" value="Edit"></td>
+                                            </tr>
+                                          </form>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

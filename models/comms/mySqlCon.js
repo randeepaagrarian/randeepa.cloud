@@ -10,5 +10,6 @@ MySql.pool = mysql.createPool({
     multipleStatements: true,
     password        :   args.dbPass,
     timezone        :   'UTC',
-    database        :   args.dbName
+    database        :   args.dbName,
+    dateStrings     :   'date'
 })

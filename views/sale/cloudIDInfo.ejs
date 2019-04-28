@@ -20,8 +20,14 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <%= title %>
+                                      <%= title %>
+                                      <% if(user.accessLevel.salesEdit == 1) { %>
                                         <p><% if(sales[0]['verified'] == 1) { %><font color="green">Sale Verified</font><% } else { %><font color="red">Sale not verified</font> You can comment on this sale or verify it below<% } %></p>
+                                        <a href="/sale/edit?cloudID=<%= sales[0]['id'] %>"><img src='/img/edit_64.png' style="width: 32px;"></a>
+                                        <a href="/sale/log?cloudID=<%= sales[0]['id'] %>" target="_blank"><img src='/img/log.png' style="width: 32px;"></a>
+                                      <% } else { %>
+                                        <p><% if(sales[0]['verified'] == 1) { %><font color="green">Sale Verified</font><% } else { %><font color="red">Sale not verified</font> You can comment on this sale or verify it below<% } %></p>
+                                      <% } %>
                                     </div>
                                     <div class="content">
 
