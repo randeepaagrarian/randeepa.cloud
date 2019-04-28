@@ -74,8 +74,8 @@ router.get('/edit', Auth.validSalesEditor, function(req, res) {
 router.post('/edit/:cloudID', Auth.validSalesEditor, function(req, res) {
   let newSale = {}
 
-  for(let key in body) {
-    newSale[key] = decodeURIComponent(body[key])
+  for(let key in req.body) {
+    newSale[key] = decodeURIComponent(req.body[key])
   }
 
   delete newSale.id
