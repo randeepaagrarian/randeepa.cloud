@@ -64,7 +64,7 @@
                                                     <td>
                                                       <select name="<%= key %>">
                                                         <% users.forEach(function(user) { %>
-                                                          <% if(user.id == sale[key]) { %>
+                                                          <% if(user.id == sale[key].toLowerCase()) { %>
                                                             <option value="<%= user.id %>" selected><%= user.name %></option>
                                                           <% } else { %>
                                                             <option value="<%= user.id %>"><%= user.name %></option>
