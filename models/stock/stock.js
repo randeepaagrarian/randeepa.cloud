@@ -777,6 +777,7 @@ Stock.markSold = function(primaryId, callback) {
         }
 
         connection.query('UPDATE main_stock SET sold = 1 WHERE primary_id = ?', primaryId, function(err, result, fields) {
+            connection.release()
             if(err) {
                 return callback(err, null)
             }
