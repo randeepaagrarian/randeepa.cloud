@@ -35,7 +35,11 @@
                                                     <th>Notes</th>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                  <% if(currentLocation[0]['sold'] == 1) { %>
+                                                      <tr class="success">
+                                                  <% } else { %>
+                                                      <tr>
+                                                  <% } %>
                                                         <td><%= currentLocation[0]['delivery_document_id'] %></td>
                                                         <td><%= currentLocation[0]['delivery_document_type_name'] %></td>
                                                         <td><%= currentLocation[0]['date'] %></td>

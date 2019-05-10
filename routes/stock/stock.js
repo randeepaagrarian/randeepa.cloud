@@ -370,6 +370,8 @@ router.get('/viewStock', function(req, res) {
             Stock.getStock(req.query.stockLocation, callback)
         }, function(callback) {
             Stock.getDealerOrShowroomDetails(req.query.stockLocation, callback)
+        }, function(callback) {
+            Stock.getSoldStock(req.query.stockLocation, callback)
         }
     ], function(err, data) {
         res.render('stock/stock/viewStock', {
@@ -377,6 +379,7 @@ router.get('/viewStock', function(req, res) {
             navbar: 'Stock',
             user: req.user,
             stocks: data[0],
+            soldStocks: data[2],
             url: encodeURIComponent(req.originalUrl),
             showroomDealerDetails: data[1]
         })

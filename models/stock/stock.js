@@ -481,6 +481,22 @@ Stock.getStock = function(locationId, callback) {
     })
 }
 
+Stock.getSoldStock = function(locationId, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('SELECT delivery_document_id, model_id, primary_id, secondary_id, price, model.name, dealer_id, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date, delivery_document_type_id, delivery_document_type.name AS delivery_document_type_name FROM main_stock LEFT JOIN model ON main_stock.model_id = model.id LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id LEFT JOIN delivery_document_type ON delivery_document_type_id = delivery_document_type.id WHERE dealer_id = ? AND sold = 1;', locationId, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
 Stock.getDealerOrShowroomDetails = function(showroomDealerId, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
@@ -519,7 +535,7 @@ Stock.getCurrentLocation = function(primaryId, callback) {
             return callback(pool_err, null)
         }
 
-        connection.query('SELECT delivery_document_id, model_id, primary_id, secondary_id, price, delivery_document_type_id, dealer_id, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date, dealer.name AS dealer_name, delivery_document_type.name AS delivery_document_type_name, model.name AS model_name, notes FROM main_stock LEFT JOIN delivery_document ON delivery_document_id = delivery_document.id LEFT JOIN dealer ON dealer_id = dealer.id LEFT JOIN delivery_document_type ON delivery_document_type_id = delivery_document_type.id LEFT JOIN model ON model_id = model.id WHERE primary_id = ? AND sold = 0', primaryId, function(err, rows, fields) {
+        connection.query('SELECT delivery_document_id, model_id, primary_id, secondary_id, price, delivery_document_type_id, dealer_id, DATE_FORMAT(date, \'%Y-%m-%d %H:%i:%S\') AS date, dealer.name AS dealer_name, delivery_document_type.name AS delivery_document_type_name, model.name AS model_name, notes, sold FROM main_stock LEFT JOIN delivery_document ON delivery_document_id = delivery_document.id LEFT JOIN dealer ON dealer_id = dealer.id LEFT JOIN delivery_document_type ON delivery_document_type_id = delivery_document_type.id LEFT JOIN model ON model_id = model.id WHERE primary_id = ?', primaryId, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

@@ -25,7 +25,10 @@
                                 <% } %>
                                 <div class="card">
                                     <div class="header">
-                                        Stock - <%= showroomDealerDetails[0].name %>
+                                        <%= showroomDealerDetails[0].name %>
+                                    </div>
+                                    <div class="header">
+                                        Physical Stock
                                     </div>
                                     <div class="content">
                                         <div style="max-width: 100%; overflow: auto;" class="table-responsive">
@@ -49,6 +52,35 @@
                                                             <td><%= stock.secondary_id %></td>
                                                             <td><%= stock.name %></td>
                                                             <td><a href="/stock/markSold?primaryId=<%= stock.primary_id %>&continue=<%= url %>">Mark Sold</a></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="header">
+                                        Sold Stock
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Delivery Document Id</th>
+                                                    <th>Delivery Document Type</th>
+                                                    <th>Date</th>
+                                                    <th>Primary ID</th>
+                                                    <th>Secondary ID</th>
+                                                    <th>Model</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% soldStocks.forEach(function(stock) { %>
+                                                        <tr class="success">
+                                                            <td><%= stock.delivery_document_id %></td>
+                                                            <td><%= stock.delivery_document_type_name %></td>
+                                                            <td><%= stock.date %></td>
+                                                            <td><a href="/stock/stockDetails?primaryId=<%= stock.primary_id %>"><%= stock.primary_id %></a></td>
+                                                            <td><%= stock.secondary_id %></td>
+                                                            <td><%= stock.name %></td>
                                                         </tr>
                                                     <% }) %>
                                                 </tbody>
