@@ -436,6 +436,20 @@ router.get('/markNotificationUnread', Auth.signedIn, function(req, res) {
 	})
 })
 
+router.get('/clearAllNotifications', Auth.signedIn, function(req, res) {
+	async.series([
+		function(callback) {
+			Notification.clearAll(req.user.username, MDate.getDateTime(), callback)
+		}
+	], function(err, data) {
+		if(data[0] == true) {
+			res.redirect('/')
+		} else {
+			res.redirect('/')
+		}
+	})
+})
+
 router.get('/changePassword', Auth.signedIn, function(req, res) {
 	res.render('changePassword', {
 		title: 'Change Password',
