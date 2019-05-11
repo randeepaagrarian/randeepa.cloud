@@ -181,7 +181,7 @@ router.post('/addComment/:cloudID', multipart, Auth.salesSearchAllowed, function
         }
       })
     } else {
-      const attachmentExtension = req.files.attachment.originalFilename.split('.').pop()
+      const attachmentExtension = req.files.attachment.originalFilename.split('.').pop().toLowerCase()
 
       if(attachmentExtension == 'jpg' || attachmentExtension == 'jpeg' || attachmentExtension == 'png') {
         async.series([

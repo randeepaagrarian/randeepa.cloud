@@ -44,7 +44,7 @@
                                                 <tbody>
                                                     <% results.forEach(function(result) { %>
                                                         <% if(result.sold == 1) { %>
-                                                            <tr class="success">
+                                                            <tr class="info">
                                                                 <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= result.delivery_document_id %>"><%= result.delivery_document_id %></a></td>
                                                                 <td><%= result.model_name %></td>
                                                                 <td><a href="/stock/viewStock?stockLocation=<%= result.dealer_id %>"><%= result.name %></a></td>
