@@ -53,6 +53,7 @@ router.get('/incompleteSales', function(req, res) {
             navbar: 'Sales',
             title: 'Incomplete Sales',
             user: req.user,
+            url: req.url,
             hpFiles: req.query.hpFiles,
             startDate: req.query.startDate,
             endDate: req.query.endDate,
@@ -60,6 +61,23 @@ router.get('/incompleteSales', function(req, res) {
             modelSummary: SalesFunctions.modelSummary(details[0]),
             results: details[0].length
         })
+    })
+})
+
+router.get('/excel/incompleteSales', function(req, res) {
+    async.series([
+        function(callback) {
+            if(req.query.hpFiles == 0) {
+                Sale.incompleteSales(req.query.startDate, req.query.endDate, callback)
+            } else if(req.query.hpFiles == 1){
+                Sale.incompleteSalesHP(req.query.startDate, req.query.endDate, callback)
+            } else {
+                res.redirect('/')
+                return
+            }
+        }
+    ], function(err, details) {
+        res.xls('Incomplete Sales '+req.query.startDate+ ' ' +req.query.endDate+'.xlsx', details[0])
     })
 })
 
