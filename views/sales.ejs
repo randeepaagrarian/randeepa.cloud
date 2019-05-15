@@ -139,6 +139,9 @@
                                             <li>
                                                 <a href="#by_year" data-toggle="tab">By Year</a>
                                             </li>
+                                            <li>
+                                                <a href="#incomplete_sales" data-toggle="tab">Incomplete Sales</a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -619,6 +622,33 @@
                                                 </div>
                                                 </div>
                                             </div>
+                                            <div id="incomplete_sales" class="tab-pane">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="title">All Incomplete Sales</h6>
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <p><i>Start Date සහ End Date යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
+                                                                <form class="form-inline" action="/sale/incompleteSales" method="get">
+                                                                    <b>Start Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                                                    <b>End Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <b>HP Files Only:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    <select class="form-control" name="hpFiles">
+                                                                        <option value="0">NO</option>
+                                                                        <option value="1">YES</option>
+                                                                    </select>
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -637,4 +667,20 @@
         </div>
     </body>
     <% include ./layouts/pro/includes %>
+    <script type="text/javascript">
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    </script>
 </html>
