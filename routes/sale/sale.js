@@ -38,10 +38,12 @@ router.get('/log', Auth.validSalesEditor, function(req, res) {
 router.get('/incompleteSales', function(req, res) {
     async.series([
         function(callback) {
-            if(req.query.hpFiles == 0) {
+            if(req.query.filter == 'all') {
                 Sale.incompleteSales(req.query.startDate, req.query.endDate, callback)
-            } else if(req.query.hpFiles == 1){
+            } else if(req.query.filter == 'hp'){
                 Sale.incompleteSalesHP(req.query.startDate, req.query.endDate, callback)
+            } else if(req.query.filter == 'allexhp') {
+                Sale.incompleteSalesExHP(req.query.startDate, req.query.endDate, callback)
             } else {
                 res.redirect('/')
                 return
@@ -54,7 +56,7 @@ router.get('/incompleteSales', function(req, res) {
             title: 'Incomplete Sales',
             user: req.user,
             url: req.url,
-            hpFiles: req.query.hpFiles,
+            filter: req.query.filter,
             startDate: req.query.startDate,
             endDate: req.query.endDate,
             sales: details[0],
@@ -67,10 +69,12 @@ router.get('/incompleteSales', function(req, res) {
 router.get('/excel/incompleteSales', function(req, res) {
     async.series([
         function(callback) {
-            if(req.query.hpFiles == 0) {
+            if(req.query.filter == 'all') {
                 Sale.incompleteSales(req.query.startDate, req.query.endDate, callback)
-            } else if(req.query.hpFiles == 1){
+            } else if(req.query.filter == 'hp'){
                 Sale.incompleteSalesHP(req.query.startDate, req.query.endDate, callback)
+            } else if(req.query.filter == 'allexhp') {
+                Sale.incompleteSalesExHP(req.query.startDate, req.query.endDate, callback)
             } else {
                 res.redirect('/')
                 return
