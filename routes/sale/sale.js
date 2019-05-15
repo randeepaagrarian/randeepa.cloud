@@ -35,6 +35,34 @@ router.get('/log', Auth.validSalesEditor, function(req, res) {
   })
 })
 
+router.get('/incompleteSales', function(req, res) {
+    async.series([
+        function(callback) {
+            if(req.query.hpFiles == 0) {
+                Sale.incompleteSales(req.query.startDate, req.query.endDate, callback)
+            } else if(req.query.hpFiles == 1){
+                Sale.incompleteSalesHP(req.query.startDate, req.query.endDate, callback)
+            } else {
+                res.redirect('/')
+                return
+            }
+        }
+    ], function(err, details) {
+        res.render('sale/incompleteSales', {
+            url: req.url,
+            navbar: 'Sales',
+            title: 'Incomplete Sales',
+            user: req.user,
+            hpFiles: req.query.hpFiles,
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            sales: details[0],
+            modelSummary: SalesFunctions.modelSummary(details[0]),
+            results: details[0].length
+        })
+    })
+})
+
 router.get('/edit', Auth.validSalesEditor, function(req, res) {
   async.series([
     function(callback) {
