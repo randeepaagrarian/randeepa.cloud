@@ -1,5 +1,7 @@
 const express = require('express')
 const async = require('async')
+const request = require('request')
+const args = require('yargs').argv
 
 const router = express.Router()
 
@@ -131,62 +133,86 @@ router.post('/getSecondaryIdModelName', function(req, res) {
 })
 
 router.post('/deliveryNote', function(req, res) {
-    async.series([
-        function(callback) {
-            Stock.validateMainStock(req.body.mainStock, callback)
-        }, function(callback) {
-            Stock.validateShowroomOrDealer(req.body.dealerOrShowroom, callback)
-        }
-    ], function(err, data) {
-        if(data[0] == true && data[1] == true) {
+      let textMessageNumbers = req.body.textMessageNumbers
+      let textMessage = req.body.textMessage
 
-            const deliveryDocument = {
-                delivery_document_type_id: 2,
-                dealer_id: req.body.dealerOrShowroom,
-                from_dealer_id: req.body.mainStock,
-                date: MDate.getDateTime(),
-                issuer: req.user.username,
-                notes: req.body.notes,
-                officer_responsible: req.body.officerResponsible,
-                officer_telephone: req.body.officerTelephone,
-                vehicle_no: req.body.vehicleNo,
-                driver_name: req.body.driverName,
-                driver_nic: req.body.driverNic,
-                driver_telephone: req.body.driverTelephone,
-            }
+      textMessageNumbers = textMessageNumbers.split(',')
 
-            const primaryNumbers = req.body.primaryNumber
-            const prices = req.body.price
+      textMessageNumbers.forEach(function(number) {
+          if(isNaN(parseInt(number)) || number.length != 11) {
+            res.send("<br><div class='alert alert-warning'>" + "Error with the number list." + "</div>")
+          }
+      })
 
-            let machines = []
-            let machinePrices = []
+      res.send("<br><div class='alert alert-info'>No issue</div>")
+      return
 
-            if(primaryNumbers.constructor === Array) {
-                for(let i = 0; i < primaryNumbers.length; i++) {
-                    machines.push([primaryNumbers[i]])
-                    machinePrices.push([prices[i]])
-                }
-            } else {
-                machines.push([primaryNumbers])
-                machinePrices.push([prices])
-            }
+      // for(let number in textMessageNumbers) {
+      //   console.log(number)
+      //   if(parseInt(number).NaN || number.length != 11) {
+      //     res.send("<br><div class='alert alert-warning'>" + "Error with the number list." + "</div>")
+      //     return
+      //   }
+      // }
 
-            async.series([
-                function(callback) {
-                    Stock.newDeliveryNote(deliveryDocument, machines, machinePrices, callback)
-                }
-            ], function(err, data) {
-                if(err) {
-                    res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
-                } else {
-                    res.send("<br><div class='alert alert-info'>Delivery note issued successfully</div>")
-                }
-            })
+      // console.log(textMessageNumbers)
 
-        } else {
-            res.send("<br><div class='alert alert-warning'>Main stock and/or dealer showroom validation error</div>")
-        }
-    })
+    // async.series([
+    //     function(callback) {
+    //         Stock.validateMainStock(req.body.mainStock, callback)
+    //     }, function(callback) {
+    //         Stock.validateShowroomOrDealer(req.body.dealerOrShowroom, callback)
+    //     }
+    // ], function(err, data) {
+    //     if(data[0] == true && data[1] == true) {
+    //
+    //         const deliveryDocument = {
+    //             delivery_document_type_id: 2,
+    //             dealer_id: req.body.dealerOrShowroom,
+    //             from_dealer_id: req.body.mainStock,
+    //             date: MDate.getDateTime(),
+    //             issuer: req.user.username,
+    //             notes: req.body.notes,
+    //             officer_responsible: req.body.officerResponsible,
+    //             officer_telephone: req.body.officerTelephone,
+    //             vehicle_no: req.body.vehicleNo,
+    //             driver_name: req.body.driverName,
+    //             driver_nic: req.body.driverNic,
+    //             driver_telephone: req.body.driverTelephone,
+    //         }
+    //
+    //         const primaryNumbers = req.body.primaryNumber
+    //         const prices = req.body.price
+    //
+    //         let machines = []
+    //         let machinePrices = []
+    //
+    //         if(primaryNumbers.constructor === Array) {
+    //             for(let i = 0; i < primaryNumbers.length; i++) {
+    //                 machines.push([primaryNumbers[i]])
+    //                 machinePrices.push([prices[i]])
+    //             }
+    //         } else {
+    //             machines.push([primaryNumbers])
+    //             machinePrices.push([prices])
+    //         }
+    //
+    //         async.series([
+    //             function(callback) {
+    //                 Stock.newDeliveryNote(deliveryDocument, machines, machinePrices, callback)
+    //             }
+    //         ], function(err, data) {
+    //             if(err) {
+    //                 res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
+    //             } else {
+    //                 res.send("<br><div class='alert alert-info'>Delivery note issued successfully</div>")
+    //             }
+    //         })
+    //
+    //     } else {
+    //         res.send("<br><div class='alert alert-warning'>Main stock and/or dealer showroom validation error</div>")
+    //     }
+    // })
 })
 
 router.get('/transferNote', function(req, res){
