@@ -215,41 +215,31 @@ router.post('/deliveryNote', function(req, res) {
 
                         let api = '15572917316573'
 
-                        textMessageNumbers.forEach(function(number) {
-                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + api + '&message=' + textMessage, { json: true }, function(err, res, body) {
-                                if(err) {
-                                    res.write("<br><div class='alert alert-warning'>Error occurred while sending text message to " + number + "</div>")
+                        for(let i = 0; i < textMessageNumbers.length; i++) {
+                            res.write("<div class='alert alert-info'>Sending to " + textMessageNumbers[i] + "</div>")
+                            async.series([
+                                function(callback) {
+                                    request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + textMessageNumbers[i] + '&q=' + api + '&message=' + textMessage, { json: true }, callback)
                                 }
-                                if(res.body == 0) {
-                                    res.write("<br><div class='alert alert-info'> Text message sent successfully to <b>" + number + "</b></div>")
+                            ], function(err, data) {
+                                if(err) {
+                                    res.write("<br><div class='alert alert-warning'>Error occurred while sending text message to " + textMessageNumbers[i] + "</div>")
+                                }
+
+                                if(data[0].body == 0) {
+                                    res.write("<br><div class='alert alert-success'> Text message sent successfully to <b>" + textMessageNumbers[i] + "</b></div>")
                                 } else {
-                                    res.write("<br><div class='alert alert-warning'>Couldn't send text message to " + number + "</div>")
+                                    res.write("<br><div class='alert alert-warning'> Couldn't send message to <b>" + textMessageNumbers[i] + "</b></div>")
                                 }
                             })
-                        })
+                        }
 
-
-
-
-
-                        // for(let i = 0; i < textMessageNumbers.length; i++) {
-                        //
-                        //     request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + textMessageNumbers[i] + '&q=' + api + '&message=' + textMessage, { json: true }, function(err, res, body) {
-                        //         if(err) {
-                        //             res.write("<br><div class='alert alert-warning'>Error occurred while sending text message to " + textMessageNumbers[i] + "</div>")
-                        //         }
-                        //         if(res.body == 0) {
-                        //             res.write("<br><div class='alert alert-info'> Text message sent successfully to <b>" + textMessageNumbers[i] + "</b></div>")
-                        //         } else {
-                        //             res.write("<br><div class='alert alert-warning'>Couldn't send text message to " + textMessageNumbers[i] + "</div>")
-                        //         }
-                        //     })
-                        // }
-                        // res.write("<br><div class='alert alert-info'>Delivery note issuing complete</div>")
-
+                        res.write("<br><div class='alert alert-success'> Delivery Note Successfull</div>")
+                        res.end()
+                        return
                     } else {
                         res.send("<br><div class='alert alert-info'>Delivery note issued successfully.</div>")
-                    //     return
+                        return
                     }
                 }
             })
