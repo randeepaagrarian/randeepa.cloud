@@ -23,8 +23,12 @@
                                         <%= title %>
                                         <p class="category">There are <b><%= results %> </b> sales</p>
                                         <p class="category">Start Date: <b><%= startDate %> </b>End Date: <b><%= endDate %> </b></p>
-                                        <% if(hpFiles == 1) { %>
-                                            <p class="category"><b>Showing HP Files Only</b></p>
+                                        <% if(filter == 'all') { %>
+                                            <p class="category"><b>Showing All Incomplete Sales</b></p>
+                                        <% } else if(filter == 'hp') { %>
+                                            <p class="category"><b>Showing All Higher Purchase Incomplete Sales</b></p>
+                                        <% } else if(filter == 'allexhp') { %>
+                                            <p class="category"><b>Showing All Incomplete Sales Except Higher Purchase</b></p>
                                         <% } %>
                                         <a class="category" href="/sale/excel<%= url %>"><u>Download Excel</u></a>
                                     </div>
