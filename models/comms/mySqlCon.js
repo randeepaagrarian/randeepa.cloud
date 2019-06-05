@@ -2,7 +2,7 @@ const mysql = require('mysql')
 
 const MySql = module.exports = {}
 
-const args = require('yargs').argv;
+const args = require('yargs').argv
 
 MySql.pool = mysql.createPool({
     host            :   args.dbIP,

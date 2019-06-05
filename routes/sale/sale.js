@@ -90,7 +90,7 @@ router.get('/edit', Auth.validSalesEditor, function(req, res) {
     function(callback) {
       Sale.saleRawInfo(req.query.cloudID, callback)
     }, function(callback) {
-      User.getActiveUsers(callback)
+      User.getAllUsers(callback)
     }, function(callback) {
       Region.getAllRegions(callback)
     }, function(callback) {

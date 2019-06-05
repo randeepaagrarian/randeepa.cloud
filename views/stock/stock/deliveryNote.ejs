@@ -86,6 +86,10 @@
                                                                     <td>Vehicle No:</td>
                                                                     <td><input class="form-control" type="text" name="vehicleNo"></td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <td>Text Message Numbers:</td>
+                                                                    <td><textarea rows="6" class="form-control" name="textMessageNumbers">94768237192,94703524274,94703524275,94703524276,94703524321,94703524300</textarea></td>
+                                                                </tr>
                                                             </table>
                                                             <a class="addRow" href="javascript:void(0)">Add Row</a>
                                                         </div>
@@ -102,6 +106,10 @@
                                                                 <tr>
                                                                     <td>Driver Telephone:</td>
                                                                     <td><input class="form-control" type="text" name="driverTelephone"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Text Message:</td>
+                                                                    <td><textarea class="form-control" name="textMessage"></textarea></td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -172,7 +180,9 @@
                     driverName: $('input[name="driverName"]').val(),
                     driverNic: $('input[name="driverNic"]').val(),
                     driverTelephone: $('input[name="driverTelephone"]').val(),
-                    notes: $('textarea[name="notes"]').val()
+                    notes: $('textarea[name="notes"]').val(),
+                    textMessageNumbers: $('textarea[name="textMessageNumbers"]').val(),
+                    textMessage: $('textarea[name="textMessage"]').val()
                 },
                 function(data, status) {
                     $("#responseMessgae").html(data);
