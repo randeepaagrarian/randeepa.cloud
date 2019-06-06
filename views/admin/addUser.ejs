@@ -76,6 +76,16 @@
                                                     <td><input class="form-control" type='text' name='designation'/></td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Designation &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="designation_fk">
+                                                            <% designations.forEach(function(designation){ %>
+                                                                <option value="<%= designation.id %>"><%= designation.name %></option>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td>Profile &nbsp; &nbsp;</td>
                                                     <td>
                                                         <select class="form-control" name="profile">
