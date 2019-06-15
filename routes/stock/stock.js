@@ -204,7 +204,6 @@ router.post('/deliveryNote', function(req, res) {
                 }
             ], function(err, data) {
                 if(err) {
-                    console.log(err)
                     res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
                     return
                 } else {
