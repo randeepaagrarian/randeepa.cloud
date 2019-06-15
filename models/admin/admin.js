@@ -22,7 +22,7 @@ Admin.allUsers = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('select user.id, username, email, user.active, user.name, region.name as region, territory.name as territory, profile_pic, DATE_FORMAT(birthday, \'%Y-%m-%d\') as birthday, designation, profile, COUNT(user_access.user_id) as active_modules from user left join region on user.region = region.id left join territory on user.territory = territory.id left join user_access on user.id = user_access.user_id group by user.id, username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile', function(err, rows, fields) {
+        connection.query('select user.id, username, email, user.active, user.login_enabled, user.name, region.name as region, territory.name as territory, profile_pic, DATE_FORMAT(birthday, \'%Y-%m-%d\') as birthday, designation.name as designation, profile, COUNT(user_access.user_id) as active_modules from user left join region on user.region = region.id left join territory on user.territory = territory.id left join user_access on user.id = user_access.user_id left join designation on user.designation_fk = designation.id group by user.id, username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -38,6 +38,21 @@ Admin.allUsersByRegion = function(region, callback) {
             return callback(pool_err, null)
         }
         connection.query('select user.id, username, email, user.active, user.name, region.name as region, territory.name as territory, profile_pic, DATE_FORMAT(birthday, \'%Y-%m-%d\') as birthday, designation, profile, COUNT(user_access.user_id) as active_modules from user left join region on user.region = region.id left join territory on user.territory = territory.id left join user_access on user.id = user_access.user_id where region = ? group by user.id, username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile', region, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Admin.allDesignations = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT * FROM designation', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -112,7 +127,7 @@ Admin.userDetails = function(userId, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('select username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile, region.name as region_name, territory.name as territory_name from user left join region on user.region = region.id left join territory on user.territory = territory.id where user.id = ?', userId, function(err, rows, fields) {
+        connection.query('select username, email, user.active, user.login_enabled, user.name, region, territory, profile_pic, birthday, designation, designation_fk, profile, region.name as region_name, territory.name as territory_name from user left join region on user.region = region.id left join territory on user.territory = territory.id where user.id = ?', userId, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

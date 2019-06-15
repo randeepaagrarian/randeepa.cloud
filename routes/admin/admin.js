@@ -60,6 +60,8 @@ router.get('/addUser', function(req, res) {
             Region.getAllRegions(callback)
         }, function(callback) {
             Region.getAllTerritories(callback)
+        }, function(callback) {
+            Admin.allDesignations(callback)
         }
     ], function(err, data) {
         res.render('admin/addUser', {
@@ -67,7 +69,8 @@ router.get('/addUser', function(req, res) {
             navbar: 'Admin',
             regions: data[0],
             territories: data[1],
-            user: req.user
+            user: req.user,
+            designations: data[2]
         })
     })
 })
@@ -89,12 +92,14 @@ router.post('/addUser', multipart, function(req, res) {
         password: hash,
         email: req.body.email,
         active: 1,
+        login_enabled: req.body.login_enabled,
         name: req.body.first_name + ' ' + req.body.last_name,
         region: req.body.region,
         territory: req.body.territory,
         profile_pic: 'https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png',
         birthday: req.body.birthday,
         designation: req.body.designation,
+        designation_fk: req.body.designation_fk,
         profile: req.body.profile,
         change_password: 1
     }
@@ -120,40 +125,46 @@ router.post('/addUser', multipart, function(req, res) {
         ], function(err, data) {
             if(data[0] == true) {
 
-                let transporter = nodemailer.createTransport({
-                    host: 'smtp.zoho.com',
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: 'admin@randeepa.cloud',
-                        pass: args.adminEmailPassword
+                if(req.body.login_enabled == 0) {
+                    req.flash('warning_msg', 'Account successfully created.')
+                    res.redirect('/admin/allUsers')
+                    return
+                } else {
+                    let transporter = nodemailer.createTransport({
+                        host: 'smtp.zoho.com',
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            user: 'admin@randeepa.cloud',
+                            pass: args.adminEmailPassword
+                        }
+                    })
+
+                    const message = '<p>Dear ' + req.body.first_name + ' ' + req.body.last_name + ', <br> Your Randeepa Cloud account details are as follows, <br> Username - ' + user.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to access the cloud.<br> You will be asked to change your password at first login. Please note that unathorized use of this credentials described in the employment agreement may lead to disciplinary action and or termination. <br> Thank You,<br>Randeepa Cloud Team</p>'
+
+                    const mailOptions = {
+                        from: 'Randeepa Cloud <admin@randeepa.cloud>',
+                        to: req.body.email+',shamal@randeepa.com',
+                        subject: 'Welcome to Randeepa, '+ req.body.first_name + '. Your Randeepa Cloud account is ready',
+                        html: message
                     }
-                })
 
-                const message = '<p>Dear ' + req.body.first_name + ' ' + req.body.last_name + ', <br> Your Randeepa Cloud account details are as follows, <br> Username - ' + user.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to access the cloud.<br> You will be asked to change your password at first login. Please note that unathorized use of this credentials described in the employment agreement may lead to disciplinary action and or termination. <br> Thank You,<br>Randeepa Cloud Team</p>'
-
-                const mailOptions = {
-                    from: 'Randeepa Cloud <admin@randeepa.cloud>',
-                    to: req.body.email+',shamal@randeepa.com',
-                    subject: 'Welcome to Randeepa, '+ req.body.first_name + '. Your Randeepa Cloud account is ready',
-                    html: message
+                    async.series([
+                        function(callback) {
+                            transporter.sendMail(mailOptions, callback)
+                        }
+                    ], function(err, data) {
+                        if(err) {
+                            req.flash('warning_msg', 'Account created. But an internal error occured. Please contact administrator to fix the issue')
+                            res.redirect('/admin/allUsers')
+                            return
+                        } else {
+                            req.flash('warning_msg', 'Account successfully created. Please check user email for login credentials')
+                            res.redirect('/admin/allUsers')
+                            return
+                        }
+                    })
                 }
-
-                async.series([
-                    function(callback) {
-                        transporter.sendMail(mailOptions, callback)
-                    }
-                ], function(err, data) {
-                    if(err) {
-                        req.flash('warning_msg', 'Account created. But an internal error occured. Please contact administrator to fix the issue')
-                        res.redirect('/admin/allUsers')
-                        return
-                    } else {
-                        req.flash('warning_msg', 'Account successfully created. Please check user email for login credentials')
-                        res.redirect('/admin/allUsers')
-                        return
-                    }
-                })
 
             }
         })
@@ -227,6 +238,8 @@ router.get('/editUser', function(req, res) {
             Region.getAllTerritories(callback)
         }, function(callback) {
             Admin.userDetails(req.query.userId, callback)
+        }, function(callback) {
+            Admin.allDesignations(callback)
         }
     ], function(err, data) {
         res.render('admin/editUser', {
@@ -236,7 +249,8 @@ router.get('/editUser', function(req, res) {
             user: req.user,
             regions: data[0],
             territories: data[1],
-            userDetails: data[2]
+            userDetails: data[2],
+            designations: data[3]
         })
     })
 })

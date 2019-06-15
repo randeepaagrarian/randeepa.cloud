@@ -548,6 +548,8 @@ passport.use(new LocalStrategy(
 			if(bcrypt.compareSync(password, user.password)) {
 				if(user.active == 0)
 					return done(null, false, { message: 'Sorr! Your account is suspended. Please contact administrator'})
+				else if(user.login_enabled == 0)
+					return done(null, false, { message: 'Your account is not enabled for signin'})
 				else
 					return done(null, user)
 			} else {

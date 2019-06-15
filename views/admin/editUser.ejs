@@ -72,6 +72,21 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Login Enabled &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="login_enabled">
+                                                            <% if(userDetails[0]['login_enabled'] == 1) { %>
+                                                                <option value='1' selected>Enabled</option>
+                                                                <option value='0'>Disabled</option>
+                                                            <% } else { %>
+                                                                <option value='1'>Enabled</option>
+                                                                <option value='0' selected>Disabled</option>
+                                                            <% } %>
+
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td>Name &nbsp; &nbsp;</td>
                                                     <td><%= userDetails[0]['name'] %></td>
                                                 </tr>
@@ -109,6 +124,20 @@
                                                     <td><%= userDetails[0]['birthday'] %></td>
                                                 </tr>
 
+                                                <tr>
+                                                    <td>Designation &nbsp; &nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="designation_fk">
+                                                            <% designations.forEach(function(designation){ %>
+                                                                <% if(designation.id == userDetails[0]['designation_fk']){ %>
+                                                                    <option value="<%= designation.id %>" selected><%= designation.name %></option>
+                                                                <% } else { %>
+                                                                    <option value="<%= designation.id %>"><%= designation.name %></option>
+                                                                <% } %>
+                                                            <% })%>
+                                                        </select>
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td>Designation &nbsp; &nbsp;</td>
                                                     <td><%= userDetails[0]['designation'] %></td>
