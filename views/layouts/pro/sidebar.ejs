@@ -118,6 +118,15 @@
                 </li>
             <% } %>
 
+            <% if(typeof user.accessLevel.service != 'undefined') { %>
+                <li class="<%= navbar == 'Service' ? 'active' : '' %>">
+                    <a href="/service">
+                        <i class="pe-7s-tools"></i>
+                        <p>Service</p>
+                    </a>
+                </li>
+            <% } %>
+
             <% if(typeof user.accessLevel.admin != 'undefined') { %>
                 <li class="<%= navbar == 'Admin' ? 'active' : '' %>">
                     <a href="/admin">
