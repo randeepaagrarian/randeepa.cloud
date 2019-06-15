@@ -234,3 +234,42 @@ bf_organization_name
 d_organization_name
 model_name
 chassis_no
+
+CREATE TABLE service(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    sale_id INT NULL,
+    sale_date DATE NULL,
+    chassis_no VARCHAR(32) NULL,
+    model_id VARCHAR(64) NULL,
+    meter INT NULL,
+    meter_type VARCHAR(8) NULL,
+    customer_name VARCHAR(64) NULL,
+    customer_contact INT NULL,
+    current_address VARCHAR(64) NULL,
+    dealer_id INT NULL,
+    technician_id VARCHAR(16) NULL,
+    work_sheet VARCHAR(64) NULL,
+    technician_allocated BOOLEAN NOT NULL DEFAULT 0,
+    technician_allocated_by VARCHAR(16) NULL,
+    technician_allocated_on DATETIME NULL,
+    service_completed BOOLEAN NOT NULL DEFAULT 0,
+    service_completed_remarks VARCHAR(128) NULL,
+    service_completed_by VARCHAR(16) NULL,
+    service_completed_on DATETIME NULL,
+    FOREIGN KEY (sale_id) REFERENCES sale(id),
+    FOREIGN KEY (model_id) REFERENCES model(id),
+    FOREIGN KEY (dealer_id) REFERENCES dealer(id),
+    FOREIGN KEY (technician_id) REFERENCES user(username),
+    FOREIGN KEY (technician_allocated_by) REFERENCES user(username),
+    FOREIGN KEY (service_completed_by) REFERENCES user(username)
+);
+
+CREATE TABLE service_technician_change_history (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    date_in DATETIME NOT NULL,
+    changed_by VARCHAR(16) NOT NULL,
+    technician_id VARCHAR(16) NOT NULL,
+    reason VARCHAR(128) NOT NULL,
+    FOREIGN KEY (changed_by) REFERENCES user(username),
+    FOREIGN KEY (technician_id) REFERENCES user(username)
+);
