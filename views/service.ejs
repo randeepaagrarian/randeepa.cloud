@@ -40,6 +40,20 @@
                                                 </div>
                                             </div>
                                             <div class="row">
+                                                <div class="col-md-6">
+                                                    <h5 class="title">Search by Service ID</h5>
+                                                    <br>
+                                                    <form action="/service/searchByServiceID" method="get">
+                                                        <div class="form-group">
+                                                          <input class="form-control" type="text" name="serviceID" placeholder="Service ID">
+                                                        </div>
+                                                        <div class="form-group">
+                                                          <input class="btn btn-default" type="submit" value="Search">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-12">
                                                     <ul role="tablist" class="nav nav-tabs">
                                                         <li role="presentation" class="active">
@@ -88,7 +102,7 @@
                                                                     <form action="/service/byofficer/date" method="get">
                                                                         <div class="form-group">
                                                                             <b>Technician:</b>
-                                                                            <select class="form-control" name="officer">
+                                                                            <select class="form-control" name="technician">
                                                                                 <% technicians.forEach(function(technician) { %>
                                                                                     <option value="<%= technician.id %>"><%= technician.name %></option>
                                                                                 <% }) %>
