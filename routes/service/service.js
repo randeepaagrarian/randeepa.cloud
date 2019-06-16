@@ -97,6 +97,10 @@ router.get('/serviceInfo', function(req, res){
                 }, function(callback){
                     Service.getTechnicians(callback)
                 }, function(callback) {
+                    Service.allocatedTechnician(req.query.serviceID, callback)
+                }, function(callback) {
+                    Service.allocatedTechnicianHistory(req.query.serviceID, callback)
+                }, function(callback) {
                     Sale.cloudIDInfo(saleID, callback)
                 }
             ], function(err, data) {
@@ -107,7 +111,9 @@ router.get('/serviceInfo', function(req, res){
                     serviceInfo: data[0],
                     saleIDEntered: true,
                     technicians: data[1],
-                    sales: data[2]
+                    allocatedTechnician: data[2],
+                    allocatedTechnicianHistory: data[3],
+                    sales: data[4]
                 })
             })
         } else {
@@ -116,6 +122,10 @@ router.get('/serviceInfo', function(req, res){
                     Service.serviceInfo(req.query.serviceID, callback)
                 }, function(callback){
                     Service.getTechnicians(callback)
+                }, function(callback) {
+                    Service.allocatedTechnician(req.query.serviceID, callback)
+                }, function(callback) {
+                    Service.allocatedTechnicianHistory(req.query.serviceID, callback)
                 }
             ], function(err, data) {
                 res.render('service/serviceInfo', {
@@ -125,6 +135,8 @@ router.get('/serviceInfo', function(req, res){
                     serviceInfo: data[0],
                     saleIDEntered: false,
                     technicians: data[1],
+                    allocatedTechnician: data[2],
+                    allocatedTechnicianHistory: data[3]
                 })
             })
         }

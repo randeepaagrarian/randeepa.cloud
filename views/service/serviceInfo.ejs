@@ -156,6 +156,38 @@
                                                                                             <td></td>
                                                                                         </tr>
                                                                                     </table>
+                                                                                    <table class="table table-striped">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Technician Name</th>
+                                                                                                <th>Allocated By</th>
+                                                                                                <th>Allocated On</th>
+                                                                                                <th>Changed By</th>
+                                                                                                <th>Changed On</th>
+                                                                                                <th>Change Reason</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td><%= allocatedTechnician[0]['technician_name'] %></td>
+                                                                                                <td><%= allocatedTechnician[0]['technician_allocated_by'] %></td>
+                                                                                                <td><%= allocatedTechnician[0]['technician_allocated_on'] %></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                            </tr>
+                                                                                            <% allocatedTechnicianHistory.forEach(function(allocatedTechnician) { %>
+                                                                                                <tr>
+                                                                                                    <td><%= allocatedTechnician.technician_name %></td>
+                                                                                                    <td><%= allocatedTechnician.technician_allocated_by %></td>
+                                                                                                    <td><%= allocatedTechnician.technician_allocated_on %></td>
+                                                                                                    <td><%= allocatedTechnician.changed_by %></td>
+                                                                                                    <td><%= allocatedTechnician.changed_on %></td>
+                                                                                                    <td><%= allocatedTechnician.reason %></td>
+                                                                                                </tr>
+                                                                                            <% }) %>
+                                                                                        </tbody>
+                                                                                    </table>
                                                                                 </form>
                                                                             <% } %>
                                                                         </div>

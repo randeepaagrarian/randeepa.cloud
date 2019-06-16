@@ -137,3 +137,33 @@ Service.changeTechnician = function(serviceID, datetime, username, reason, techn
         })
     })
 }
+
+Service.allocatedTechnician = function(serviceID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT U.name as technician_name, SR.technician_allocated_by, SR.technician_allocated_on FROM service SR LEFT JOIN user U ON SR.technician_id = U.username WHERE SR.id = ?;', serviceID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Service.allocatedTechnicianHistory = function(serviceID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT U.name as technician_name, SR.technician_allocated_by, SR.technician_allocated_on, SR.changed_by, SR.date_in as changed_on, SR.reason FROM service_technician_change_history SR LEFT JOIN user U ON SR.technician_id = U.username WHERE SR.service_id = ? ORDER BY SR.date_in DESC;', serviceID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
