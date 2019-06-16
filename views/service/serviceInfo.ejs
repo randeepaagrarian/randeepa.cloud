@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <% if(user.accessLevel.service == 8) { %>
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="header">
+                                            <h4 class="title"><%= title %></h4>
+                                        </div>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <ul role="tablist" class="nav nav-tabs">
+                                                        <li role="presentation" class="active">
+                                                            <a href="#service_info" data-toggle="tab">Service Info</a>
+                                                        </li>
+                                                        <li role="presentation">
+                                                            <a href="#sale_info" data-toggle="tab">Sale Info</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div id="service_info" class="tab-pane active">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <table class="table table-striped">
+                                                                        <tr>
+                                                                            <td><b>ID</b></td>
+                                                                            <td><%= serviceInfo[0]['id'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Issue</b></td>
+                                                                            <td><%= serviceInfo[0]['issue'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><b>Technician</b></td>
+                                                                            <td><%= serviceInfo[0]['technician_name'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><font color='green'>Optional Details</font></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Cloud ID</td>
+                                                                            <td><%= serviceInfo[0]['sale_id'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Chassis No</td>
+                                                                            <td><%= serviceInfo[0]['chassis_no'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Model</td>
+                                                                            <td><%= serviceInfo[0]['model_name'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Chassis No</td>
+                                                                            <td><%= serviceInfo[0]['chassis_no'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Meter</td>
+                                                                            <td><%= serviceInfo[0]['meter'] %> <%= serviceInfo[0]['meter_type'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Customer Name</td>
+                                                                            <td><%= serviceInfo[0]['customer_name'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Customer Contact</td>
+                                                                            <td><%= serviceInfo[0]['customer_contact'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Current Address</td>
+                                                                            <td><%= serviceInfo[0]['current_address'] %></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Dealer/Showroom</td>
+                                                                            <td><%= serviceInfo[0]['dealer_name'] %></td>
+                                                                        </tr>
+                                                                    </table>
+
+                                                                    <br>
+
+                                                                    <p class="category"><font color='red'><%= warning_msg %></font></p>
+                                                                    <p class="category"><font color='green'><%= success_msg %></font></p>
+
+                                                                    <ul role="tablist" class="nav nav-tabs">
+                                                                        <li role="presentation" class="active">
+                                                                            <a href="#allocate_technician" data-toggle="tab">Allocate Technician</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="#complete_service" data-toggle="tab">Complete Service</a>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                    <div class="tab-content">
+                                                                        <div id="allocate_technician" class="tab-pane active">
+                                                                            <% if(serviceInfo[0]['technician_allocated'] == 0 && serviceInfo[0]['service_completed'] == 0) { %>
+                                                                                <form action="/service/allocateTechnician/<%= serviceInfo[0]['id'] %>" method="post">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>Technician &nbsp;</td>
+                                                                                            <td>
+                                                                                                <select class="form-control" style='width: 350px' name="technician">
+                                                                                                    <% technicians.forEach(function(technician) { %>
+                                                                                                        <option value="<%= technician.id %>"><%= technician.name %></option>
+                                                                                                    <% }) %>
+                                                                                                </select>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><input type='submit' class='btn btn-primary' value='Allocate' /></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </form>
+                                                                            <% } else if(serviceInfo[0]['technician_allocated'] == 1 && serviceInfo[0]['service_completed'] == 0) { %>
+                                                                                <form action="/service/changeTechnician/<%= serviceInfo[0]['id'] %>" method="post">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>Technician &nbsp;</td>
+                                                                                            <td>
+                                                                                                <select class="form-control" style='width: 350px' name="technician">
+                                                                                                    <% technicians.forEach(function(technician) { %>
+                                                                                                        <option value="<%= technician.id %>"><%= technician.name %></option>
+                                                                                                    <% }) %>
+                                                                                                </select>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Change Reason</td>
+                                                                                            <td>
+                                                                                                <textarea name="reason" class="form-control" rows="5" style='width: 350px' ></textarea>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><input type='submit' class='btn btn-primary' value='Change Technician' /></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                    <table class="table table-striped">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Technician Name</th>
+                                                                                                <th>Allocated By</th>
+                                                                                                <th>Allocated On</th>
+                                                                                                <th>Changed By</th>
+                                                                                                <th>Changed On</th>
+                                                                                                <th>Change Reason</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td><%= allocatedTechnician[0]['technician_name'] %></td>
+                                                                                                <td><%= allocatedTechnician[0]['technician_allocated_by'] %></td>
+                                                                                                <td><%= allocatedTechnician[0]['technician_allocated_on'] %></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                            </tr>
+                                                                                            <% allocatedTechnicianHistory.forEach(function(allocatedTechnician) { %>
+                                                                                                <tr>
+                                                                                                    <td><%= allocatedTechnician.technician_name %></td>
+                                                                                                    <td><%= allocatedTechnician.technician_allocated_by %></td>
+                                                                                                    <td><%= allocatedTechnician.technician_allocated_on %></td>
+                                                                                                    <td><%= allocatedTechnician.changed_by %></td>
+                                                                                                    <td><%= allocatedTechnician.changed_on %></td>
+                                                                                                    <td><%= allocatedTechnician.reason %></td>
+                                                                                                </tr>
+                                                                                            <% }) %>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </form>
+                                                                            <% } else { %>
+                                                                                <table class="table table-striped">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Technician Name</th>
+                                                                                            <th>Allocated By</th>
+                                                                                            <th>Allocated On</th>
+                                                                                            <th>Changed By</th>
+                                                                                            <th>Changed On</th>
+                                                                                            <th>Change Reason</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td><%= allocatedTechnician[0]['technician_name'] %></td>
+                                                                                            <td><%= allocatedTechnician[0]['technician_allocated_by'] %></td>
+                                                                                            <td><%= allocatedTechnician[0]['technician_allocated_on'] %></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                        <% allocatedTechnicianHistory.forEach(function(allocatedTechnician) { %>
+                                                                                            <tr>
+                                                                                                <td><%= allocatedTechnician.technician_name %></td>
+                                                                                                <td><%= allocatedTechnician.technician_allocated_by %></td>
+                                                                                                <td><%= allocatedTechnician.technician_allocated_on %></td>
+                                                                                                <td><%= allocatedTechnician.changed_by %></td>
+                                                                                                <td><%= allocatedTechnician.changed_on %></td>
+                                                                                                <td><%= allocatedTechnician.reason %></td>
+                                                                                            </tr>
+                                                                                        <% }) %>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            <% } %>
+                                                                        </div>
+                                                                        <div id="complete_service" class="tab-pane">
+                                                                            <% if(serviceInfo[0]['service_completed'] == 0) { %>
+                                                                                <form action="/service/serviceComplete/<%= serviceInfo[0]['id'] %>" method="post">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>Remarks: </td>
+                                                                                            <td>
+                                                                                                <textarea name="remarks" class="form-control" rows="5" style="width: 350px" ></textarea>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><input type='submit' value='Mark Complete' class="btn btn-primary"></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </form>
+                                                                            <% } else { %>
+                                                                                <p><font color="green">Service Completed</font></p>
+                                                                                <table class="table table-striped">
+                                                                                  <tr>
+                                                                                    <td>By</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_by'] %></td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                    <td>On</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_on'] %></td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                    <td>Remarks</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_remarks'] %></td>
+                                                                                  </tr>
+                                                                                </table>
+                                                                            <% } %>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="sale_info" class="tab-pane">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <% if(saleIDEntered) { %>
+                                                                        <p><% if(sales[0]['verified'] == 1) { %><font color="green">Sale Verified</font><% } else { %><font color="red">Sale not verified</font><% } %></p>
+
+                                                                        <% if(sales[0]['sale_completed'] == 0) { %>
+                                                                            <p><font color="red">Sale not complete</font></p>
+                                                                        <% } else { %>
+                                                                            <p><font color="green">Sale Completed</font></p>
+                                                                            <table class="table table-striped">
+                                                                              <tr>
+                                                                                <td>Type</td>
+                                                                                <td><%= sales[0]['sale_completed_type_name'] %></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td>By</td>
+                                                                                <td><%= sales[0]['sale_completed_by'] %></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td>On</td>
+                                                                                <td><%= sales[0]['sale_completed_on'] %></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td>Remarks</td>
+                                                                                <td><%= sales[0]['sale_completed_remarks'] %></td>
+                                                                              </tr>
+                                                                            </table>
+                                                                        <% } %>
+
+                                                                      <table class="table table-striped">
+                                                                        <tbody>
+                                                                          <tr>
+                                                                            <td><b>Cloud ID</b></td>
+                                                                            <td><b><%= sales[0]['id'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Officer</b></td>
+                                                                            <td><b><%= sales[0]['officer_name'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Region</td>
+                                                                            <td><%= sales[0]['region_name'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>ME Territory</b></td>
+                                                                            <td><b><%= sales[0]['territory_name'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Date</td>
+                                                                            <td><%= sales[0]['date'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Cloud Date</b></td>
+                                                                            <td><b><%= sales[0]['sys_date'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Showroom/Dealer</b></td>
+                                                                            <% if(sales[0]['location']){ %>
+                                                                                <td> <b><%= sales[0]['location'] %></b> </td>
+                                                                            <% } else if(sales[0]['sd_location']){ %>
+                                                                                <td> <b><%= sales[0]['sd_location'] %></b> </td>
+                                                                            <% } %>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Dealer/Showroom Territory Name</b></td>
+                                                                            <td><b><%= sales[0]['dealer_territory'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Chassis Number</b></td>
+                                                                            <td><b><%= sales[0]['chassis_no'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Customer Name</td>
+                                                                            <td><%= sales[0]['customer_name'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Customer Address</td>
+                                                                            <td><%= sales[0]['customer_address'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Customer Contact</td>
+                                                                            <td><%= sales[0]['customer_contact'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Model</b></td>
+                                                                            <td><b><%= sales[0]['model_name'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Invoice Number</td>
+                                                                            <td><%= sales[0]['invoice_no'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td><b>Price</b></td>
+                                                                            <td><b><%= sales[0]['price'] %></b></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Sale Type</td>
+                                                                            <td><%= sales[0]['sale_type_name'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Institute</td>
+                                                                            <td><%= sales[0]['institute'] %></td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                            <td>Advance</td>
+                                                                            <td><%= sales[0]['advance'] %></td>
+                                                                          </tr>
+                                                                        </tbody>
+                                                                      </table>
+                                                                    <% } else { %>
+                                                                        <p>Cloud ID not provided for this service</p>
+                                                                    <% } %>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

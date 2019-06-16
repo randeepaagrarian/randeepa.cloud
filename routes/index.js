@@ -18,6 +18,7 @@ const Sale = require('../models/dashboard/sale')
 const Stock = require('../models/stock/stock')
 const ProfileMyProfile = require('../models/profile/myprofile')
 const Notification = require('../models/notification/notification')
+const Service = require('../models/service/service')
 
 const args = require('yargs').argv
 
@@ -365,6 +366,21 @@ router.get('/dealerProfile', Auth.signedIn, Auth.validDealerProfileDashboardUser
 			title: 'Dealer Profile',
 			navbar: 'Dealer Profile',
 			dealersAndShowrooms: data[0],
+			user: req.user
+		})
+	})
+})
+
+router.get('/service', Auth.signedIn, Auth.validServiceUser, function(req, res) {
+	async.series([
+		function(callback) {
+			Service.getTechnicians(callback)
+		}
+	], function(err, data) {
+		res.render('service', {
+			title: 'Service',
+			navbar: 'Service',
+			technicians: data[0],
 			user: req.user
 		})
 	})

@@ -265,3 +265,11 @@ Auth.validSalesEditor = function(req, res, next) {
     res.redirect('/')
   }
 }
+
+Auth.validServiceUser = function(req, res, next) {
+    if(req.user.accessLevel.service) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
