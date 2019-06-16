@@ -1,5 +1,6 @@
 const express = require('express')
 const async = require('async')
+const multiparty = require('connect-multiparty')
 
 const router = express.Router()
 
@@ -9,6 +10,8 @@ const MDate = require('../../functions/mdate')
 const Service = require('../../models/service/service')
 const Stock = require('../../models/stock/stock')
 const Sale = require('../../models/sale/sale')
+
+const multipart = multiparty()
 
 router.use(Auth.signedIn, Auth.validServiceUser, function(req, res, next) {
     next()
@@ -32,7 +35,7 @@ router.get('/new', function(req, res) {
     })
 })
 
-router.post('/new', function(req, res) {
+router.post('/new', multipart, function(req, res) {
 
     if(req.body.issue == '') {
         req.flash('warning_msg', 'Please enter the issue')
@@ -76,6 +79,44 @@ router.get('/date', function(req, res) {
             navbar: 'Service',
             user: req.user,
             services: data[0],
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/byofficer/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.byDateTechnician(req.query.startDate, req.query.endDate, req.query.technician, callback)
+        }
+    ], function(err, data) {
+        res.render('service/bydateofficer', {
+            title: 'Services By Date Officer',
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            technician: req.query.technician,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/searchByServiceID', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.searchByServiceID(req.query.serviceID, callback)
+        }
+    ], function(err, data) {
+        res.render('service/searchByServiceID', {
+            title: 'Services By Date Officer',
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            serviceID: req.query.serviceID,
             results: data[0].length
         })
     })
