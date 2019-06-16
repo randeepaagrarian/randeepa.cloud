@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <form method="POST" action="/service/new">
+                                            <table>
+                                                <tr>
+                                                    <td>Issue &nbsp;</td>
+                                                    <td><font color='orange'>(Required)</font>&nbsp;</td>
+                                                    <td><textarea class="form-control" rows='5' style='width: 350px' type='text' name='issue'></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cloud ID &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='sale_id' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sale Date &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='sale_date' placeholder="YYYY-MM-DD"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chassis No &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='chassis_no' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Model &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="model_id">
+                                                            <option value="-1">- No Selection -</option>
+                                                            <% models.forEach(function(model) { %>
+                                                                <option value="<%= model.id %>"><%= model.name %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Meter &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='meter' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Meter Type &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='meter_type' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Customer Name &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='customer_name' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Customer Contact &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='customer_contact' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Current Address &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='current_address' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dealer/Showroom &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td>
+                                                        <select class="form-control" name="dealer_id">
+                                                            <option value="-1">- No Selection -</option>
+                                                            <% dealersAndShowrooms.forEach(function(dealerAndShowroom){ %>
+                                                                <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Submit</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
