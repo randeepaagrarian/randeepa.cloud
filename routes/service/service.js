@@ -76,6 +76,44 @@ router.get('/date', function(req, res) {
             navbar: 'Service',
             user: req.user,
             services: data[0],
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/byofficer/date', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.byDateTechnician(req.query.startDate, req.query.endDate, req.query.technician, callback)
+        }
+    ], function(err, data) {
+        res.render('service/bydateofficer', {
+            title: 'Services By Date Officer',
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            technician: req.query.technician,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/searchByServiceID', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.searchByServiceID(req.query.serviceID, callback)
+        }
+    ], function(err, data) {
+        res.render('service/searchByServiceID', {
+            title: 'Services By Date Officer',
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            serviceID: req.query.serviceID,
             results: data[0].length
         })
     })
