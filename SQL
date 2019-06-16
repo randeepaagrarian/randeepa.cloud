@@ -238,6 +238,7 @@ chassis_no
 CREATE TABLE service(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     date DATETIME NOT NULL,
+    issue VARCHAR(256) NOT NULL,
     sale_id INT NULL,
     sale_date DATE NULL,
     chassis_no VARCHAR(32) NULL,
@@ -267,12 +268,15 @@ CREATE TABLE service(
 
 CREATE TABLE service_technician_change_history (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    service_id INT NOT NULL,
     date_in DATETIME NOT NULL,
+    service_id INT NOT NULL,
     changed_by VARCHAR(16) NOT NULL,
     technician_id VARCHAR(16) NOT NULL,
+    technician_allocated_by VARCHAR(16) NOT NULL,
+    technician_allocated_on DATETIME NULL,
     reason VARCHAR(128) NOT NULL,
     FOREIGN KEY (service_id) REFERENCES service(id),
     FOREIGN KEY (changed_by) REFERENCES user(username),
-    FOREIGN KEY (technician_id) REFERENCES user(username)
+    FOREIGN KEY (technician_id) REFERENCES user(username),
+    FOREIGN KEY (technician_allocated_by) REFERENCES user(username)
 );

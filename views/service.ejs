@@ -60,15 +60,15 @@
                                                                         </button>
 
                                                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/banking/today">Today</a></li>
+                                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/service/today">Today</a></li>
                                                                             <li role="presentation" class="divider"></li>
-                                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/banking/all">All</a></li>
+                                                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/service/all">All</a></li>
                                                                         </ul>
                                                                     </div>
                                                                     <br>
                                                                     <p class="title">Date Range</p>
                                                                     <p><i>From සහ To යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
-                                                                    <form action="/banking/date" method="get">
+                                                                    <form action="/service/date" method="get">
                                                                         <div class="form-group">
                                                                             <b>From:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
                                                                             <b>To:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
@@ -85,9 +85,9 @@
                                                                 <div class="col-md-6">
                                                                     <p class="title">Date Range</p>
                                                                     <p><i>From සහ To යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
-                                                                    <form action="/banking/byofficer/date" method="get">
+                                                                    <form action="/service/byofficer/date" method="get">
                                                                         <div class="form-group">
-                                                                            <b>Officer:</b>
+                                                                            <b>Technician:</b>
                                                                             <select class="form-control" name="officer">
                                                                                 <% technicians.forEach(function(technician) { %>
                                                                                     <option value="<%= technician.id %>"><%= technician.name %></option>
