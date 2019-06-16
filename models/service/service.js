@@ -78,12 +78,12 @@ Service.serviceInfo = function(serviceID, callback) {
     })
 }
 
-Service.allocateTechnician = function(technician, serviceID, callback) {
+Service.updateService = function(update, serviceID, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('UPDATE service SET ? WHERE id = ?', [technician, serviceID], function(err, result) {
+        connection.query('UPDATE service SET ? WHERE id = ?', [update, serviceID], function(err, result) {
             connection.release()
             if(err) {
                 return callback(err, false)

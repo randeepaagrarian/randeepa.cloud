@@ -91,6 +91,8 @@
                                                                         </tr>
                                                                     </table>
 
+                                                                    <br>
+
                                                                     <p class="category"><font color='red'><%= warning_msg %></font></p>
                                                                     <p class="category"><font color='green'><%= success_msg %></font></p>
 
@@ -105,7 +107,7 @@
 
                                                                     <div class="tab-content">
                                                                         <div id="allocate_technician" class="tab-pane active">
-                                                                            <% if(serviceInfo[0]['technician_allocated'] == 0) { %>
+                                                                            <% if(serviceInfo[0]['technician_allocated'] == 0 && serviceInfo[0]['service_completed'] == 0) { %>
                                                                                 <form action="/service/allocateTechnician/<%= serviceInfo[0]['id'] %>" method="post">
                                                                                     <table>
                                                                                         <tr>
@@ -128,7 +130,7 @@
                                                                                         </tr>
                                                                                     </table>
                                                                                 </form>
-                                                                            <% } else { %>
+                                                                            <% } else if(serviceInfo[0]['technician_allocated'] == 1 && serviceInfo[0]['service_completed'] == 0) { %>
                                                                                 <form action="/service/changeTechnician/<%= serviceInfo[0]['id'] %>" method="post">
                                                                                     <table>
                                                                                         <tr>
@@ -189,10 +191,74 @@
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </form>
+                                                                            <% } else { %>
+                                                                                <table class="table table-striped">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Technician Name</th>
+                                                                                            <th>Allocated By</th>
+                                                                                            <th>Allocated On</th>
+                                                                                            <th>Changed By</th>
+                                                                                            <th>Changed On</th>
+                                                                                            <th>Change Reason</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td><%= allocatedTechnician[0]['technician_name'] %></td>
+                                                                                            <td><%= allocatedTechnician[0]['technician_allocated_by'] %></td>
+                                                                                            <td><%= allocatedTechnician[0]['technician_allocated_on'] %></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                        </tr>
+                                                                                        <% allocatedTechnicianHistory.forEach(function(allocatedTechnician) { %>
+                                                                                            <tr>
+                                                                                                <td><%= allocatedTechnician.technician_name %></td>
+                                                                                                <td><%= allocatedTechnician.technician_allocated_by %></td>
+                                                                                                <td><%= allocatedTechnician.technician_allocated_on %></td>
+                                                                                                <td><%= allocatedTechnician.changed_by %></td>
+                                                                                                <td><%= allocatedTechnician.changed_on %></td>
+                                                                                                <td><%= allocatedTechnician.reason %></td>
+                                                                                            </tr>
+                                                                                        <% }) %>
+                                                                                    </tbody>
+                                                                                </table>
                                                                             <% } %>
                                                                         </div>
                                                                         <div id="complete_service" class="tab-pane">
-                                                                            Complete Service
+                                                                            <% if(serviceInfo[0]['service_completed'] == 0) { %>
+                                                                                <form action="/service/serviceComplete/<%= serviceInfo[0]['id'] %>" method="post">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>Remarks: </td>
+                                                                                            <td>
+                                                                                                <textarea name="remarks" class="form-control" rows="5" style="width: 350px" ></textarea>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><input type='submit' value='Mark Complete' class="btn btn-primary"></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </form>
+                                                                            <% } else { %>
+                                                                                <p><font color="green">Service Completed</font></p>
+                                                                                <table class="table table-striped">
+                                                                                  <tr>
+                                                                                    <td>By</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_by'] %></td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                    <td>On</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_on'] %></td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                    <td>Remarks</td>
+                                                                                    <td><%= serviceInfo[0]['service_completed_remarks'] %></td>
+                                                                                  </tr>
+                                                                                </table>
+                                                                            <% } %>
                                                                         </div>
                                                                     </div>
 

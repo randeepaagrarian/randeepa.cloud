@@ -153,7 +153,7 @@ router.post('/allocateTechnician/:serviceID', function(req, res) {
 
     async.series([
         function(callback) {
-            Service.allocateTechnician(technician, req.params.serviceID, callback)
+            Service.updateService(technician, req.params.serviceID, callback)
         }
     ], function(err, data) {
         if(data[0] == true) {
@@ -193,6 +193,38 @@ router.post('/changeTechnician/:serviceID', function(req, res) {
             return
         } else {
             req.flash('warning_msg', 'Failed to change technician')
+            res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+            return
+        }
+    })
+})
+
+router.post('/serviceComplete/:serviceID', function(req, res) {
+
+    if(req.body.remarks == '') {
+        req.flash('warning_msg', 'Please enter the remarks')
+        res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+        return
+    }
+
+    let service = {
+        service_completed: 1,
+        service_completed_remarks: req.body.remarks,
+        service_completed_by: req.user.username,
+        service_completed_on: MDate.getDateTime()
+    }
+
+    async.series([
+        function(callback) {
+            Service.updateService(service, req.params.serviceID, callback)
+        }
+    ], function(err, data) {
+        if(data[0] == true) {
+            req.flash('success_msg', 'Service successfully completed')
+            res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+            return
+        } else {
+            req.flash('warning_msg', 'Failed to complete service')
             res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
             return
         }
