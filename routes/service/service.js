@@ -1,5 +1,6 @@
 const express = require('express')
 const async = require('async')
+const multiparty = require('connect-multiparty')
 
 const router = express.Router()
 
@@ -9,6 +10,8 @@ const MDate = require('../../functions/mdate')
 const Service = require('../../models/service/service')
 const Stock = require('../../models/stock/stock')
 const Sale = require('../../models/sale/sale')
+
+const multipart = multiparty()
 
 router.use(Auth.signedIn, Auth.validServiceUser, function(req, res, next) {
     next()
@@ -32,7 +35,7 @@ router.get('/new', function(req, res) {
     })
 })
 
-router.post('/new', function(req, res) {
+router.post('/new', multipart, function(req, res) {
 
     if(req.body.issue == '') {
         req.flash('warning_msg', 'Please enter the issue')
