@@ -16,10 +16,6 @@
             }
           });
 
-          socket.on('message', function(msg) {
-            alert(msg);
-          });
-
           function sendMessage() {
             var msg = document.getElementById('message').value;
             socket.emit('message', msg);

@@ -32,6 +32,21 @@ Admin.allUsers = function(callback) {
     })
 }
 
+Admin.currentlyEmployedUsers = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('select user.id, username, email, user.active, user.login_enabled, user.name, region.name as region, territory.name as territory, profile_pic, DATE_FORMAT(birthday, \'%Y-%m-%d\') as birthday, designation.name as designation, profile, COUNT(user_access.user_id) as active_modules from user left join region on user.region = region.id left join territory on user.territory = territory.id left join user_access on user.id = user_access.user_id left join designation on user.designation_fk = designation.id where user.active = 1 group by user.id, username, email, user.active, user.name, region, territory, profile_pic, birthday, designation, profile', function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
 Admin.allUsersByRegion = function(region, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
