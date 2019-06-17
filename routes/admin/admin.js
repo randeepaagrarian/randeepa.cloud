@@ -54,6 +54,32 @@ router.get('/allUsers', function(req, res) {
     })
 })
 
+router.get('/currentlyEmployed', function(req, res) {
+    async.series([
+        function(callback) {
+            Admin.currentlyEmployedUsers(callback)
+        }
+    ], function(err, data) {
+        res.render('admin/currentlyEmployed', {
+            title: 'Currently Employed',
+            url: req.url,
+            navbar: 'Admin',
+            users: data[0],
+            user: req.user
+        })
+    })
+})
+
+router.get('/excel/currentlyEmployed', function(req, res) {
+    async.series([
+        function(callback) {
+            Admin.currentlyEmployedUsers(callback)
+        }
+    ], function(err, data) {
+        res.xls('Currently Employed.xlsx', data[0])
+    })
+})
+
 router.get('/addUser', function(req, res) {
     async.series([
         function(callback) {
@@ -77,7 +103,7 @@ router.get('/addUser', function(req, res) {
 
 router.post('/addUser', multipart, function(req, res) {
 
-    if(req.body.first_name == '' || req.body.last_name == '' || req.body.common_name == '' || req.body.email == '' || req.body.birthday == '' || req.body.designation == '' || req.files.application_form.originalFilename == '' || Validator.validEmail(req.body.email) == false || req.body.common_name.indexOf(' ') >= 0) {
+    if(req.body.first_name == '' || req.body.last_name == '' || req.body.common_name == '' || req.body.display_name == '' || req.body.email == '' || req.body.birthday == '' || req.body.designation == '' || req.files.application_form.originalFilename == '' || Validator.validEmail(req.body.email) == false || req.body.common_name.indexOf(' ') >= 0) {
         req.flash('warning_msg', 'Validation Errors')
         res.redirect('/admin/addUser')
         return
@@ -93,7 +119,7 @@ router.post('/addUser', multipart, function(req, res) {
         email: req.body.email,
         active: 1,
         login_enabled: req.body.login_enabled,
-        name: req.body.first_name + ' ' + req.body.last_name,
+        name: req.body.display_name,
         region: req.body.region,
         territory: req.body.territory,
         profile_pic: 'https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png',
