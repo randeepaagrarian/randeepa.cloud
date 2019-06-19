@@ -41,6 +41,7 @@ router.post('/new', multipart, function(req, res) {
     if(req.body.issue == '') {
         req.flash('warning_msg', 'Please enter the issue')
         res.redirect('/service/new')
+        return
     }
 
     let service = {}
@@ -61,9 +62,11 @@ router.post('/new', multipart, function(req, res) {
         if(data[0] == true) {
             req.flash('warning_msg', 'Service successfully opened')
             res.redirect('/service/new')
+            return
         } else {
             req.flash('warning_msg', 'Failed to open service')
             res.redirect('/service/new')
+            return
         }
     })
 
