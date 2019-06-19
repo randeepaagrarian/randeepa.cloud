@@ -103,6 +103,9 @@
                                                                         <li>
                                                                             <a href="#complete_service" data-toggle="tab">Complete Service</a>
                                                                         </li>
+                                                                        <li>
+                                                                            <a href="#upload_worksheet" data-toggle="tab">Upload Worksheet</a>
+                                                                        </li>
                                                                     </ul>
 
                                                                     <div class="tab-content">
@@ -258,6 +261,48 @@
                                                                                     <td><%= serviceInfo[0]['service_completed_remarks'] %></td>
                                                                                   </tr>
                                                                                 </table>
+                                                                            <% } %>
+                                                                        </div>
+                                                                        <div id="upload_worksheet" class="tab-pane">
+                                                                            <% if(serviceInfo[0]['service_completed'] == 1) { %>
+                                                                                <% if(serviceInfo[0]['work_sheet']) { %>
+                                                                                    <p><font color="green">Worksheet uploaded</font></p>
+                                                                                    <table class="table table-striped">
+                                                                                      <tr>
+                                                                                        <td>By</td>
+                                                                                        <td><%= serviceInfo[0]['work_sheet_uploaded_by'] %></td>
+                                                                                      </tr>
+                                                                                      <tr>
+                                                                                        <td>On</td>
+                                                                                        <td><%= serviceInfo[0]['work_sheet_uploaded_on'] %></td>
+                                                                                      </tr>
+                                                                                      <tr>
+                                                                                        <td>Worksheet</td>
+                                                                                        <td><a href='<%= serviceInfo[0]['work_sheet'] %>' target="_blank"><i class="material-icons">image</i></a></td>
+                                                                                      </tr>
+                                                                                    </table>
+                                                                                <% } else { %>
+                                                                                    <form action="/service/uploadWorksheet/<%= serviceInfo[0]['id'] %>" method="post" enctype="multipart/form-data">
+                                                                                        <div class="form-group">
+                                                                                            <table>
+                                                                                                <tr>
+                                                                                                    <td>Add worksheet (Image): &nbsp;</td>
+                                                                                                    <td><input type="file" name="attachment" accept=".jpg, .jpeg, .png, .JPG, .JPEG, .PNG"></td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td></td>
+                                                                                                    <td>Maximum File Size (512KB)</td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td></td>
+                                                                                                    <td><input type="submit" class="btn btn-default" value="Upload" /></td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                <% } %>
+                                                                            <% } else { %>
+                                                                                <p>Service should be completed to upload the worksheet</p>
                                                                             <% } %>
                                                                         </div>
                                                                     </div>

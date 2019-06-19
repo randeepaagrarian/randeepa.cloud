@@ -167,7 +167,7 @@
                                         <table>
                                           <tr>
                                             <td>Add attachment (Image): &nbsp;</td>
-                                            <td><input type="file" name="attachment" accept=".jpg, .jpeg, .png"></td>
+                                            <td><input type="file" name="attachment" accept=".jpg, .jpeg, .png, .JPG, .JPEG, .PNG"></td>
                                           </tr>
                                           <tr>
                                             <td></td>
@@ -189,7 +189,7 @@
                                             <tr>
                                               <td>Sale Completed Type &nbsp;</td>
                                               <td>
-                                                <select name="sale_completed_type" class="form-group">
+                                                <select name="sale_completed_type" class="form-control">
                                                   <% saleCompletedTypes.forEach(function(saleCompletedType) { %>
                                                     <option value="<%= saleCompletedType.id %>"><%= saleCompletedType.name %></option>
                                                   <% }) %>
