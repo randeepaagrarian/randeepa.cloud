@@ -98,7 +98,7 @@ Service.serviceInfo = function(serviceID, callback) {
         if(pool_err){
             return callback(pool_err, null)
         }
-        connection.query('SELECT SR.id, SR.date, SR.issue, SR.sale_id, SR.sale_date, SR.chassis_no, SR_M.name as model_name, SR.meter, SR.meter_type, SR.customer_name, SR. customer_contact, SR.current_address, SR_D.name as dealer_name, U.name as technician_name, SR.work_sheet, SR.technician_allocated, SR.technician_allocated_by, SR.technician_allocated_on, SR.service_completed, SR.service_completed_remarks, SR.service_completed_by, SR.service_completed_on FROM service SR LEFT JOIN dealer SR_D ON SR.dealer_id = SR_D.id LEFT JOIN model SR_M ON SR.model_id = SR_M.id LEFT JOIN user U ON SR.technician_id = U.username WHERE SR.id = ?;', [serviceID], function(err, rows, fields) {
+        connection.query('SELECT SR.id, SR.date, SR.issue, SR.sale_id, SR.sale_date, SR.chassis_no, SR_M.name as model_name, SR.meter, SR.meter_type, SR.customer_name, SR. customer_contact, SR.current_address, SR_D.name as dealer_name, U.name as technician_name, SR.work_sheet, SR.work_sheet_uploaded_by, SR.work_sheet_uploaded_on, SR.technician_allocated, SR.technician_allocated_by, SR.technician_allocated_on, SR.service_completed, SR.service_completed_remarks, SR.service_completed_by, SR.service_completed_on FROM service SR LEFT JOIN dealer SR_D ON SR.dealer_id = SR_D.id LEFT JOIN model SR_M ON SR.model_id = SR_M.id LEFT JOIN user U ON SR.technician_id = U.username WHERE SR.id = ?;', [serviceID], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

@@ -1,6 +1,7 @@
 const express = require('express')
 const async = require('async')
 const multiparty = require('connect-multiparty')
+const Cloudinary = require('../../models/comms/cloudinary')
 
 const router = express.Router()
 
@@ -270,6 +271,56 @@ router.post('/serviceComplete/:serviceID', function(req, res) {
             return
         }
     })
+})
+
+router.post('/uploadWorksheet/:serviceID', multipart, function(req, res) {
+    if(req.files.attachment.originalFilename == '') {
+        req.flash('warning_msg', 'Please select the worksheet to upload')
+        res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+        return
+    }
+
+    const attachmentExtension = req.files.attachment.originalFilename.split('.').pop().toLowerCase()
+
+    if(attachmentExtension == 'jpg' || attachmentExtension == 'jpeg' || attachmentExtension == 'png' || attachmentExtension == 'JPG' || attachmentExtension == 'JPEG' || attachmentExtension == 'PNG') {
+        async.series([
+            function(callback) {
+                Cloudinary.upload(req.files.attachment.path, callback)
+            }
+        ], function(err, uploadData) {
+            if(uploadData[0].error) {
+                req.flash('warning_msg', 'Error occured while uploading worksheet')
+                res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+                return
+            }
+
+            let worksheet = {
+                work_sheet: uploadData[0].url,
+                work_sheet_uploaded_by: req.user.username,
+                work_sheet_uploaded_on: MDate.getDateTime()
+            }
+
+            async.series([
+                function(callback) {
+                    Service.updateService(worksheet, req.params.serviceID, callback)
+                }
+            ], function(err, data) {
+                if(data[0] == true) {
+                    req.flash('success_msg', 'Worksheet successfully uploaded')
+                    res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+                    return
+                } else {
+                    req.flash('warning_msg', 'Failed to upload worksheet')
+                    res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+                    return
+                }
+            })
+        })
+    } else {
+        req.flash('warning_msg', 'Invalid file format')
+        res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+        return
+    }
 })
 
 module.exports = router

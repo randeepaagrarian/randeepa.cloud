@@ -233,7 +233,7 @@ router.post('/addComment/:cloudID', multipart, Auth.salesSearchAllowed, function
     } else {
       const attachmentExtension = req.files.attachment.originalFilename.split('.').pop().toLowerCase()
 
-      if(attachmentExtension == 'jpg' || attachmentExtension == 'jpeg' || attachmentExtension == 'png') {
+      if(attachmentExtension == 'jpg' || attachmentExtension == 'jpeg' || attachmentExtension == 'png' || attachmentExtension == 'JPG' || attachmentExtension == 'JPEG' || attachmentExtension == 'PNG') {
         async.series([
           function(callback) {
             Cloudinary.upload(req.files.attachment.path, callback)
