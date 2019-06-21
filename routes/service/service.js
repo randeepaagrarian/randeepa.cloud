@@ -146,6 +146,8 @@ router.get('/serviceInfo', function(req, res){
                 }, function(callback) {
                     Service.allocatedTechnicianHistory(req.query.serviceID, callback)
                 }, function(callback) {
+                    Service.getComments(req.query.serviceID, callback)
+                }, function(callback) {
                     Sale.cloudIDInfo(saleID, callback)
                 }
             ], function(err, data) {
@@ -158,7 +160,8 @@ router.get('/serviceInfo', function(req, res){
                     technicians: data[1],
                     allocatedTechnician: data[2],
                     allocatedTechnicianHistory: data[3],
-                    sales: data[4]
+                    comments: data[4],
+                    sales: data[5]
                 })
             })
         } else {
@@ -171,6 +174,8 @@ router.get('/serviceInfo', function(req, res){
                     Service.allocatedTechnician(req.query.serviceID, callback)
                 }, function(callback) {
                     Service.allocatedTechnicianHistory(req.query.serviceID, callback)
+                }, function(callback) {
+                    Service.getComments(req.query.serviceID, callback)
                 }
             ], function(err, data) {
                 res.render('service/serviceInfo', {
@@ -181,7 +186,8 @@ router.get('/serviceInfo', function(req, res){
                     saleIDEntered: false,
                     technicians: data[1],
                     allocatedTechnician: data[2],
-                    allocatedTechnicianHistory: data[3]
+                    allocatedTechnicianHistory: data[3],
+                    comments: data[4]
                 })
             })
         }
@@ -324,6 +330,38 @@ router.post('/uploadWorksheet/:serviceID', multipart, function(req, res) {
         res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
         return
     }
+})
+
+router.post('/addComment/:serviceID', multipart, function(req, res) {
+    if(req.body.comment == '') {
+        req.flash('warning_msg', 'Please enter the comment')
+        res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+        return
+    }
+
+    let comment = {
+        service_id: req.params.serviceID,
+        username: req.user.username,
+        date: MDate.getDateTime(),
+        text: req.body.comment
+    }
+
+    async.series([
+        function(callback) {
+            Service.addComment(comment, callback)
+        }
+    ], function(err, data) {
+        if(data[0] == true) {
+            req.flash('success_msg', 'Comment added')
+            res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+            return
+        } else {
+            req.flash('warning_msg', 'Failed to add comment')
+            res.redirect('/service/serviceInfo?serviceID=' + req.params.serviceID)
+            return
+        }
+    })
+
 })
 
 module.exports = router

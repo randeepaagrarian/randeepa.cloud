@@ -197,3 +197,33 @@ Service.allocatedTechnicianHistory = function(serviceID, callback) {
         })
     })
 }
+
+Service.addComment = function(comment, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('INSERT INTO service_comment SET ?', comment, function(err, result) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}
+
+Service.getComments = function(serviceID, callback) {
+  MySql.pool.getConnection(function(pool_err, connection) {
+    if(pool_err) {
+        return callback(pool_err, null)
+    }
+    connection.query('SELECT SC.username, U.name, SC.date, SC.text FROM service_comment SC LEFT JOIN user U ON SC.username = U.username WHERE service_id = ? ORDER BY SC.date DESC', serviceID, function(err, rows, fields) {
+        connection.release()
+        if(err) {
+            return callback(err, null)
+        }
+        callback(err, rows)
+    })
+  })
+}
