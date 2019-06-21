@@ -98,6 +98,9 @@
 
                                                                     <ul role="tablist" class="nav nav-tabs">
                                                                         <li role="presentation" class="active">
+                                                                            <a href="#add_comment" data-toggle="tab">Add Comment</a>
+                                                                        </li>
+                                                                        <li role="presentation">
                                                                             <a href="#allocate_technician" data-toggle="tab">Allocate Technician</a>
                                                                         </li>
                                                                         <li>
@@ -109,7 +112,22 @@
                                                                     </ul>
 
                                                                     <div class="tab-content">
-                                                                        <div id="allocate_technician" class="tab-pane active">
+                                                                        <div id="add_comment" class="tab-pane active">
+                                                                            <form action="/service/addComment/<%= serviceInfo[0]['id'] %>" method="post" enctype="multipart/form-data">
+                                                                              <h4 style="margin-top: 0px;">Add comment</h4>
+                                                                              <div class="form-group">
+                                                                                <textarea class="form-control" rows="4" columns="50" name="comment" placeholder="Comment"></textarea>
+                                                                              </div>
+                                                                              <div class="form-group">
+                                                                                <input class="btn btn-default" type="submit" value="Comment">
+                                                                              </div>
+                                                                            </form>
+                                                                            <% comments.forEach(function(comment) { %>
+                                                                                <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
+                                                                                <p><font color='blue'><%= comment.text %></font></p>
+                                                                            <% }) %>
+                                                                        </div>
+                                                                        <div id="allocate_technician" class="tab-pane">
                                                                             <% if(serviceInfo[0]['technician_allocated'] == 0 && serviceInfo[0]['service_completed'] == 0) { %>
                                                                                 <form action="/service/allocateTechnician/<%= serviceInfo[0]['id'] %>" method="post">
                                                                                     <table>
