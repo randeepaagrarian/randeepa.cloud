@@ -290,9 +290,16 @@ router.get('/activeUsers', function(req, res) {
 })
 
 router.post('/editUser', function(req, res) {
+
+    let reqBody = req.body;
+
+    if(reqBody.birthday == "") {
+        reqBody.birthday = null
+    }
+
     async.series([
         function(callback) {
-            Admin.udpateUserDetails(req.query.userId, req.body, callback)
+            Admin.udpateUserDetails(req.query.userId, reqBody, callback)
         }
     ], function(err, data) {
         if(err) {
