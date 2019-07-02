@@ -39,6 +39,7 @@ Expense.markBillReceived = function(expenseItemId, username, callback) {
         }
 
         connection.query('UPDATE expense_item SET bill_received = 1, bill_received_date = ?, bill_received_marked_by = ? WHERE id = ? AND rejected = 0', [MDate.getDate('-'), username, expenseItemId], function(err, result, fields) {
+            connection.release()
             if(err) {
                 return callback(err, null)
             }
@@ -54,6 +55,7 @@ Expense.markBillPaid = function(expenseItemId, username, callback) {
         }
 
         connection.query('UPDATE expense_item SET bill_paid = 1, bill_paid_date = ?, bill_paid_marked_by = ? WHERE id = ? AND rejected = 0 AND bill_received = 1', [MDate.getDate('-'), username, expenseItemId], function(err, result, fields) {
+            connection.release()
             if(err) {
                 return callback(err, null)
             }
@@ -69,6 +71,7 @@ Expense.markBillRejected = function(expenseItemId, username, callback) {
         }
 
         connection.query('UPDATE expense_item SET rejected = 1, rejected_date = ?, rejected_marked_by = ? WHERE id = ? AND bill_paid = 0', [MDate.getDate('-'), username, expenseItemId], function(err, result, fields) {
+            connection.release()
             if(err) {
                 return callback(err, null)
             }
