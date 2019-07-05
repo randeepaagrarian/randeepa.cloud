@@ -135,6 +135,9 @@
                                     <li>
                                         <a href="#mark_complete" data-toggle="tab">Mark Sale Complete</a>
                                     </li>
+                                    <li>
+                                        <a href="#commission" data-toggle="tab">Commissions</a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -224,6 +227,40 @@
                                         <tr>
                                           <td>Remarks</td>
                                           <td><%= sales[0]['sale_completed_remarks'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                  </div>
+                                  <div id="commission" class="tab-pane">
+                                    <% if(sales[0]['commision_paid'] == 0) { %>
+                                      <form action="/sale/commisionPaid/<%= sales[0]['id'] %>" method="post">
+                                        <h4 style="margin-top: 0px;">Commission Payment Details</h4>
+                                        <div class="form-group">
+                                          <table>
+                                            <tr>
+                                              <td>Details</td>
+                                              <td width="100%"><textarea class="form-control" rows="4" columns="50" name="details" placeholder="Details"></textarea></td>
+                                            </tr>
+                                          </table>
+                                        </div>
+                                        <div class="form-group">
+                                          <input class="btn btn-default" type="submit" value="Complete">
+                                        </div>
+                                      </form>
+                                    <% } else { %>
+                                      <p><font color="green">Commision Paid</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= sales[0]['commission_paid_marked_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= sales[0]['commission_paid_marked_on'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Remarks</td>
+                                          <td><%= sales[0]['commission_paid_remarks'] %></td>
                                         </tr>
                                       </table>
                                     <% } %>
