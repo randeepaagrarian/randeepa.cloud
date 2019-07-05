@@ -362,6 +362,28 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
   })
 })
 
+router.post('/commisionPaid/:cloudID', function(req, res) {
+    const markComplete = {
+      commision_paid: 1,
+      commission_paid_remarks: req.body.details,
+      commission_paid_marked_by: req.user.username,
+      commission_paid_marked_on: MDate.getDateTime()
+    }
+
+    async.series([
+      function(callback) {
+        Sale.markComplete(markComplete, req.params.cloudID, callback)
+      }
+    ], function(err, data) {
+      if(data[0] == true) {
+        res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      } else {
+        req.flash('warning_msg', 'Error occurred')
+        res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      }
+    })
+})
+
 router.post('/markComplete/:cloudID', Auth.salesSearchAllowed, function(req, res) {
   const markComplete = {
     sale_completed: 1,
