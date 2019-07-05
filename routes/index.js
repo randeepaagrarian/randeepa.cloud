@@ -26,6 +26,10 @@ const Admin = require('../models/admin/admin')
 
 const Default = require('../models/default')
 
+router.get('/play', function(req, res) {
+	res.redirect('https://play.google.com/store/apps/details?id=com.randeepa.cloud')
+})
+
 router.get('/', Auth.signedIn, function(req, res) {
 
 	if(req.user.accessLevel.sale == 8) {
