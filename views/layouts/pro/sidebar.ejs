@@ -135,6 +135,15 @@
                     </a>
                 </li>
             <% } %>
+
+            <% if(typeof user.accessLevel.hirePurchase != 'undefined') { %>
+                <li class="<%= navbar == 'Hire Purchase' ? 'active' : '' %>">
+                    <a href="/hirePurchase">
+                        <i class="pe-7s-cash"></i>
+                        <p>Hire Purchase</p>
+                    </a>
+                </li>
+            <% } %>
         </ul>
     </div>
 </div>

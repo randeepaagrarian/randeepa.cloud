@@ -390,6 +390,20 @@ router.get('/service', Auth.signedIn, Auth.validServiceUser, function(req, res) 
 	})
 })
 
+router.get('/hirePurchase', Auth.signedIn, Auth.validHirePurchaseUser, function(req, res) {
+	async.series([
+		function(callback) {
+			Service.getTechnicians(callback)
+		}
+	], function(err, data) {
+		res.render('hirePurchase', {
+			title: 'Hire Purchase',
+			navbar: 'Hire Purchase',
+			user: req.user
+		})
+	})
+})
+
 router.get('/signin', function(req, res) {
 	if(req.user) {
 		res.redirect('/')

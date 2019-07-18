@@ -53,6 +53,8 @@ const task = require('./routes/task')
 
 const service = require('./routes/service/service')
 
+const hirePurchase = require('./routes/hirePurchase/hirePurchase')
+
 // Model files
 const Notification = require('./models/notification/notification')
 const MDate = require('./functions/mdate')
@@ -148,6 +150,8 @@ app.use('/sale_SYSEDIT', sale_SYSEDIT)
 app.use('/task', task)
 
 app.use('/service', service)
+
+app.use('/hirePurchase', hirePurchase)
 
 app.get('*', function(req, res) {
     res.status(404).send('What???')
