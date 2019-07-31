@@ -31,7 +31,7 @@
                                                         <th>Contract ID</th>
                                                         <th>Amount</th>
                                                         <th>Due Date</th>
-                                                        <th>Paid On</th>
+                                                        <th>Add Payment</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -45,7 +45,7 @@
                                                             <td> <%= installment.contract_id %> </td>
                                                             <td> <%= installment.amount %> </td>
                                                             <td> <%= installment.due_date %> </td>
-                                                            <td> <%= installment.paid_on %> </td>
+                                                            <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
                                                         </tr>
                                                     <% }) %>
                                                 </tbody>

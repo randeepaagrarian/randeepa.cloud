@@ -280,3 +280,22 @@ CREATE TABLE service_technician_change_history (
     FOREIGN KEY (technician_id) REFERENCES user(username),
     FOREIGN KEY (technician_allocated_by) REFERENCES user(username)
 );
+
+SELECT id, contract_id, amount, due_date, paid, paid_on, paid_marked_by, (CASE WHEN (paid = 0 AND due_date < NOW()) THEN 1 ELSE 0 END) as overdue FROM contract_installment WHERE contract_id = ?;
+
+SELECT SUM(amount) as total_paid FROM contract_installment_payment WHERE contract_installment_id = 7;
+
+SELECT CI.id, CI.amount, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.amount;
+
+SELECT C.id, C.contract_id, C.amount, C.due_date, C.amount_paid FROM 
+(SELECT CI.id, CI.contract_id, CI.amount, CI.due_date, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C
+
+SELECT C.id, id_1, id_2, SUM(CASE WHEN (CI.paid = 0 AND CI.due_date < NOW()) THEN CI.amount ELSE 0 END) as amount_pending, M.name as model_name, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact FROM contract C LEFT JOIN model M on M.id = C.model_id LEFT JOIN contract_installment CI on CI.contract_id = C.id GROUP BY C.id, id_1, id_2, model_name, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact
+
+SELECT C.contract_id, C.id, C.id_1, C.id_2, SUM(CASE WHEN (C.due_date <= NOW() AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_overdue FROM 
+(SELECT CI.contract_id, CI.id, C.id_1, C.id_2, M.name as model_name, C.customer_name, C.customer_address, C.customer_contact, C.guarantor1_name, C.guarantor1_address, C.guarantor1_contact, C.guarantor2_name, C.guarantor2_address, C.guarantor2_contact, CI.amount, CI.due_date, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id LEFT JOIN contract C ON CI.contract_id = C.id LEFT JOIN model M ON C.model_id = M.id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date, C.id_1, C.id_2, model_name, C.customer_name, C.customer_address, C.customer_contact, C.guarantor1_name, C.guarantor1_address, C.guarantor1_contact, C.guarantor2_name, C.guarantor2_address, C.guarantor2_contact) C GROUP BY C.contract_id, C.id, C.id_1, C.id_2
+
+SELECT C.contract_id, CP.id_1, CP.id_2, SUM(C.amount)
+FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C
+LEFT JOIN contract CP on C.contract_id = CP.id
+GROUP BY C.contract_id

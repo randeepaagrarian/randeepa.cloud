@@ -71,12 +71,51 @@ HirePurchase.installments = function(contractID, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT id, contract_id, amount, due_date, paid, paid_on, paid_marked_by, (CASE WHEN (paid = 0 AND due_date < NOW()) THEN 1 ELSE 0 END) as overdue FROM contract_installment WHERE contract_id = ?;', contractID, function(err, rows, fields) {
+        connection.query('SELECT id, contract_id, amount, due_date, \'test\' as overdue FROM contract_installment WHERE contract_id = ?;', contractID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
             }
             callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.validPaymentAmount = function(installmentID, amount, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, false)
+        }
+        connection.query('SELECT CI.id, CI.amount, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id WHERE CI.id = ? GROUP BY CI.id, CI.amount;', installmentID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+
+            const amount_db = parseInt(rows[0].amount)
+            const amount_paid = parseInt(rows[0].amount_paid) + parseInt(amount)
+
+            if(amount_paid <= amount_db) {
+                return callback(err, true)
+            } else {
+                return callback(err, false)
+            }
+        })
+    })
+}
+
+HirePurchase.addPayment = function(payment, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, false)
+        }
+        connection.query('INSERT INTO contract_installment_payment SET ?;', payment, function(err, rows) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+
+            return callback(err, true)
         })
     })
 }

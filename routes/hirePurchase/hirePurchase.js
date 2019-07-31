@@ -112,4 +112,61 @@ router.get('/contractInfo', function(req, res) {
     })
 })
 
+router.get('/addPayment', function(req, res) {
+    res.render('hirePurchase/addPayment', {
+        title: 'Add Payment',
+        navbar: 'Hire Purchase',
+        user: req.user,
+        installmentID: req.query.installmentID
+    })
+})
+
+router.post('/addPayment/:installmentID', multipart, function(req, res) {
+    const amount = req.body.amount
+    const installmentID = req.params.installmentID
+
+    if(isNaN(amount) || amount == '' || amount == undefined) {
+        req.flash('warning_msg', 'Please enter a valid amount')
+        res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
+        return
+    }
+    
+    async.series([
+        function(callback) {
+            HirePurchase.validPaymentAmount(installmentID, amount, callback)
+        }
+    ], function(err, data) {
+        if(!data[0]) {
+            req.flash('warning_msg', 'Payment amount exceeds installment amount.')
+            res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
+            return
+        }
+
+        const payment = {
+            contract_installment_id: installmentID,
+            amount: amount,
+            issued_user: req.user.username,
+            issued_on: MDate.getDateTime()
+        }
+
+        async.series([
+            function(callback) {
+                HirePurchase.addPayment(payment, callback)
+            }
+        ], function(err, data) {
+            if(!data[0]) {
+                req.flash('warning_msg', 'Error occurred while adding payment. Please contact system administrator.')
+                res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
+                return
+            } else {
+                req.flash('warning_msg', 'Payment added successfully.')
+                res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
+                return
+            }
+        })
+
+    })
+    
+})
+
 module.exports = router
