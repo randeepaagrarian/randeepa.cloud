@@ -56,7 +56,7 @@ HirePurchase.allContracts = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT C.id, id_1, id_2, SUM(CASE WHEN (CI.paid = 0 AND CI.due_date < NOW()) THEN CI.amount ELSE 0 END) as amount_pending, M.name as model_name, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact FROM contract C LEFT JOIN model M on M.id = C.model_id LEFT JOIN contract_installment CI on CI.contract_id = C.id GROUP BY C.id, id_1, id_2, model_name, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact', function(err, rows, fields) {
+        connection.query('SELECT C.contract_id as id, CT.id_1, CT.id_2, SUM(CASE WHEN (C.due_date <= NOW() AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_pending, M.name as model_name, CT.customer_name, CT.customer_address, CT.customer_contact, CT.guarantor1_name, CT.guarantor1_address, CT.guarantor1_contact, CT.guarantor2_name, CT.guarantor2_address, CT.guarantor2_contact FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C LEFT JOIN contract CT on C.contract_id = CT.id LEFT JOIN model M on M.id = CT.model_id GROUP BY C.contract_id', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -71,7 +71,7 @@ HirePurchase.installments = function(contractID, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT id, contract_id, amount, due_date, \'test\' as overdue FROM contract_installment WHERE contract_id = ?;', contractID, function(err, rows, fields) {
+        connection.query('SELECT CI.id, CI.contract_id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) AS amount_paid, (CASE WHEN (CI.due_date <= NOW() AND COALESCE(SUM(CIP.amount), 0) < CI.amount) THEN 1 ELSE 0 END) as overdue FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CIP.contract_installment_id = CI.id WHERE contract_id = ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date;', contractID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -86,7 +86,7 @@ HirePurchase.validPaymentAmount = function(installmentID, amount, callback) {
         if(pool_err) {
             return callback(pool_err, false)
         }
-        connection.query('SELECT CI.id, CI.amount, SUM(CIP.amount) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id WHERE CI.id = ? GROUP BY CI.id, CI.amount;', installmentID, function(err, rows, fields) {
+        connection.query('SELECT CI.id, CI.amount, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id WHERE CI.id = ? GROUP BY CI.id, CI.amount;', installmentID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, false)
