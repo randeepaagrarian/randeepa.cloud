@@ -273,3 +273,11 @@ Auth.validServiceUser = function(req, res, next) {
         res.redirect('/')
     }
 }
+
+Auth.validHirePurchaseUser = function(req, res, next) {
+    if(req.user.accessLevel.hirePurchase) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}

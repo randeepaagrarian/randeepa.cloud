@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Contract ID</th>
+                                                        <th>Amount</th>
+                                                        <th>Amount Paid</th>
+                                                        <th>Due Date</th>
+                                                        <th>Add Payment</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% installments.forEach(function(installment) { %>
+                                                        <% if (installment.overdue == 0) { %>
+                                                            <tr>
+                                                        <% } else { %>
+                                                            <tr class='warning'>
+                                                        <% } %>
+                                                            <td> <%= installment.id %> </td>
+                                                            <td> <%= installment.contract_id %> </td>
+                                                            <td> <%= installment.amount %> </td>
+                                                            <td> <%= installment.amount_paid %> </td>
+                                                            <td> <%= installment.due_date %> </td>
+                                                            <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

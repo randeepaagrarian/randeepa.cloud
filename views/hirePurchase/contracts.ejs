@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> contracts</p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>ID 1</th>
+                                                        <th>ID 2</th>
+                                                        <th>Amount Pending</th>
+                                                        <th>Model</th>
+                                                        <th>Customer Name</th>
+                                                        <th>Customer Address</th>
+                                                        <th>Customer Contact</th>
+                                                        <th>Guarantor 1 Name</th>
+                                                        <th>Guarantor 1 Address</th>
+                                                        <th>Guarantor 1 Contact</th>
+                                                        <th>Guarantor 2 Name</th>
+                                                        <th>Guarantor 2 Address</th>
+                                                        <th>Guarantor 2 Contact</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% contracts.forEach(function(contract) { %>
+                                                        <tr>
+                                                            <td><a href='/hirePurchase/contractInfo?contractID=<%= contract.id %>'><%= contract.id %></a></td>
+                                                            <td> <%= contract.id_1 %> </td>
+                                                            <td> <%= contract.id_2 %> </td>
+                                                            <% if(contract.amount_pending > 0) { %>
+                                                                <td><font color='red'><%= contract.amount_pending %></font></td>
+                                                            <% } else { %>
+                                                                <td><font color='green'><%= contract.amount_pending %></font></td>
+                                                            <% } %>
+                                                            <td> <%= contract.model_name %> </td>
+                                                            <td> <%= contract.customer_name %> </td>
+                                                            <td> <%= contract.customer_address %> </td>
+                                                            <td> <%= contract.customer_contact %> </td>
+                                                            <td> <%= contract.guarantor1_name %> </td>
+                                                            <td> <%= contract.guarantor1_address %> </td>
+                                                            <td> <%= contract.guarantor1_contact %> </td>
+                                                            <td> <%= contract.guarantor2_name %> </td>
+                                                            <td> <%= contract.guarantor2_address %> </td>
+                                                            <td> <%= contract.guarantor2_contact %> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

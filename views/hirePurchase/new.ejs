@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <style>
+            th, tr, td {
+                padding: 5px;
+            }
+        </style>
+        <script>
+            $.ajaxSetup({traditional: true});
+            $(document).ready(function(){
+                $(".addRow").click(function(){
+                    $("#contractInstallmentsTable").append('<tr><td><input class="form-control" type="text" name="amount" value="" placeholder="100000"></td><td><input class="form-control" type="text" name="dueDate" value="" placeholder="2019-12-01"></td><td><a href="javascript:void(0);" class="remRow">Remove</a></td></tr>');
+                });
+                $("#contractInstallmentsTable").on('click','.remRow',function(){
+                    $(this).parent().parent().remove();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        New Contract
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="responseMessgae"></div>
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Contract ID 1:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="contractID1"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Contract ID 2:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="contractID2"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Model:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td>
+                                                                        <select class="form-control" name="model">
+                                                                            <% models.forEach(function(model) { %>
+                                                                                <option value="<%= model.id %>"><%= model.name %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Customer Name:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="customerName"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Customer Address:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="customerAddress"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Customer Contact:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="customerContact"></td>
+                                                                </tr>
+                                                            </table>
+                                                            <a class="addRow" href="javascript:void(0)">Add Row</a>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>Guarantor 1 Name:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor1Name"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Guarantor 1 Address:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor1Address"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Guarantor 1 Contact:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor1Contact"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Guarantor 2 Name:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor2Name"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Guarantor 2 Address:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor2Address"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Guarantor 2 Contact:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="guarantor2Contact"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <table id="contractInstallmentsTable">
+                                                                <thead>
+                                                                    <th>Amount</th>
+                                                                    <th>Due Date</th>
+                                                                    <th></th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><input class="form-control" type="text" name="amount" value="" placeholder="100000"></td>
+                                                                        <td><input class="form-control" type="text" name="dueDate" value="" placeholder="2019-12-01"></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <button class="btn btn-primary" id="submitContract">Create Contract</button>
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.ajaxSetup({traditional: true});
+        $("#submitContract").click(function(){
+            $("#responseMessgae").html("<br><div class='alert alert-info'>Creating contract please wait...Do not refresh or close the tab</div>");
+            $.post("/hirePurchase/new",
+                {
+                    contractID1: $('input[name="contractID1"]').val(),
+                    contractID2: $('input[name="contractID2"]').val(),
+                    model: $('select[name="model"]').val(),
+                    customerName: $('input[name="customerName"]').val(),
+                    customerAddress: $('input[name="customerAddress"]').val(),
+                    customerContact: $('input[name="customerContact"]').val(),
+                    guarantor1Name: $('input[name="guarantor1Name"]').val(),
+                    guarantor1Address: $('input[name="guarantor1Address"]').val(),
+                    guarantor1Contact: $('input[name="guarantor1Contact"]').val(),
+                    guarantor2Name: $('input[name="guarantor2Name"]').val(),
+                    guarantor2Address: $('input[name="guarantor2Address"]').val(),
+                    guarantor2Contact: $('input[name="guarantor2Contact"]').val(),
+                    amount: $("input[name='amount']").map(function(){return $(this).val();}).get(),
+                    dueDate: $("input[name='dueDate']").map(function(){return $(this).val();}).get()
+                },
+                function(data, status) {
+                    $("#responseMessgae").html(data);
+            });
+        });
+    </script>
+
+</html>
