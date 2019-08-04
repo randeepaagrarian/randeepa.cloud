@@ -40,6 +40,7 @@ router.post('/new', function(req, res) {
     }
 
     const contract = {
+        date: MDate.getDateTime(),
         id_1: req.body.contractID1,
         id_2: req.body.contractID2,
         model_id: req.body.model,
