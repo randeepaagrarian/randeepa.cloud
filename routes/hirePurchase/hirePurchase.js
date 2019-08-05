@@ -124,7 +124,7 @@ router.get('/addPayment', function(req, res) {
 })
 
 router.post('/addPayment/:installmentID', multipart, function(req, res) {
-    const amount = req.body.amount
+    const { amount, payment_date, receipt_number } = req.body
     const installmentID = req.params.installmentID
 
     if(isNaN(amount) || amount == '' || amount == undefined) {
@@ -147,6 +147,8 @@ router.post('/addPayment/:installmentID', multipart, function(req, res) {
         const payment = {
             contract_installment_id: installmentID,
             amount: amount,
+            receipt_number: receipt_number,
+            paid_on: payment_date,
             issued_user: req.user.username,
             issued_on: MDate.getDateTime()
         }
@@ -169,6 +171,22 @@ router.post('/addPayment/:installmentID', multipart, function(req, res) {
 
     })
     
+})
+
+router.get('/viewPayments', function(req, res) {
+    async.series([
+        function(callback) {
+            HirePurchase.getPayments(req.query.installmentID, callback)
+        }
+    ], function(err, data) {
+        res.render('hirePurchase/viewPayments', {
+            title: 'Payments',
+            navbar: 'Hire Purchase',
+            user: req.user,
+            installmentID: req.query.installmentID,
+            payments: data[0]
+        })
+    })
 })
 
 module.exports = router

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                        <p>Installment ID: <%= installmentID %></p>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>#</th>
+                                                    <th>Amount</th>
+                                                    <th>Receipt Number</th>
+                                                    <th>Paid On</th>
+                                                    <th>Issued On</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% payments.forEach(function(sale) { %>
+                                                        <tr>
+                                                            <td><%= sale.id %></td>
+                                                            <td><%= sale.amount %></td>
+                                                            <td><%= sale.receipt_number %></td>
+                                                            <td><%= sale.paid_on %></td>
+                                                            <td><%= sale.issued_on %></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
