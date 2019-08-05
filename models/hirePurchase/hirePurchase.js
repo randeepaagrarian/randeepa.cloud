@@ -119,3 +119,18 @@ HirePurchase.addPayment = function(payment, callback) {
         })
     })
 }
+
+HirePurchase.getPayments = function(installmentID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT * FROM contract_installment_payment WHERE contract_installment_id = ?;', installmentID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}

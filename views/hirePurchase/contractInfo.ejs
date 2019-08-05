@@ -28,6 +28,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Number</th>
                                                         <th>Contract ID</th>
                                                         <th>Amount</th>
                                                         <th>Amount Paid</th>
@@ -36,16 +37,17 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% installments.forEach(function(installment) { %>
+                                                    <% installments.forEach(function(installment, i) { %>
                                                         <% if (installment.overdue == 0) { %>
                                                             <tr>
                                                         <% } else { %>
                                                             <tr class='warning'>
                                                         <% } %>
                                                             <td> <%= installment.id %> </td>
+                                                            <td><%= i + 1 %></td>
                                                             <td> <%= installment.contract_id %> </td>
                                                             <td> <%= installment.amount %> </td>
-                                                            <td> <%= installment.amount_paid %> </td>
+                                                            <td> <a href="/hirePurchase/viewPayments?installmentID=<%= installment.id %>"><%= installment.amount_paid %></a> </td>
                                                             <td> <%= installment.due_date %> </td>
                                                             <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
                                                         </tr>
