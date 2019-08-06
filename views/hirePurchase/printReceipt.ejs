@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/head %>
+
+        <style>
+        .nopadding {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        </style>
+    </head>
+    <body>
+        <% include ../layouts/invoice_header_venders %>
+
+        <div class="container">
+
+            <h4 style="padding: 0px; margin: 0px">Receipt &mdash; <%= receiptID %></h3>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <p>M/S: <b><%= receiptData.customer_name %></b></p>
+                    <p>Address: <b><%= receiptData.customer_address %></b></p>
+                    <p>Contact: <b><%= receiptData.customer_contact %></b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p>Date: <b><%= receiptData.date %></b></p>
+                    <p>Temporory Receipt: <b><%= receiptData.tr_number %></b></p>
+                </div>
+            </div>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Contract Number</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><b><%= receiptData.id_1 %></b></td>
+                        <td><b>RS <%= receiptData.amount %></b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="nopadding"><b>Receipt Details</b></p>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    <p class="nopadding">Issued By: <b><%= receiptData.issued_user %></b></p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="nopadding">Issued On: <b><%= receiptData.issued_on %></b></p>
+                </div>
+            </div>
+
+            <p><i>This is a computer generated document and is valid without manual signature.</i></p>
+
+            <% include ../layouts/footer %>
+        </div>
+    </body>
+</html>

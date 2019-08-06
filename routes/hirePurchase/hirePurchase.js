@@ -21,12 +21,18 @@ router.get('/new', function(req, res) {
     async.series([
         function(callback) {
             Stock.getModels(callback)
+        }, function(callback) {
+            HirePurchase.getRecoveryOfficers(callback)
+        }, function(callback) {
+            HirePurchase.getBatches(callback)
         }
     ], function(err, data) {
         res.render('hirePurchase/new', {
             title: 'New Contract',
             navbar: 'Hire Purchase',
             models: data[0],
+            recoveryOfficers: data[1],
+            batches: data[2],
             user: req.user
         })
     })
@@ -39,12 +45,18 @@ router.post('/new', function(req, res) {
         return
     }
 
+    let sale_id = req.body.cloudID
+    if(sale_id == '') { sale_id = null }
+
     const contract = {
         date: MDate.getDateTime(),
         user: req.user.username,
         id_1: req.body.contractID1,
         id_2: req.body.contractID2,
         model_id: req.body.model,
+        contract_batch_id: req.body.contractBatch,
+        recovery_officer: req.body.recoveryOfficer,
+        sale_id,
         customer_name: req.body.customerName,
         customer_address: req.body.customerAddress,
         customer_contact: req.body.customerContact,
@@ -240,6 +252,22 @@ router.post('/newReceipt', multipart, function(req, res) {
             res.redirect('/hirePurchase/newReceipt')
             return
         }
+    })
+})
+
+router.get('/printReceipt', function(req, res) {
+    const receiptID = req.query.receiptID
+
+    async.series([
+        function(callback) {
+            HirePurchase.receiptDetails(receiptID, callback)
+        }
+    ], function(err, data) {
+        res.render('hirePurchase/printReceipt', {
+            title: 'Receipt',
+            receiptID,
+            receiptData: data[0][0]
+        })
     })
 })
 

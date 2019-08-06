@@ -75,6 +75,20 @@
                                                                     <td>Customer Contact:<br><font color='orange'>(Required)</font>&nbsp;</td>
                                                                     <td><input class="form-control" type="text" name="customerContact"></td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <td>Recovery Officer:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td>
+                                                                        <select class="form-control" name="recoveryOfficer">
+                                                                            <% recoveryOfficers.forEach(function(model) { %>
+                                                                                <option value="<%= model.id %>"><%= model.name %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Cloud ID:<br><font color='green'>(Optional)</font>&nbsp;</td>
+                                                                    <td><input class="form-control" type="text" name="cloudID"></td>
+                                                                </tr>
                                                             </table>
                                                             <a class="addRow" href="javascript:void(0)">Add Row</a>
                                                         </div>
@@ -103,6 +117,16 @@
                                                                 <tr>
                                                                     <td>Guarantor 2 Contact:<br><font color='green'>(Optional)</font>&nbsp;</td>
                                                                     <td><input class="form-control" type="text" name="guarantor2Contact"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Contract Batch:<br><font color='orange'>(Required)</font>&nbsp;</td>
+                                                                    <td>
+                                                                        <select class="form-control" name="contractBatch">
+                                                                            <% batches.forEach(function(model) { %>
+                                                                                <option value="<%= model.id %>"><%= model.name %></option>
+                                                                            <% }) %>
+                                                                        </select>
+                                                                    </td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -166,6 +190,9 @@
                     guarantor2Name: $('input[name="guarantor2Name"]').val(),
                     guarantor2Address: $('input[name="guarantor2Address"]').val(),
                     guarantor2Contact: $('input[name="guarantor2Contact"]').val(),
+                    recoveryOfficer: $('select[name="recoveryOfficer"]').val(),
+                    contractBatch: $('select[name="contractBatch"]').val(),
+                    cloudID: $('input[name="cloudID"]').val(),
                     amount: $("input[name='amount']").map(function(){return $(this).val();}).get(),
                     dueDate: $("input[name='dueDate']").map(function(){return $(this).val();}).get()
                 },
