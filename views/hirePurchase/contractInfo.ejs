@@ -71,6 +71,7 @@
                                                             <th>TR Number</th>
                                                             <th>TR Book Number</th>
                                                             <th>Amount Allocated</th>
+                                                            <th>To Be Allocated</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -83,6 +84,7 @@
                                                                 <td> <%= installment.tr_number %> </td>
                                                                 <td> <%= installment.tr_book_number %> </td>
                                                                 <td> <%= installment.amount_allocated %> </td>
+                                                                <td><%= installment.to_be_allocated %></td>
                                                             </tr>
                                                         <% }) %>
                                                     </tbody>

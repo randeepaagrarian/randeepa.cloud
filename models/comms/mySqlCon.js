@@ -11,5 +11,7 @@ MySql.pool = mysql.createPool({
     password        :   args.dbPass,
     timezone        :   'UTC',
     database        :   args.dbName,
-    dateStrings     :   'date'
+    dateStrings     :   'date',
+    supportBigNumbers: true,
+    bigNumberStrings: true
 })
