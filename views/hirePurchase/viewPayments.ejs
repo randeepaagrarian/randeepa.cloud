@@ -31,7 +31,6 @@
                                                     <th>#</th>
                                                     <th>Amount</th>
                                                     <th>Receipt Number</th>
-                                                    <th>Paid On</th>
                                                     <th>Issued On</th>
                                                 </thead>
                                                 <tbody>
@@ -39,8 +38,7 @@
                                                         <tr>
                                                             <td><%= sale.id %></td>
                                                             <td><%= sale.amount %></td>
-                                                            <td><%= sale.receipt_number %></td>
-                                                            <td><%= sale.paid_on %></td>
+                                                            <td><%= sale.contract_receipt_id %></td>
                                                             <td><%= sale.issued_on %></td>
                                                         </tr>
                                                     <% }) %>

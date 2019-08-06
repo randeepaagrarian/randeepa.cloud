@@ -56,6 +56,39 @@
                                             </table>
                                         </div>
                                     </div>
+                                    <div class="header">
+                                        Receipts
+                                    </div>
+                                    <div class="content">
+                                            <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Receipt ID</th>
+                                                            <th>Date</th>
+                                                            <th>Amount</th>
+                                                            <th>TR Number</th>
+                                                            <th>TR Book Number</th>
+                                                            <th>Amount Allocated</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% receipts.forEach(function(installment, i) { %>
+                                                            <tr>
+                                                                <td><%= i + 1 %></td>
+                                                                <td> <%= installment.receipt_id %> </td>
+                                                                <td> <%= installment.date %> </td>
+                                                                <td> <%= installment.amount %> </td>
+                                                                <td> <%= installment.tr_number %> </td>
+                                                                <td> <%= installment.tr_book_number %> </td>
+                                                                <td> <%= installment.amount_allocated %> </td>
+                                                            </tr>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
 

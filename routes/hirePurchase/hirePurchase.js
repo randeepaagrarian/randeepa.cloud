@@ -103,12 +103,15 @@ router.get('/contractInfo', function(req, res) {
     async.series([
         function(callback) {
             HirePurchase.installments(req.query.contractID, callback)
+        }, function(callback) {
+            HirePurchase.receipts(req.query.contractID, callback)
         }
     ], function(err, data) {
         res.render('hirePurchase/contractInfo', {
             title: 'Contract Installments',
             navbar: 'Hire Purchase',
             installments: data[0],
+            receipts: data[1],
             user: req.user
         })
     })
@@ -124,11 +127,11 @@ router.get('/addPayment', function(req, res) {
 })
 
 router.post('/addPayment/:installmentID', multipart, function(req, res) {
-    const { amount, payment_date, receipt_number } = req.body
+    const { contract_receipt_id, amount } = req.body
     const installmentID = req.params.installmentID
 
-    if(isNaN(amount) || amount == '' || amount == undefined) {
-        req.flash('warning_msg', 'Please enter a valid amount')
+    if(isNaN(amount) || amount == '' || amount == undefined || contract_receipt_id == '') {
+        req.flash('warning_msg', 'Data validation errors')
         res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
         return
     }
@@ -136,6 +139,8 @@ router.post('/addPayment/:installmentID', multipart, function(req, res) {
     async.series([
         function(callback) {
             HirePurchase.validPaymentAmount(installmentID, amount, callback)
+        }, function(callback) {
+            HirePurchase.validReceiptAllocation(contract_receipt_id, amount, callback)
         }
     ], function(err, data) {
         if(!data[0]) {
@@ -144,11 +149,16 @@ router.post('/addPayment/:installmentID', multipart, function(req, res) {
             return
         }
 
+        if(!data[1]) {
+            req.flash('warning_msg', 'Payment amount exceeds receipt amount.')
+            res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
+            return
+        }
+
         const payment = {
             contract_installment_id: installmentID,
-            amount: amount,
-            receipt_number: receipt_number,
-            paid_on: payment_date,
+            contract_receipt_id,
+            amount,
             issued_user: req.user.username,
             issued_on: MDate.getDateTime()
         }
@@ -159,7 +169,7 @@ router.post('/addPayment/:installmentID', multipart, function(req, res) {
             }
         ], function(err, data) {
             if(!data[0]) {
-                req.flash('warning_msg', 'Error occurred while adding payment. Please contact system administrator.')
+                req.flash('warning_msg', 'Error occurred: ' + err.code)
                 res.redirect('/hirePurchase/addPayment?installmentID=' + req.params.installmentID)
                 return
             } else {
@@ -186,6 +196,50 @@ router.get('/viewPayments', function(req, res) {
             installmentID: req.query.installmentID,
             payments: data[0]
         })
+    })
+})
+
+router.get('/newReceipt', function(req, res) {
+    res.render('hirePurchase/newReceipt', {
+        title: 'New Receipt',
+        navbar: 'Hire Purchase',
+        user: req.user
+    })
+})
+
+router.post('/newReceipt', multipart, function(req, res) {
+    const { date, contract_id, amount, tr_number, tr_book_number } = req.body
+
+    if(date == '' || contract_id == '' || amount == '' || isNaN(amount)) {
+        req.flash('warning_msg', 'Data validation errors')
+        res.redirect('/hirePurchase/newReceipt')
+        return
+    }
+
+    const receipt = {
+        date,
+        contract_id,
+        amount,
+        tr_number,
+        tr_book_number,
+        issued_user: req.user.username,
+        issued_on: MDate.getDateTime()
+    }
+
+    async.series([
+        function(callback) {
+            HirePurchase.addReceipt(receipt, callback)
+        }
+    ], function(err, data) {
+        if(!data[0]) {
+            req.flash('warning_msg', 'Error occured: ' + err.code)
+            res.redirect('/hirePurchase/newReceipt')
+            return
+        } else {
+            req.flash('warning_msg', 'Receipt generated')
+            res.redirect('/hirePurchase/newReceipt')
+            return
+        }
     })
 })
 
