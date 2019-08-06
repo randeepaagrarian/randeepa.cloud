@@ -71,7 +71,7 @@ HirePurchase.installments = function(contractID, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT CI.id, CI.contract_id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) AS amount_paid, (CASE WHEN (CI.due_date <= NOW() AND COALESCE(SUM(CIP.amount), 0) < CI.amount) THEN 1 ELSE 0 END) as overdue FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CIP.contract_installment_id = CI.id WHERE contract_id = ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date;', contractID, function(err, rows, fields) {
+        connection.query('SELECT CI.id, CI.contract_id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) AS amount_paid, (CASE WHEN (CI.due_date <= NOW() AND COALESCE(SUM(CIP.amount), 0) < CI.amount) THEN 1 ELSE 0 END) as overdue, (CASE WHEN(CI.due_date > NOW()) THEN 1 ELSE 0 END) as upcoming FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CIP.contract_installment_id = CI.id WHERE contract_id = ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date;', contractID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

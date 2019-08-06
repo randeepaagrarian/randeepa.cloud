@@ -38,10 +38,12 @@
                                                 </thead>
                                                 <tbody>
                                                     <% installments.forEach(function(installment, i) { %>
-                                                        <% if (installment.overdue == 0) { %>
-                                                            <tr>
-                                                        <% } else { %>
+                                                        <% if (installment.overdue == 0 && installment.upcoming == 0) { %>
+                                                            <tr class='success'>
+                                                        <% } else if(installment.overdue == 1 && installment.upcoming == 0) { %>
                                                             <tr class='warning'>
+                                                        <% } else { %>
+                                                            <tr>
                                                         <% } %>
                                                             <td> <%= installment.id %> </td>
                                                             <td><%= i + 1 %></td>
