@@ -80,7 +80,7 @@
                                                         <% receipts.forEach(function(installment, i) { %>
                                                             <tr>
                                                                 <td><%= i + 1 %></td>
-                                                                <td> <%= installment.receipt_id %> </td>
+                                                                <td> <a href="/hirePurchase/printReceipt?receiptID=<%= installment.receipt_id %>"><%= installment.receipt_id %></a> </td>
                                                                 <td> <%= installment.date %> </td>
                                                                 <td> <%= installment.amount %> </td>
                                                                 <td> <%= installment.tr_number %> </td>

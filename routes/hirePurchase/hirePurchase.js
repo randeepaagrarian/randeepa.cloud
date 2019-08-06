@@ -243,4 +243,20 @@ router.post('/newReceipt', multipart, function(req, res) {
     })
 })
 
+router.get('/printReceipt', function(req, res) {
+    const receiptID = req.query.receiptID
+
+    async.series([
+        function(callback) {
+            HirePurchase.receiptDetails(receiptID, callback)
+        }
+    ], function(err, data) {
+        res.render('hirePurchase/printReceipt', {
+            title: 'Receipt',
+            receiptID,
+            receiptData: data[0][0]
+        })
+    })
+})
+
 module.exports = router

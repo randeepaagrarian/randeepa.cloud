@@ -188,3 +188,18 @@ HirePurchase.receipts = function(contractID, callback) {
         })
     })
 }
+
+HirePurchase.receiptDetails = function(receiptID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id_1, C.customer_name, C.customer_address, C.customer_contact, CR.amount, CR.tr_number, CR.date, CR.issued_on, CR.issued_user FROM contract_receipt CR LEFT JOIN contract C ON C.id = CR.contract_id WHERE CR.id = ?;', receiptID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
