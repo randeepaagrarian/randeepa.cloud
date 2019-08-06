@@ -134,3 +134,57 @@ HirePurchase.getPayments = function(installmentID, callback) {
         })
     })
 }
+
+HirePurchase.addReceipt = function(receipt, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, false)
+        }
+        connection.query('INSERT INTO contract_receipt SET ?;', receipt, function(err, rows) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+
+            return callback(err, true)
+        })
+    })
+}
+
+HirePurchase.validReceiptAllocation = function(receiptNo, amount, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, false)
+        }
+        connection.query('SELECT CR.id, CR.amount, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_receipt CR LEFT JOIN contract_installment_payment CIP ON CR.id = CIP.contract_receipt_id WHERE CR.id = ? GROUP BY CR.id, CR.amount;', receiptNo, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+
+            const amount_db = parseInt(rows[0].amount)
+            const amount_paid = parseInt(rows[0].amount_paid) + parseInt(amount)
+
+            if(amount_paid <= amount_db) {
+                return callback(err, true)
+            } else {
+                return callback(err, false)
+            }
+        })
+    })
+}
+
+HirePurchase.receipts = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id as contract_id, CR.id as receipt_id, CR.date, CR.amount, CR.tr_number, CR.tr_book_number, COALESCE(SUM(CIP.amount), 0) as amount_allocated FROM contract_receipt CR LEFT JOIN contract_installment_payment CIP ON CR.id = CIP.contract_receipt_id LEFT JOIN contract C ON C.id = CR.contract_id WHERE C.id = ?  GROUP BY CR.id, CR.amount;', contractID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}

@@ -22,20 +22,34 @@
                                     <div class="header">
                                         <%= title %>
                                         <p class="category"><%= warning_msg %></p>
-                                        <p>Installment ID: <%= installmentID %></p>
                                     </div>
                                     <div class="content">
-                                        <form method="POST" action="/hirePurchase/addPayment/<%= installmentID %>" enctype="multipart/form-data">
+                                        <form method="POST" action="/hirePurchase/newReceipt" enctype="multipart/form-data">
                                             <table>
                                                 <tr>
-                                                    <td>Receipt ID &nbsp;</td>
+                                                    <td>Date &nbsp;</td>
                                                     <td><font color='orange'>(Required)</font>&nbsp;</td>
-                                                    <td><input class="form-control" style='width: 350px' type='text' name='contract_receipt_id' /></td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='date' placeholder='YYYY-MM-DD' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contract ID &nbsp;</td>
+                                                    <td><font color='orange'>(Required)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='contract_id' /></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Amount &nbsp;</td>
                                                     <td><font color='orange'>(Required)</font>&nbsp;</td>
                                                     <td><input class="form-control" style='width: 350px' type='text' name='amount' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TR Number&nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='tr_number' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TR Book Number &nbsp;</td>
+                                                    <td><font color='green'>(Optional)</font>&nbsp;</td>
+                                                    <td><input class="form-control" style='width: 350px' type='text' name='tr_book_number' /></td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
