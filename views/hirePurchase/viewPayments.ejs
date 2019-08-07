@@ -37,7 +37,7 @@
                                                     <% payments.forEach(function(sale) { %>
                                                         <tr>
                                                             <td><%= sale.id %></td>
-                                                            <td><%= sale.amount %></td>
+                                                            <td><%= printAmount(sale.amount) %></td>
                                                             <td><%= sale.contract_receipt_id %></td>
                                                             <td><%= sale.issued_on %></td>
                                                         </tr>
@@ -61,4 +61,7 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
+    <% printAmount = function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } %>
 </html>

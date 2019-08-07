@@ -62,13 +62,13 @@
                                                             <td> <%= contract.id_1 %> </td>
                                                             <td> <%= contract.id_2 %> </td>
                                                             <% if(contract.amount_pending > 0) { %>
-                                                                <td><font color='red'><%= contract.amount_pending %></font></td>
+                                                                <td><font color='red'><%= printAmount(contract.amount_pending) %></font></td>
                                                             <% } else { %>
-                                                                <td><font color='green'><%= contract.amount_pending %></font></td>
+                                                                <td><font color='green'><%= printAmount(contract.amount_pending) %></font></td>
                                                             <% } %>
-                                                            <td><%= contract.contract_amount %></td>
-                                                            <td><%= contract.paid_amount %></td>
-                                                            <td><%= contract.to_be_collected %></td>
+                                                            <td><%= printAmount(contract.contract_amount) %></td>
+                                                            <td><%= printAmount(contract.paid_amount) %></td>
+                                                            <td><%= printAmount(contract.to_be_collected) %></td>
                                                             <td><%= contract.contract_finishes_in %> Days</td>
                                                             <td> <%= contract.model_name %> </td>
                                                             <td> <%= contract.batch_name %> </td>
@@ -104,4 +104,7 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
+    <% printAmount = function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } %>
 </html>
