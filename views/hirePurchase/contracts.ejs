@@ -2,6 +2,9 @@
 <html>
     <head>
         <% include ../layouts/pro/head %>
+        <% printAmount = function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } %>
         <style>
         </style>
     </head>
@@ -104,7 +107,4 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
-    <% printAmount = function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    } %>
 </html>

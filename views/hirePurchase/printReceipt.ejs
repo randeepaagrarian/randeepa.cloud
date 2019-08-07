@@ -2,6 +2,9 @@
 <html>
     <head>
         <% include ../layouts/head %>
+        <% printAmount = function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } %>
 
         <style>
         .nopadding {
@@ -59,9 +62,6 @@
             <p><i>This is a computer generated document and is valid without manual signature.</i></p>
 
             <% include ../layouts/footer %>
-            <% printAmount = function numberWithCommas(x) {
-                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            } %>
         </div>
     </body>
 </html>
