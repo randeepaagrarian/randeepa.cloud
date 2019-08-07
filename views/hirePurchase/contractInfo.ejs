@@ -48,8 +48,8 @@
                                                             <td> <%= installment.id %> </td>
                                                             <td><%= i + 1 %></td>
                                                             <td> <%= installment.contract_id %> </td>
-                                                            <td> <%= installment.amount %> </td>
-                                                            <td> <a href="/hirePurchase/viewPayments?installmentID=<%= installment.id %>"><%= installment.amount_paid %></a> </td>
+                                                            <td> <%= printAmount(installment.amount) %> </td>
+                                                            <td> <a href="/hirePurchase/viewPayments?installmentID=<%= installment.id %>"><%= printAmount(installment.amount_paid) %></a> </td>
                                                             <td> <%= installment.due_date %> </td>
                                                             <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
                                                         </tr>
@@ -82,10 +82,10 @@
                                                                 <td><%= i + 1 %></td>
                                                                 <td> <a href="/hirePurchase/printReceipt?receiptID=<%= installment.receipt_id %>"><%= installment.receipt_id %></a> </td>
                                                                 <td> <%= installment.date %> </td>
-                                                                <td> <%= installment.amount %> </td>
+                                                                <td> <%= printAmount(installment.amount) %> </td>
                                                                 <td> <%= installment.tr_number %> </td>
                                                                 <td> <%= installment.tr_book_number %> </td>
-                                                                <td> <%= installment.amount_allocated %> </td>
+                                                                <td> <%= printAmount(installment.amount_allocated) %> </td>
                                                                 <td><%= installment.to_be_allocated %></td>
                                                             </tr>
                                                         <% }) %>
@@ -108,4 +108,7 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
+    <% printAmount = function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } %>
 </html>
