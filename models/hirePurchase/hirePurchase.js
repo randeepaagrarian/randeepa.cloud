@@ -278,3 +278,86 @@ HirePurchase.getBatches = function(callback) {
         })
     })
 }
+
+HirePurchase.editLocked = function(installmentID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.edit_lock FROM contract_installment CI LEFT JOIN contract C ON C.id = CI.contract_id WHERE CI.id = ?;', [installmentID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+
+            const edit_lock = rows[0].edit_lock
+
+            if(edit_lock == 0) {
+                return callback(err, false)
+            } else {
+                return callback(err, true)
+            }
+        })
+    })
+}
+
+
+HirePurchase.getInstallmentDetails = function(installmentID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT amount, due_date FROM contract_installment WHERE id = ?', [installmentID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.changeInstallment = function(installmentID, installmentChange, datetime, changed_by, reason, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.beginTransaction(function(err) {
+            if(err) {
+                connection.release()
+                return callback(err, false)
+            }
+
+            connection.query('INSERT INTO contract_installment_history (date_in, changed_by, change_reason, contract_installment_id, contract_id, amount, due_date) SELECT ?, ?, ?, id, contract_id, amount, due_date FROM contract_installment WHERE id = ?', [datetime, changed_by, reason, installmentID], function(err, result) {
+                if(err) {
+                    return connection.rollback(function() {
+                        connection.release()
+                        callback(err, false)
+                    })
+                }
+
+                connection.query('UPDATE contract_installment SET ? WHERE id = ?', [installmentChange, installmentID], function(err, result) {
+                    if(err) {
+                        return connection.rollback(function() {
+                            connection.release()
+                            callback(err, false)
+                        })
+                    }
+
+                    connection.commit(function(err) {
+                        if(err) {
+                            return connection.rollback(function() {
+                                connection.release()
+                                callback(err, false)
+                            })
+                        }
+                        connection.release()
+                        callback(err, true)
+                    })
+                })
+            })
+
+        })
+    })
+}

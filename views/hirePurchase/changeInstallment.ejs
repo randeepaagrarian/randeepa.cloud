@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
+                                    </div>
+                                    <div class="content">
+                                        <form method="POST" action="/hirePurchase/changeInstallment?installmentID=<%= installmentID %>&contractID=<%= contractID %>" enctype="multipart/form-data">
+                                            <table>
+                                                <tr>
+                                                    <td>Amount &nbsp;</td>
+                                                    <td><input class="form-control" value="<%= installmentDetails[0]['amount'] %>" style='width: 350px' type='text' name='amount' placeholder='YYYY-MM-DD' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Due Date &nbsp;</td>
+                                                    <td><input class="form-control" value="<%= installmentDetails[0]['due_date'] %>" style='width: 350px' type='text' name='due_date' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Reason &nbsp;</td>
+                                                    <td><textarea class="form-control" style='width: 350px' type='text' name='reason'></textarea></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><button class="btn btn-primary">Change Installment</button></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

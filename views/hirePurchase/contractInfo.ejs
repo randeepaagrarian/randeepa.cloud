@@ -24,6 +24,7 @@
                                 <div class="card">
                                     <div class="header">
                                         <%= title %>
+                                        <p class="category"><%= warning_msg %></p>
                                     </div>
                                     <div class="content">
                                         <div style="max-width: 100%; overflow: auto;" class="table-responsive">
@@ -48,7 +49,7 @@
                                                         <% } else { %>
                                                             <tr>
                                                         <% } %>
-                                                            <td> <%= installment.id %> </td>
+                                                            <td> <a href="/hirePurchase/changeInstallment?installmentID=<%= installment.id %>&contractID=<%= contractID %>"><%= installment.id %></a> </td>
                                                             <td><%= i + 1 %></td>
                                                             <td> <%= installment.contract_id %> </td>
                                                             <td> <%= printAmount(installment.amount) %> </td>
