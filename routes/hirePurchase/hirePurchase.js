@@ -271,4 +271,61 @@ router.get('/printReceipt', function(req, res) {
     })
 })
 
+router.get('/contractsByBatch', function(req, res) {
+    const batchID = req.query.batch;
+
+    async.series([
+        function(callback) {
+            HirePurchase.allContractsByBatch(batchID, callback)
+        }
+    ], function(err, data) {
+        res.render('hirePurchase/contracts', {
+            title: 'Contracts by Batch',
+            navbar: 'Hire Purchase',
+            contracts: data[0],
+            results: data[0].length,
+            user: req.user
+        })
+    })
+})
+
+router.get('/contractsAsAt', function(req, res) {
+    const date = req.query.date
+    const batch = req.query.batch
+
+    if(batch == -1) {
+        const title = 'All Contracts As At ' + date
+
+        async.series([
+            function(callback) {
+                HirePurchase.allContractsAsAt(date, callback)
+            }
+        ], function(err, data) {
+            res.render('hirePurchase/contracts', {
+                title,
+                navbar: 'Hire Purchase',
+                contracts: data[0],
+                results: data[0].length,
+                user: req.user
+            })
+        })
+    } else {
+        const title = 'Contracts As At ' + date
+
+        async.series([
+            function(callback) {
+                HirePurchase.allContractsAsAtByBatch(date, batch, callback)
+            }
+        ], function(err, data) {
+            res.render('hirePurchase/contracts', {
+                title,
+                navbar: 'Hire Purchase',
+                contracts: data[0],
+                results: data[0].length,
+                user: req.user
+            })
+        })
+    }
+})
+
 module.exports = router
