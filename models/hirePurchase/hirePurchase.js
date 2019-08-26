@@ -66,6 +66,51 @@ HirePurchase.allContracts = function(callback) {
     })
 }
 
+HirePurchase.allContractsAsAt = function(date, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.contract_id as id, CT.id_1, CT.id_2, SUM(CASE WHEN (C.due_date <= ? AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_pending, COALESCE(SUM(C.amount), 0) as contract_amount, COALESCE(SUM(C.amount_paid), 0) as paid_amount, (COALESCE(SUM(C.amount), 0) - COALESCE(SUM(C.amount_paid), 0)) as to_be_collected, (CASE WHEN (MAX(C.due_date) <= ?) THEN 1 ELSE 0 END) as contract_finished, DATEDIFF(MAX(C.due_date), ?) as contract_finishes_in, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, MIN(C.due_date) as contract_start_date, CT.customer_name, CT.customer_address, CT.customer_contact, CT.guarantor1_name, CT.guarantor1_address, CT.guarantor1_contact, CT.guarantor2_name, CT.guarantor2_address, CT.guarantor2_contact FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C LEFT JOIN contract CT on C.contract_id = CT.id LEFT JOIN model M on M.id = CT.model_id LEFT JOIN contract_batch CB ON CT.contract_batch_id = CB.id LEFT JOIN user U ON CT.recovery_officer = U.username WHERE CT.closed = 0 GROUP BY C.contract_id', [date, date, date], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.allContractsAsAtByBatch = function(date, batch, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.contract_id as id, CT.id_1, CT.id_2, SUM(CASE WHEN (C.due_date <= ? AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_pending, COALESCE(SUM(C.amount), 0) as contract_amount, COALESCE(SUM(C.amount_paid), 0) as paid_amount, (COALESCE(SUM(C.amount), 0) - COALESCE(SUM(C.amount_paid), 0)) as to_be_collected, (CASE WHEN (MAX(C.due_date) <= ?) THEN 1 ELSE 0 END) as contract_finished, DATEDIFF(MAX(C.due_date), ?) as contract_finishes_in, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, MIN(C.due_date) as contract_start_date, CT.customer_name, CT.customer_address, CT.customer_contact, CT.guarantor1_name, CT.guarantor1_address, CT.guarantor1_contact, CT.guarantor2_name, CT.guarantor2_address, CT.guarantor2_contact FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C LEFT JOIN contract CT on C.contract_id = CT.id LEFT JOIN model M on M.id = CT.model_id LEFT JOIN contract_batch CB ON CT.contract_batch_id = CB.id LEFT JOIN user U ON CT.recovery_officer = U.username WHERE CT.closed = 0 AND CT.contract_batch_id = ? GROUP BY C.contract_id', [date, date, date, batch], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.allContractsByBatch = function(batchID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.contract_id as id, CT.id_1, CT.id_2, SUM(CASE WHEN (C.due_date <= NOW() AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_pending, COALESCE(SUM(C.amount), 0) as contract_amount, COALESCE(SUM(C.amount_paid), 0) as paid_amount, (COALESCE(SUM(C.amount), 0) - COALESCE(SUM(C.amount_paid), 0)) as to_be_collected, (CASE WHEN (MAX(C.due_date) <= NOW()) THEN 1 ELSE 0 END) as contract_finished, DATEDIFF(MAX(C.due_date), NOW()) as contract_finishes_in, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, MIN(C.due_date) as contract_start_date, CT.customer_name, CT.customer_address, CT.customer_contact, CT.guarantor1_name, CT.guarantor1_address, CT.guarantor1_contact, CT.guarantor2_name, CT.guarantor2_address, CT.guarantor2_contact FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C LEFT JOIN contract CT on C.contract_id = CT.id LEFT JOIN model M on M.id = CT.model_id LEFT JOIN contract_batch CB ON CT.contract_batch_id = CB.id LEFT JOIN user U ON CT.recovery_officer = U.username WHERE CT.closed = 0 AND CT.contract_batch_id = ? GROUP BY C.contract_id', [batchID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
 HirePurchase.installments = function(contractID, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {

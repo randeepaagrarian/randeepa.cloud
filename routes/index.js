@@ -19,6 +19,7 @@ const Stock = require('../models/stock/stock')
 const ProfileMyProfile = require('../models/profile/myprofile')
 const Notification = require('../models/notification/notification')
 const Service = require('../models/service/service')
+const HirePurchase = require('../models/hirePurchase/hirePurchase')
 
 const args = require('yargs').argv
 
@@ -394,12 +395,15 @@ router.get('/hirePurchase', Auth.signedIn, Auth.validHirePurchaseUser, function(
 	async.series([
 		function(callback) {
 			Service.getTechnicians(callback)
+		}, function(callback) {
+			HirePurchase.getBatches(callback)
 		}
 	], function(err, data) {
 		res.render('hirePurchase', {
 			title: 'Hire Purchase',
 			navbar: 'Hire Purchase',
-			user: req.user
+			user: req.user,
+			batches: data[1]
 		})
 	})
 })
