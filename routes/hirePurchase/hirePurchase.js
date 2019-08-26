@@ -122,6 +122,7 @@ router.get('/contractInfo', function(req, res) {
         res.render('hirePurchase/contractInfo', {
             title: 'Contract Installments',
             navbar: 'Hire Purchase',
+            contractID: req.query.contractID,
             installments: data[0],
             receipts: data[1],
             user: req.user
@@ -326,6 +327,70 @@ router.get('/contractsAsAt', function(req, res) {
             })
         })
     }
+})
+
+router.get('/changeInstallment', function(req, res) {
+    const installmentID = req.query.installmentID
+    const contractID = req.query.contractID
+
+    async.series([
+        function(callback) {
+            HirePurchase.editLocked(installmentID, callback)
+        }
+    ], function(err, data) {
+        if(data[0] == false) {
+            async.series([
+                function(callback) {
+                    HirePurchase.getInstallmentDetails(installmentID, callback)
+                }
+            ], function(err, data) {
+                res.render('hirePurchase/changeInstallment', {
+                    title: 'Change Installment',
+                    navbar: 'Hire Purchase',
+                    installmentID,
+                    contractID,
+                    installmentDetails: data[0],
+                    user: req.user
+                })
+            })
+        } else {
+            res.redirect('/hirePurchase')
+            return
+        }
+    })
+})
+
+router.post('/changeInstallment', multipart, function(req, res) {
+
+    if(req.body.reason == '') {
+        req.flash('warning_msg', 'Please enter the reason for change');
+        res.redirect('/hirePurchase/changeInstallment?installmentID=' + req.query.installmentID + '&contractID=' + req.query.contractID)
+        return
+    }
+
+    const installmentID = req.query.installmentID
+
+    const installmentChange = {
+        amount: req.body.amount,
+        due_date: req.body.due_date
+    }
+    
+    async.series([
+        function(callback) {
+            HirePurchase.changeInstallment(installmentID, installmentChange, MDate.getDateTime(), req.user.username, req.body.reason, callback)
+        }
+    ], function(err, data) {
+        if(data[0]) {
+            req.flash('warning_msg', 'Installment udpated');
+            res.redirect('/hirePurchase/contractInfo?contractID=' + req.query.contractID)
+            return
+        } else {
+            req.flash('warning_msg', 'Validation errors ' + err.code);
+            res.redirect('/hirePurchase/changeInstallment?installmentID=' + req.query.installmentID)
+            return
+        }
+    })
+
 })
 
 module.exports = router
