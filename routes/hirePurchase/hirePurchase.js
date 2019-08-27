@@ -10,6 +10,7 @@ const MDate = require('../../functions/mdate')
 
 const HirePurchase = require('../../models/hirePurchase/hirePurchase')
 const Stock = require('../../models/stock/stock')
+const User = require('../../models/user/user')
 
 const multipart = multiparty()
 
@@ -117,6 +118,8 @@ router.get('/contractInfo', function(req, res) {
             HirePurchase.installments(req.query.contractID, callback)
         }, function(callback) {
             HirePurchase.receipts(req.query.contractID, callback)
+        }, function(callback) {
+            HirePurchase.getContractInfo(req.query.contractID, callback)
         }
     ], function(err, data) {
         res.render('hirePurchase/contractInfo', {
@@ -125,7 +128,8 @@ router.get('/contractInfo', function(req, res) {
             contractID: req.query.contractID,
             installments: data[0],
             receipts: data[1],
-            user: req.user
+            user: req.user,
+            contractInfo: data[2]
         })
     })
 })
@@ -391,6 +395,79 @@ router.post('/changeInstallment', multipart, function(req, res) {
         }
     })
 
+})
+
+router.get('/edit', function(req, res) {
+    const { contractID } = req.query
+
+    async.series([
+        function(callback) {
+            HirePurchase.contractEditLocked(contractID, callback)
+        }
+    ], function(err, data) {
+        if(data[0] == false) {
+            async.series([
+                function(callback) {
+                    HirePurchase.rawInfo(contractID, callback)
+                }, function(callback) {
+                    User.getAllUsers(callback)
+                }, function(callback) {
+                    Stock.getModels(callback)
+                }, function(callback) {
+                    HirePurchase.getBatches(callback)
+                }
+            ], function(err, data) {
+                res.render('hirePurchase/edit', {
+                    title: 'Edit Contract',
+                    navbar: 'Hire Purchase',
+                    contractID,
+                    user: req.user,
+                    contract: data[0][0],
+                    users: data[1],
+                    models: data[2],
+                    batches: data[3]
+                })
+            })
+        } else {
+            req.flash('warning_msg', 'Edit Lock enabled')
+            res.redirect('/hirePurchase/contractInfo?contractID=' + contractID)
+        }
+    })
+})
+
+router.post('/edit/:contractID', function(req, res) {
+    const { contractID } = req.params
+    let newContract = {}
+
+    for(let key in req.body) {
+        newContract[key] = decodeURIComponent(req.body[key])
+    }
+
+    delete newContract.id
+    delete newContract.date
+    delete newContract.user
+
+    for(let key in newContract) {
+        if(newContract[key] == '') {
+            delete newContract[key]
+        }
+    }
+
+    async.series([
+        function(callback) {
+            HirePurchase.edit(contractID, newContract, req.user.username, MDate.getDateTime(), callback)
+        }
+    ], function(err, data) {
+        if(data[0]) {
+            req.flash('success_msg', 'Contract successfully edited');
+            res.redirect('/hirePurchase/edit?contractID=' + contractID)
+            return
+        } else {
+            req.flash('error', 'Error occurred ' + err.code);
+            res.redirect('/hirePurchase/edit?contractID=' + contractID)
+            return
+        }
+    })
 })
 
 module.exports = router
