@@ -34,6 +34,7 @@
                                                         <th>#</th>
                                                         <th>ID 1</th>
                                                         <th>ID 2</th>
+                                                        <th>Cloud ID</th>
                                                         <th>Amount Pending</th>
                                                         <th>Contract Amount</th>
                                                         <th>Paid Amount</th>
@@ -64,6 +65,7 @@
                                                             <td><a href='/hirePurchase/contractInfo?contractID=<%= contract.id %>'><%= contract.id %></a></td>
                                                             <td> <%= contract.id_1 %> </td>
                                                             <td> <%= contract.id_2 %> </td>
+                                                            <td> <a target='_blank' href='/sale/cloudIDInfo?cloudID=<%= contract.sale_id %>'><%= contract.sale_id %></a> </td>
                                                             <% if(contract.amount_pending > 0) { %>
                                                                 <td><font color='red'><%= printAmount(contract.amount_pending) %></font></td>
                                                             <% } else { %>
