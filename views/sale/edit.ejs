@@ -247,6 +247,21 @@
                                                       </select>
                                                     </td>
                                                   </tr>
+                                                <% } else if(key == 'commision_paid') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(sale[key] == 0) { %>
+                                                          <option value="0" selected>Not Paid</option>
+                                                          <option value="1">Paid</option>
+                                                        <% } else { %>
+                                                          <option value="0">Not Paid</option>
+                                                          <option value="1" selected>Paid</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
                                                 <% } else { %>
                                                   <tr>
                                                     <td><%= key %></td>
