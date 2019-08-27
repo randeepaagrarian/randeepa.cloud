@@ -301,6 +301,28 @@ HirePurchase.editLocked = function(installmentID, callback) {
     })
 }
 
+HirePurchase.contractEditLocked = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.edit_lock FROM contract C WHERE C.id = ?;', [contractID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+
+            const edit_lock = rows[0].edit_lock
+
+            if(edit_lock == 0) {
+                return callback(err, false)
+            } else {
+                return callback(err, true)
+            }
+        })
+    })
+}
+
 
 HirePurchase.getInstallmentDetails = function(installmentID, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
@@ -361,3 +383,81 @@ HirePurchase.changeInstallment = function(installmentID, installmentChange, date
         })
     })
 }
+
+HirePurchase.getContractInfo = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.contract_id as id, CT.id_1, CT.id_2, CT.sale_id, SUM(CASE WHEN (C.due_date <= NOW() AND C.amount_paid < C.amount) THEN C.amount - C.amount_paid ELSE 0 END) as amount_pending, COALESCE(SUM(C.amount), 0) as contract_amount, COALESCE(SUM(C.amount_paid), 0) as paid_amount, (COALESCE(SUM(C.amount), 0) - COALESCE(SUM(C.amount_paid), 0)) as to_be_collected, (CASE WHEN (MAX(C.due_date) <= NOW()) THEN 1 ELSE 0 END) as contract_finished, DATEDIFF(MAX(C.due_date), NOW()) as contract_finishes_in, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, MIN(C.due_date) as contract_start_date, CT.customer_name, CT.customer_address, CT.customer_contact, CT.guarantor1_name, CT.guarantor1_address, CT.guarantor1_contact, CT.guarantor2_name, CT.guarantor2_address, CT.guarantor2_contact FROM (SELECT CI.contract_id, CI.id, CI.amount, CI.due_date, COALESCE(SUM(CIP.amount), 0) as amount_paid FROM contract_installment CI LEFT JOIN contract C ON CI.contract_id = C.id LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id WHERE C.id = ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date) C LEFT JOIN contract CT on C.contract_id = CT.id LEFT JOIN model M on M.id = CT.model_id LEFT JOIN contract_batch CB ON CT.contract_batch_id = CB.id LEFT JOIN user U ON CT.recovery_officer = U.username WHERE CT.closed = 0 GROUP BY C.contract_id', contractID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.rawInfo = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT * FROM contract WHERE id = ?', contractID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.edit = function(contractID, newContract, user, datetime, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, false)
+      }
+  
+      connection.beginTransaction(function(err) {
+        if(err) {
+            connection.release()
+            return callback(err, false)
+        }
+  
+        connection.query('INSERT INTO contract_history (id, date, user, id_1, id_2, model_id, contract_batch_id, recovery_officer, sale_id, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact, edit_lock, closed, date_in, modified_by) SELECT id, date, user, id_1, id_2, model_id, contract_batch_id, recovery_officer, sale_id, customer_name, customer_address, customer_contact, guarantor1_name, guarantor1_address, guarantor1_contact, guarantor2_name, guarantor2_address, guarantor2_contact, edit_lock, closed, ?, ? FROM contract WHERE id = ?', [datetime, user, contractID], function(err, rows, fields) {
+  
+          if(err) {
+              return connection.rollback(function() {
+                  connection.release()
+                  callback(err, false)
+              })
+          }
+  
+          connection.query('UPDATE contract SET ? WHERE id = ?', [newContract, contractID], function(err, rows, fields) {
+              if(err) {
+                  return connection.rollback(function() {
+                      connection.release()
+                      callback(err, false)
+                  })
+              }
+  
+              connection.commit(function(err) {
+                  if(err) {
+                      return connection.rollback(function() {
+                          connection.release()
+                          callback(err, false)
+                      })
+                  }
+                  connection.release()
+                  callback(err, true)
+              })
+  
+          })
+  
+        })
+  
+      })
+    })
+  }

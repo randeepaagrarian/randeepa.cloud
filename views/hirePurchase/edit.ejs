@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                      <%= title %>
+                                    </div>
+                                    <div class="content">
+
+                                      <a href="/hirePurchase/contractInfo?contractID=<%= contract.id %>">Go to Contract Info Page</a>
+
+                                      <% if (error != '') { %>
+                          							<div class="alert alert-warning">
+                          								<%= error %>
+                          							</div>
+                          						<% } else if (success_msg != '') { %>
+                          							<div class="alert alert-success">
+                          								<%= success_msg %>
+                          							</div>
+                          						<% } %>
+
+                                      <table class="table table-striped">
+                                        <tbody>
+
+                                          <form action="/hirePurchase/edit/<%= contract.id %>" method="post">
+                                            <% for(let key in contract) { %>
+                                              <% if(contract.hasOwnProperty(key)) { %>
+
+                                                <% if(key == 'edit_lock') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% if(contract[key] == 0) { %>
+                                                          <option value="0" selected>Unlocked</option>
+                                                          <option value="1">Locked</option>
+                                                        <% } else { %>
+                                                          <option value="0">Unlocked</option>
+                                                          <option value="1" selected>Locked</option>
+                                                        <% } %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% }else if(key == 'closed') { %>
+                                                <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                    <select name="<%= key %>">
+                                                        <% if(contract[key] == 0) { %>
+                                                        <option value="0" selected>Open</option>
+                                                        <option value="1">Closed</option>
+                                                        <% } else { %>
+                                                        <option value="0">Open</option>
+                                                        <option value="1" selected>Closed</option>
+                                                        <% } %>
+                                                    </select>
+                                                    </td>
+                                                </tr>
+                                                <% } else if(key == 'recovery_officer') { %>
+                                                <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                    <select name="<%= key %>">
+                                                        <% users.forEach(function(user) { %>
+                                                        <% if(user.id == contract[key].toLowerCase()) { %>
+                                                            <option value="<%= user.id %>" selected><%= user.name %></option>
+                                                        <% } else { %>
+                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                        <% } %>
+                                                        <% }) %>
+                                                    </select>
+                                                    </td>
+                                                </tr>
+                                                <% } else if(key == 'user') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% users.forEach(function(user) { %>
+                                                          <% if(user.id == contract[key].toLowerCase()) { %>
+                                                            <option value="<%= user.id %>" selected><%= user.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= user.id %>"><%= user.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'contract_batch_id') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% batches.forEach(function(batch) { %>
+                                                          <% if(batch.id == contract[key]) { %>
+                                                            <option value="<%= batch.id %>" selected><%= batch.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= batch.id %>"><%= batch.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else if(key == 'model_id') { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td>
+                                                      <select name="<%= key %>">
+                                                        <% models.forEach(function(model) { %>
+                                                          <% if(model.id == contract[key]) { %>
+                                                            <option value="<%= model.id %>" selected><%= model.name %></option>
+                                                          <% } else { %>
+                                                            <option value="<%= model.id %>"><%= model.name %></option>
+                                                          <% } %>
+                                                        <% }) %>
+                                                      </select>
+                                                    </td>
+                                                  </tr>
+                                                <% } else { %>
+                                                  <tr>
+                                                    <td><%= key %></td>
+                                                    <td><textarea cols="50" rows="3" name="<%= key %>"><%= contract[key] %></textarea></td>
+                                                  </tr>
+                                                <% } %>
+
+                                              <% } %>
+                                            <% } %>
+                                            <tr>
+                                              <td></td>
+                                              <td><input type="submit" value="Edit"></td>
+                                            </tr>
+                                          </form>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>

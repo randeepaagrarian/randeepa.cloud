@@ -27,76 +27,192 @@
                                         <p class="category"><%= warning_msg %></p>
                                     </div>
                                     <div class="content">
-                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Number</th>
-                                                        <th>Contract ID</th>
-                                                        <th>Amount</th>
-                                                        <th>Amount Paid</th>
-                                                        <th>Due Date</th>
-                                                        <th>Add Payment</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <% installments.forEach(function(installment, i) { %>
-                                                        <% if (installment.overdue == 0 && installment.upcoming == 0) { %>
-                                                            <tr class='success'>
-                                                        <% } else if(installment.overdue == 1 && installment.upcoming == 0) { %>
-                                                            <tr class='warning'>
-                                                        <% } else { %>
+                                        <ul role="tablist" class="nav nav-tabs">
+                                            <li role="presentation" class="active">
+                                                <a href="#payments_info" data-toggle="tab">Payments Info</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#contract_info" data-toggle="tab">Contract Info</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="payments_info" class="tab-pane active">
+                                                    <div class="content">
+                                                            <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>#</th>
+                                                                            <th>Number</th>
+                                                                            <th>Contract ID</th>
+                                                                            <th>Amount</th>
+                                                                            <th>Amount Paid</th>
+                                                                            <th>Due Date</th>
+                                                                            <th>Add Payment</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% installments.forEach(function(installment, i) { %>
+                                                                            <% if (installment.overdue == 0 && installment.upcoming == 0) { %>
+                                                                                <tr class='success'>
+                                                                            <% } else if(installment.overdue == 1 && installment.upcoming == 0) { %>
+                                                                                <tr class='warning'>
+                                                                            <% } else { %>
+                                                                                <tr>
+                                                                            <% } %>
+                                                                                <td> <a href="/hirePurchase/changeInstallment?installmentID=<%= installment.id %>&contractID=<%= contractID %>"><%= installment.id %></a> </td>
+                                                                                <td><%= i + 1 %></td>
+                                                                                <td> <%= installment.contract_id %> </td>
+                                                                                <td> <%= printAmount(installment.amount) %> </td>
+                                                                                <td> <a href="/hirePurchase/viewPayments?installmentID=<%= installment.id %>"><%= printAmount(installment.amount_paid) %></a> </td>
+                                                                                <td> <%= installment.due_date %> </td>
+                                                                                <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
+                                                                            </tr>
+                                                                        <% }) %>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="header">
+                                                            Receipts
+                                                        </div>
+                                                        <div class="content">
+                                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>Receipt ID</th>
+                                                                                <th>Date</th>
+                                                                                <th>Amount</th>
+                                                                                <th>TR Number</th>
+                                                                                <th>TR Book Number</th>
+                                                                                <th>Amount Allocated</th>
+                                                                                <th>To Be Allocated</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <% receipts.forEach(function(installment, i) { %>
+                                                                                <tr>
+                                                                                    <td><%= i + 1 %></td>
+                                                                                    <td> <a href="/hirePurchase/printReceipt?receiptID=<%= installment.receipt_id %>"><%= installment.receipt_id %></a> </td>
+                                                                                    <td> <%= installment.date %> </td>
+                                                                                    <td> <%= printAmount(installment.amount) %> </td>
+                                                                                    <td> <%= installment.tr_number %> </td>
+                                                                                    <td> <%= installment.tr_book_number %> </td>
+                                                                                    <td> <%= printAmount(installment.amount_allocated) %> </td>
+                                                                                    <td><%= installment.to_be_allocated %></td>
+                                                                                </tr>
+                                                                            <% }) %>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                            </div>
+                                            <div id="contract_info" class="tab-pane">
+                                                    <a href="/hirePurchase/edit?contractID=<%= contractInfo[0]['id'] %>"><img src='/img/edit_64.png' style="width: 32px;"></a>
+                                                    <br>
+                                                    <br>
+                                                    <table class="table table-striped">
+                                                        <tbody>
                                                             <tr>
-                                                        <% } %>
-                                                            <td> <a href="/hirePurchase/changeInstallment?installmentID=<%= installment.id %>&contractID=<%= contractID %>"><%= installment.id %></a> </td>
-                                                            <td><%= i + 1 %></td>
-                                                            <td> <%= installment.contract_id %> </td>
-                                                            <td> <%= printAmount(installment.amount) %> </td>
-                                                            <td> <a href="/hirePurchase/viewPayments?installmentID=<%= installment.id %>"><%= printAmount(installment.amount_paid) %></a> </td>
-                                                            <td> <%= installment.due_date %> </td>
-                                                            <td> <a href="/hirePurchase/addPayment?installmentID=<%= installment.id %>">Add</a> </td>
-                                                        </tr>
-                                                    <% }) %>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="header">
-                                        Receipts
-                                    </div>
-                                    <div class="content">
-                                            <div style="max-width: 100%; overflow: auto;" class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Receipt ID</th>
-                                                            <th>Date</th>
-                                                            <th>Amount</th>
-                                                            <th>TR Number</th>
-                                                            <th>TR Book Number</th>
-                                                            <th>Amount Allocated</th>
-                                                            <th>To Be Allocated</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <% receipts.forEach(function(installment, i) { %>
-                                                            <tr>
-                                                                <td><%= i + 1 %></td>
-                                                                <td> <a href="/hirePurchase/printReceipt?receiptID=<%= installment.receipt_id %>"><%= installment.receipt_id %></a> </td>
-                                                                <td> <%= installment.date %> </td>
-                                                                <td> <%= printAmount(installment.amount) %> </td>
-                                                                <td> <%= installment.tr_number %> </td>
-                                                                <td> <%= installment.tr_book_number %> </td>
-                                                                <td> <%= printAmount(installment.amount_allocated) %> </td>
-                                                                <td><%= installment.to_be_allocated %></td>
+                                                                <td><b>Contract ID</b></td>
+                                                                <td><b><%= contractInfo[0]['id'] %></b></td>
                                                             </tr>
-                                                        <% }) %>
-                                                    </tbody>
-                                                </table>
+                                                            <tr>
+                                                                <td>ID 1</td>
+                                                                <td><%= contractInfo[0]['id_1'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>ID 2</td>
+                                                                <td><%= contractInfo[0]['id_2'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Cloud ID</td>
+                                                                <td><a target='_blank' href="/sale/cloudIDInfo?cloudID=<%= contractInfo[0]['sale_id'] %>"><%= contractInfo[0]['sale_id'] %></a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Amount Pending</b></td>
+                                                                <% if(contractInfo[0]['amount_pending'] > 0) { %>
+                                                                    <td><b><font color='red'><%= printAmount(contractInfo[0]['amount_pending']) %></font></b></td>
+                                                                <% } else { %>
+                                                                    <td><b><font color='green'><%= printAmount(contractInfo[0]['amount_pending']) %></font></b></td>
+                                                                <% } %>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Contract Amount</td>
+                                                                <td><%= printAmount(contractInfo[0]['contract_amount']) %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Paid Amount</td>
+                                                                <td><%= printAmount(contractInfo[0]['paid_amount']) %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>To Be Collected</td>
+                                                                <td><%= printAmount(contractInfo[0]['to_be_collected']) %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Finishes In</td>
+                                                                <td><%= contractInfo[0]['contract_finishes_in'] %> Days</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Model</td>
+                                                                <td><%= contractInfo[0]['model_name'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Batch Name</td>
+                                                                <td><%= contractInfo[0]['batch_name'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Recovery Officer</td>
+                                                                <td><%= contractInfo[0]['recovery_officer'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Start Date</td>
+                                                                <td><%= contractInfo[0]['contract_start_date'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Customer Name</td>
+                                                                <td><%= contractInfo[0]['customer_name'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Customer Address</td>
+                                                                <td><%= contractInfo[0]['customer_address'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Customer Contact</td>
+                                                                <td><%= contractInfo[0]['customer_contact'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 1 Name</td>
+                                                                <td><%= contractInfo[0]['guarantor1_name'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 1 Address</td>
+                                                                <td><%= contractInfo[0]['guarantor1_address'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 1 Contact</td>
+                                                                <td><%= contractInfo[0]['guarantor1_contact'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 2 Name</td>
+                                                                <td><%= contractInfo[0]['guarantor2_name'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 2 Address</td>
+                                                                <td><%= contractInfo[0]['guarantor2_address'] %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Guarantor 2 Contact</td>
+                                                                <td><%= contractInfo[0]['guarantor2_contact'] %></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
 
