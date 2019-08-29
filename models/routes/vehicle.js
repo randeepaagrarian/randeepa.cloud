@@ -16,7 +16,6 @@ Vehicle.monthlyRoutes = function(vehicleid, year, month, callback) {
         }
         connection.query('SELECT id, vehicle_number, DATE_FORMAT(route_start_time, \'%Y-%m-%d\') AS route_start_time, DATE_FORMAT(route_end_time, \'%Y-%m-%d %H:%i:%S\') AS route_end_time, start_meter, end_meter, start_location, end_location, DATE_FORMAT(sys_time, \'%Y-%m-%d %H:%i:%S\') AS sys_time, (end_meter - start_meter) AS mileage FROM route WHERE vehicle_number = ? AND route_start_time BETWEEN ? AND ? ORDER BY route_start_time;', [vehicleid, firstDate, secondDate], function(err, rows, fields) {
             connection.release()
-            console.log(this.sql)
             if(err) {
                 return callback(err, null)
             }
