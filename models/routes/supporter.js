@@ -59,7 +59,7 @@ Supporter.calculateSummary = function(year, month, routes, callback) {
     var total = 0
     var routeItems = routes.length
     for(var i = 0; i < routeItems; i++) {
-        total = total + routes[i]['mileage']
+        total = total + parseInt(routes[i]['mileage'])
     }
 
     if(!(year < 2018) && (year >= 2018 && month > 4)) {

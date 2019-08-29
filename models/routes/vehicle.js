@@ -26,10 +26,10 @@ Vehicle.monthlyRoutes = function(vehicleid, year, month, callback) {
 
 Vehicle.calculateSummary = function(routes, callback) {
     err = null
-    var total = 0
-    var routeItems = routes.length
-    for(var i = 0; i < routeItems; i++) {
-        total = total + routes[i]['mileage']
+    let total = 0
+    let routeItems = routes.length
+    for(let i = 0; i < routeItems; i++) {
+        total = total + parseInt(routes[i]['mileage'])
     }
 
     const summary = {
