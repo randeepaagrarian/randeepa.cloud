@@ -106,9 +106,20 @@ router.get('/contracts', function(req, res) {
             title: 'All Contracts',
             navbar: 'Hire Purchase',
             contracts: data[0],
+            url: req.url,
             results: data[0].length,
             user: req.user
         })
+    })
+})
+
+router.get('/excel/contracts', function(req, res) {
+    async.series([
+        function(callback) {
+            HirePurchase.allContracts(callback)
+        }
+    ], function(err, data) {
+        res.xls('All Contracts.xlsx', data[0])
     })
 })
 
@@ -288,9 +299,22 @@ router.get('/contractsByBatch', function(req, res) {
             title: 'Contracts by Batch',
             navbar: 'Hire Purchase',
             contracts: data[0],
+            url: req.url,
             results: data[0].length,
             user: req.user
         })
+    })
+})
+
+router.get('/excel/contractsByBatch', function(req, res) {
+    const batchID = req.query.batch;
+
+    async.series([
+        function(callback) {
+            HirePurchase.allContractsByBatch(batchID, callback)
+        }
+    ], function(err, data) {
+        res.xls('Contracts By Batch.xlsx', data[0])
     })
 })
 
@@ -326,9 +350,37 @@ router.get('/contractsAsAt', function(req, res) {
                 title,
                 navbar: 'Hire Purchase',
                 contracts: data[0],
+                url: req.url,
                 results: data[0].length,
                 user: req.user
             })
+        })
+    }
+})
+
+router.get('/excel/contractsAsAt', function(req, res) {
+    const date = req.query.date
+    const batch = req.query.batch
+
+    if(batch == -1) {
+        const title = 'All Contracts As At ' + date
+
+        async.series([
+            function(callback) {
+                HirePurchase.allContractsAsAt(date, callback)
+            }
+        ], function(err, data) {
+            res.xls(title + '.xlsx', data[0])
+        })
+    } else {
+        const title = 'Contracts As At ' + date
+
+        async.series([
+            function(callback) {
+                HirePurchase.allContractsAsAtByBatch(date, batch, callback)
+            }
+        ], function(err, data) {
+            res.xls(title + 'xlsx', data[0])
         })
     }
 })
