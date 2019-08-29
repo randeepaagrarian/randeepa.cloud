@@ -334,6 +334,7 @@ router.get('/contractsAsAt', function(req, res) {
                 title,
                 navbar: 'Hire Purchase',
                 contracts: data[0],
+                url: req.url,
                 results: data[0].length,
                 user: req.user
             })
