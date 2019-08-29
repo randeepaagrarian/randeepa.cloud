@@ -56,10 +56,10 @@ Driver.monthlyRoutes = function(driver_id, year, month, callback) {
 
 Driver.calculateSummary = function(year, month, routes, callback) {
     err = null
-    var total = 0
-    var routeItems = routes.length
-    for(var i = 0; i < routeItems; i++) {
-        total = total + routes[i]['mileage']
+    let total = 0
+    let routeItems = routes.length
+    for(let i = 0; i < routeItems; i++) {
+        total = total + parseInt(routes[i]['mileage'])
     }
 
     if(!(year < 2018) && (year >= 2018 && month > 4)) {
