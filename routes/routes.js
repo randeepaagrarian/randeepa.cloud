@@ -279,7 +279,6 @@ router.get('/monthly-routes/vehicle', function(req, res) {
                 Vehicle.calculateSummary(details[0], callback)
             }
         ], function(err, summary) {
-            console.log(summary[0])
             res.render('routes/monthly_routes/vehicle', {
                 title: 'Monthly Routes',
                 routes: details[0],
