@@ -461,3 +461,48 @@ HirePurchase.edit = function(contractID, newContract, user, datetime, callback) 
       })
     })
   }
+
+HirePurchase.pendingInstallments = function(date, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id_1, C.id_2, CI.contract_id, CI.id, CI.amount, CI.due_date, DATEDIFF(CI.due_date, NOW()) as due_for, COALESCE(SUM(CIP.amount), 0) as amount_paid, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, C.customer_name, C.customer_address, C.customer_contact FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id LEFT JOIN contract C ON C.id = CI.contract_id LEFT JOIN model M on C.model_id = M.id LEFT JOIN contract_batch CB on C.contract_batch_id = CB.id LEFT JOIN user U on C.recovery_officer = U.username WHERE CI.due_date < ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date HAVING CI.amount > COALESCE(SUM(CIP.amount), 0)', date, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.pendingInstallmentsArrears = function(date, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id_1, C.id_2, CI.contract_id, CI.id, CI.amount, CI.due_date, DATEDIFF(CI.due_date, NOW()) as due_for, COALESCE(SUM(CIP.amount), 0) as amount_paid, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, C.customer_name, C.customer_address, C.customer_contact FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id LEFT JOIN contract C ON C.id = CI.contract_id LEFT JOIN model M on C.model_id = M.id LEFT JOIN contract_batch CB on C.contract_batch_id = CB.id LEFT JOIN user U on C.recovery_officer = U.username WHERE CI.due_date < ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date HAVING CI.amount > COALESCE(SUM(CIP.amount), 0) AND DATEDIFF(CI.due_date, NOW()) < 0', date, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.pendingInstallmentsUpcoming = function(date, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id_1, C.id_2, CI.contract_id, CI.id, CI.amount, CI.due_date, DATEDIFF(CI.due_date, NOW()) as due_for, COALESCE(SUM(CIP.amount), 0) as amount_paid, M.name as model_name, CB.name as batch_name, U.name as recovery_officer, C.customer_name, C.customer_address, C.customer_contact FROM contract_installment CI LEFT JOIN contract_installment_payment CIP ON CI.id = CIP.contract_installment_id LEFT JOIN contract C ON C.id = CI.contract_id LEFT JOIN model M on C.model_id = M.id LEFT JOIN contract_batch CB on C.contract_batch_id = CB.id LEFT JOIN user U on C.recovery_officer = U.username WHERE CI.due_date < ? GROUP BY CI.id, CI.contract_id, CI.amount, CI.due_date HAVING CI.amount > COALESCE(SUM(CIP.amount), 0) AND DATEDIFF(CI.due_date, NOW()) > 0', date, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}

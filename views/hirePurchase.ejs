@@ -87,6 +87,31 @@
                                                         </table>
                                                     </form>
                                                 </div>
+                                                <div class="col-md-6">
+                                                    <p class="title">Pending Installments As At</p>
+                                                    <form action="/hirePurchase/pendingInstallments">
+                                                        <table>
+                                                            <tr>
+                                                                <td>Filter</td>
+                                                                <td>
+                                                                    <select class="form-control" name="filter">
+                                                                        <option value="-1">All</option>
+                                                                        <option value="1">Arrears Only</option>
+                                                                        <option value="2">Upcoming Installments Only</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Date: &nbsp;&nbsp;</td>
+                                                                <td><input type="text" name="date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td><input class="btn sumit" type='submit' value='Submit'></td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                </div>
                                             </div>
                                             </div>
                                         </div>

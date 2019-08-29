@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <% printAmount = function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> installments</p>
+                                        <a class="category" href="/hirePurchase/excel<%= url %>"><u>Download Excel</u></a>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID 1</th>
+                                                        <th>ID 2</th>
+                                                        <th>Contract ID</th>
+                                                        <th>Installment ID</th>
+                                                        <th>Amount</th>
+                                                        <th>Due Date</th>
+                                                        <th>Due For</th>
+                                                        <th>Amount Paid</th>
+                                                        <th>Model</th>
+                                                        <th>Batch Name</th>
+                                                        <th>Recovery Officer</th>
+                                                        <th>Customer Name</th>
+                                                        <th>Customer Address</th>
+                                                        <th>Customer Contact</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% installments.forEach(function(installment) { %>
+                                                            <td><%= installment.id_1 %></td>
+                                                            <td> <%= installment.id_2 %> </td>
+                                                            <td> <%= installment.contract_id %> </td>
+                                                            <td> <%= installment.id %> </td>
+                                                            <td> <%= installment.amount %> </td>
+                                                            <td> <%= installment.due_date %> </td>
+                                                            <% if(installment.due_for > 0) { %>
+                                                                <td> <font color='green'><%= installment.due_for %> Days</font> </td>
+                                                            <% } else { %>
+                                                                <td> <font color='red'><%= installment.due_for %> Days</font> </td>
+                                                            <% } %>
+                                                            <td> <%= installment.amount_paid %> </td>
+                                                            <td> <%= installment.model_name %> </td>
+                                                            <td> <%= installment.batch_name %> </td>
+                                                            <td> <%= installment.recovery_officer %> </td>
+                                                            <td> <%= installment.customer_name %> </td>
+                                                            <td> <%= installment.customer_address %> </td>
+                                                            <td> <%= installment.customer_contact %> </td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
