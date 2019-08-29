@@ -380,7 +380,7 @@ router.get('/excel/contractsAsAt', function(req, res) {
                 HirePurchase.allContractsAsAtByBatch(date, batch, callback)
             }
         ], function(err, data) {
-            res.xls(title + 'xlsx', data[0])
+            res.xls(title + '.xlsx', data[0])
         })
     }
 })
