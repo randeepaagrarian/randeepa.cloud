@@ -123,7 +123,7 @@ router.get('/contractInfo', function(req, res) {
         }
     ], function(err, data) {
         res.render('hirePurchase/contractInfo', {
-            title: 'Contract Installments',
+            title: 'Contract Details',
             navbar: 'Hire Purchase',
             contractID: req.query.contractID,
             installments: data[0],
@@ -468,6 +468,89 @@ router.post('/edit/:contractID', function(req, res) {
             return
         }
     })
+})
+
+router.get('/pendingInstallments', function(req, res) {
+    const title = 'Pending Installments As At ' + req.query.date
+    if(req.query.filter == -1) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallments(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.render('hirePurchase/pendingInstallments', {
+                title,
+                navbar: 'Hire Purchase',
+                installments: data[0],
+                url: req.url,
+                results: data[0].length,
+                user: req.user
+            })
+        })
+    } else if(req.query.filter == 1) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallmentsArrears(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.render('hirePurchase/pendingInstallments', {
+                title,
+                navbar: 'Hire Purchase',
+                installments: data[0],
+                url: req.url,
+                results: data[0].length,
+                user: req.user
+            })
+        })
+    } else if(req.query.filter == 2) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallmentsUpcoming(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.render('hirePurchase/pendingInstallments', {
+                title,
+                navbar: 'Hire Purchase',
+                installments: data[0],
+                url: req.url,
+                results: data[0].length,
+                user: req.user
+            })
+        })
+    } else {
+        res.send('Error')
+    }
+})
+
+router.get('/excel/pendingInstallments', function(req, res) {
+    const title = 'Pending Installments As At ' + req.query.date
+    if(req.query.filter == -1) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallments(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.xls(title + '.xlsx', data[0])
+        })
+    } else if(req.query.filter == 1) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallmentsArrears(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.xls(title + '.xlsx', data[0])
+        })
+    } else if(req.query.filter == 2) {
+        async.series([
+            function(callback) {
+                HirePurchase.pendingInstallmentsUpcoming(req.query.date, callback)
+            }
+        ], function(err, data) {
+            res.xls(title + '.xlsx', data[0])
+        })
+    } else {
+        res.send('Error')
+    }
 })
 
 module.exports = router
