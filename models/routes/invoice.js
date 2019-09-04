@@ -107,7 +107,7 @@ Invoice.getSummary = function(routes, callback) {
     err = null
     var total = 0
     for(i = 0; i < routes.length; i++) {
-        total = total + routes[i]['route_cost']
+        total = total + parseInt(routes[i]['route_cost'])
     }
     callback(err, {total: total})
 }
