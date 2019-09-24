@@ -34,6 +34,9 @@
                                             <li role="presentation">
                                                 <a href="#contract_info" data-toggle="tab">Contract Info</a>
                                             </li>
+                                            <li role="presentation">
+                                                <a href="#contract_comments" data-toggle="tab">Comments</a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -211,6 +214,63 @@
                                                         </tbody>
                                                     </table>
                                             </div>
+                                            <div id="contract_comments" class="tab-pane">
+                                                <p class="category"><font color='red'><%= warning_msg %></font></p>
+                                                <form action="/hirePurchase/addComment/<%= contractInfo[0]['id'] %>" method="post" enctype="multipart/form-data">
+                                                    <h4 style="margin-top: 0px;">Add comment</h4>
+                                                    <div class="form-group">
+                                                      <textarea class="form-control" rows="4" columns="50" name="comment" placeholder="Comment"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <table>
+                                                        <tr>
+                                                          <td>Installment &nbsp;</td>
+                                                          <td>
+                                                              <select name='installment' class="form-control">
+                                                                <option value='-1'>None</option>
+                                                                <% installments.forEach(function(installment, i) { %>
+                                                                    <option value='<%= installment.id %>'><%= installment.id %></option>
+                                                                <% }) %>
+                                                              </select>
+                                                          </td>
+                                                        </tr>
+                                                        <tr>
+                                                          <td>Commitment &nbsp;</td>
+                                                          <td>
+                                                              <select name='commitment' class="form-control">
+                                                                <option value="1">Yes</option>
+                                                                <option value="0">No</option>
+                                                              </select>
+                                                          </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Date &nbsp;</td>
+                                                            <td><input type="text" name="due_date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                                        </tr>
+                                                      </table>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <input class="btn btn-default" type="submit" value="Comment">
+                                                    </div>
+                                                  </form>
+                                                  <% comments.forEach(function(comment) { %>
+                                                      <% if(comment.commitment == 1) { %>
+                                                        <% if(comment.fulfilled == 1) { %>
+                                                            <font color='green'><p>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
+                                                            <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                            <p><%= comment.text %></p></font>
+                                                        <% } else { %>
+                                                            <font color='blue'><p>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b> expires in <font color='red'><%= comment.expires %></font> days <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>"><b>Fulfill</b></a></p>
+                                                            <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                            <p><%= comment.text %></p></font>
+                                                        <% } %>
+                                                      <% } else { %>
+                                                        <p>Comment added by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
+                                                        <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                        <p><%= comment.text %></p>
+                                                      <% } %>
+                                                  <% }) %>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -228,4 +288,20 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
+    <script type="text/javascript">
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    </script>
 </html>
