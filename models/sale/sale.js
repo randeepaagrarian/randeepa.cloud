@@ -649,3 +649,33 @@ Sale.incompleteSalesExHP = function(startDate, endDate, callback) {
         })
     })
 }
+
+Sale.addWatch = function(watch, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('INSERT INTO sale_watch SET ?', watch, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}
+
+Sale.getWatches = function(cloudID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT sale_watch.id, content, DATE_FORMAT(due_date, \'%Y-%m-%d\') due_date, U.name, DATEDIFF(NOW(), due_date) as expires FROM sale_watch LEFT JOIN user U on U.username = user WHERE closed = 0 AND sale_watch.sale_id = ?;', cloudID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+      })
+}

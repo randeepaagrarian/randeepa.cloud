@@ -349,6 +349,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       Sale.getComments(req.query.cloudID, callback)
     }, function(callback) {
       Sale.saleCompletedTypes(callback)
+    }, function(callback) {
+      Sale.getWatches(req.query.cloudID, callback)
     }
   ], function(err, details) {
     res.render('sale/cloudIDInfo', {
@@ -357,7 +359,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       user: req.user,
       sales: details[0],
       comments: details[1],
-      saleCompletedTypes: details[2]
+      saleCompletedTypes: details[2],
+      watches: details[3]
     })
   })
 })
@@ -1066,5 +1069,33 @@ router.get('/excel/year/officer/sysdate', function(req, res) {
         res.xls('Officer '+req.query.officer+ ' ' +req.query.year + ' Sys.xlsx', details[0])
     })
 })
+
+router.post('/addWatch/:saleID', (req, res) => {
+  const { content, due_date } = req.body;
+  const { saleID } = req.params;
+
+  const sale_watch = {
+    sale_id: saleID,
+    content,
+    due_date,
+    user: req.user.username
+  }
+
+  async.series([
+    function(callback) {
+      Sale.addWatch(sale_watch, callback)
+    }
+  ], function(err, data) {
+    const watchAdded = data[0]
+
+    if(watchAdded) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + saleID)
+    } else {
+      console.log(err)
+      req.flash('warning_msg', 'Failed to add watch')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + saleID)
+    }
+  })
+});
 
 module.exports = router

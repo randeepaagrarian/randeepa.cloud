@@ -138,6 +138,9 @@
                                     <li>
                                         <a href="#commission" data-toggle="tab">Commissions</a>
                                     </li>
+                                    <li>
+                                      <a href="#sales_watch" data-toggle="tab">Sales Watch</a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -265,16 +268,64 @@
                                       </table>
                                     <% } %>
                                   </div>
+                                  <div id="sales_watch" class="tab-pane">
+                                    <form action="/sale/addWatch/<%= sales[0]['id'] %>" method="post">
+                                      <h4 style="margin-top: 0px;">Add Sale Watch</h4>
+                                      <div class="form-group">
+                                        <table>
+                                          <tr>
+                                            <td>Details</td>
+                                            <td width="100%"><textarea class="form-control" rows="4" columns="50" name="content" placeholder="Details"></textarea></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Date</td>
+                                            <td><input type="text" name="due_date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                          </tr>
+                                        </table>
+                                      </div>
+                                      <div class="form-group">
+                                        <input class="btn btn-default" type="submit" value="Add Watch">
+                                      </div>
+                                    </form>
+                                  </div>
                                 </div>
 
-                                <% comments.forEach(function(comment) { %>
-                                  <% if(comment.attachment) { %>
-                                    <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b> &nbsp;&nbsp; <a href="javascript:window.open('<%= comment.attachment %>','mypopuptitle','width=900,height=900')"><font color='green'><b>Show Attachment</b></font></a></p>
-                                  <% } else { %>
-                                    <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
-                                  <% } %>
-                                  <p><font color='blue'><%= comment.text %></font></p>
-                                <% }) %>
+                                <ul role="tablist" class="nav nav-tabs">
+                                  <li role="presentation" class="active">
+                                      <a href="#comments" data-toggle="tab">Comments</a>
+                                  </li>
+                                  <li>
+                                      <a href="#watches" data-toggle="tab">Watches</a>
+                                  </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                  <div id="comments" class="tab-pane active">
+                                      <% comments.forEach(function(comment) { %>
+                                        <% if(comment.attachment) { %>
+                                          <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b> &nbsp;&nbsp; <a href="javascript:window.open('<%= comment.attachment %>','mypopuptitle','width=900,height=900')"><font color='green'><b>Show Attachment</b></font></a></p>
+                                        <% } else { %>
+                                          <p><b><%= comment.name %></b> commented on <b><%= comment.date %></b></p>
+                                        <% } %>
+                                        <p><font color='blue'><%= comment.text %></font></p>
+                                      <% }) %>
+                                  </div>
+                                  <div id="watches" class="tab-pane">
+                                      <% watches.forEach(function(watch) { %>
+                                        <% if(watch.expires < 0) { %>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires in <font color='green'><b><%= Math.abs(watch.expires) %> days</b></font></p>
+                                          <p><font color='blue'><%= watch.content %></font></p>
+                                        <% } else if (watch.expires > 0) { %>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expired <font color='red'><b><%= Math.abs(watch.expires) %> days ago</b></font></p>
+                                          <p><font color='blue'><%= watch.content %></font></p>
+                                        <% } else { %>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires <font color='blue'><b>today</b></font></p>
+                                          <p><font color='blue'><%= watch.content %></font></p>
+                                        <% } %>
+                                        
+                                      <% }) %>
+                                    </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -290,4 +341,20 @@
         </div>
     </body>
     <% include ../layouts/pro/includes %>
+    <script type="text/javascript">
+      $('.datetimepicker').datetimepicker({
+          format: 'YYYY-MM-DD',
+          icons: {
+              time: "fa fa-clock-o",
+              date: "fa fa-calendar",
+              up: "fa fa-chevron-up",
+              down: "fa fa-chevron-down",
+              previous: 'fa fa-chevron-left',
+              next: 'fa fa-chevron-right',
+              today: 'fa fa-screenshot',
+              clear: 'fa fa-trash',
+              close: 'fa fa-remove'
+          }
+      });
+  </script>
 </html>
