@@ -506,3 +506,48 @@ HirePurchase.pendingInstallmentsUpcoming = function(date, callback) {
         })
     })
 }
+
+HirePurchase.addComment = function(comment, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('INSERT INTO contract_comment SET ?', comment, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}
+
+HirePurchase.getComments = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT CC.id, CC.installment_id, U.name as user, CC.date, CC.text, CC.commitment, CC.fulfilled, DATEDIFF(CC.due_date, NOW()) as expires FROM contract_comment CC LEFT JOIN user U ON CC.username = U.username WHERE CC.contract_id = ? ORDER BY CC.date DESC;', contractID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+HirePurchase.fulfill = function(commentID, username, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE contract_comment SET fulfilled = 1 WHERE id = ?;', [commentID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}

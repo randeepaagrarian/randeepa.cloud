@@ -131,6 +131,8 @@ router.get('/contractInfo', function(req, res) {
             HirePurchase.receipts(req.query.contractID, callback)
         }, function(callback) {
             HirePurchase.getContractInfo(req.query.contractID, callback)
+        }, function(callback) {
+            HirePurchase.getComments(req.query.contractID, callback)
         }
     ], function(err, data) {
         res.render('hirePurchase/contractInfo', {
@@ -140,7 +142,8 @@ router.get('/contractInfo', function(req, res) {
             installments: data[0],
             receipts: data[1],
             user: req.user,
-            contractInfo: data[2]
+            contractInfo: data[2],
+            comments: data[3]
         })
     })
 })
@@ -604,6 +607,56 @@ router.get('/excel/pendingInstallments', function(req, res) {
     } else {
         res.send('Error')
     }
+})
+
+router.post('/addComment/:contractID', multipart, (req, res) => {
+    const { contractID } = req.params;
+    const { comment, installment, commitment, due_date } = req.body;
+    if(comment == '') {
+        req.flash('warning_msg', 'Please enter a comment');
+        res.redirect('/hirePurchase/contractInfo?contractID=' + contractID)
+        return
+    }
+    const contractComment = {
+        contract_id: contractID,
+        installment_id: installment == -1 ? null : installment,
+        username: req.user.username,
+        date: MDate.getDateTime(),
+        text: comment,
+        commitment,
+        due_date: commitment == 1 ? due_date : null
+    }
+    async.series([
+        function(callback) {
+            HirePurchase.addComment(contractComment, callback)
+        }
+    ], function(err, added) {
+        if(added) {
+            res.redirect('/hirePurchase/contractInfo?contractID=' + contractID)
+            return
+        } else {
+            req.flash('warning_msg', 'Failed to add comment ' + err.code);
+            res.redirect('/hirePurchase/contractInfo?contractID=' + contractID)
+            return
+        }
+    })
+})
+
+router.get('/fulfill/:contractID/:commentID', (req, res) => {
+    async.series([
+        function(callback) {
+          HirePurchase.fulfill(req.params.commentID, req.user.username, callback)
+        }
+      ], function(err, fulfilled) {
+        if(fulfilled) {
+            res.redirect('/hirePurchase/contractInfo?contractID=' + req.params.contractID)
+            return
+        } else {
+            req.flash('warning_msg', 'Failed to fulfill commitment ' + err.code);
+            res.redirect('/hirePurchase/contractInfo?contractID=' + req.params.contractID)
+            return
+        }
+      })
 })
 
 module.exports = router
