@@ -1091,11 +1091,25 @@ router.post('/addWatch/:saleID', (req, res) => {
     if(watchAdded) {
       res.redirect('/sale/cloudIDInfo?cloudID=' + saleID)
     } else {
-      console.log(err)
       req.flash('warning_msg', 'Failed to add watch')
       res.redirect('/sale/cloudIDInfo?cloudID=' + saleID)
     }
   })
 });
+
+router.get('/closeWatch/:saleID/:watchID', (req, res) => {
+  async.series([
+    function(callback) {
+      Sale.closeWatch(req.params.watchID, req.user.username, callback)
+    }
+  ], function(err, closed) {
+    if(closed) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.saleID)
+    } else {
+      req.flash('warning_msg', 'Failed to close watch')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.saleID)
+    }
+  })
+})
 
 module.exports = router

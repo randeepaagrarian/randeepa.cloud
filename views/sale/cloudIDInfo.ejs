@@ -313,13 +313,13 @@
                                   <div id="watches" class="tab-pane">
                                       <% watches.forEach(function(watch) { %>
                                         <% if(watch.expires < 0) { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires in <font color='green'><b><%= Math.abs(watch.expires) %> days</b></font></p>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires in <font color='green'><b><%= Math.abs(watch.expires) %> days <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
                                           <p><font color='blue'><%= watch.content %></font></p>
                                         <% } else if (watch.expires > 0) { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expired <font color='red'><b><%= Math.abs(watch.expires) %> days ago</b></font></p>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expired <font color='red'><b><%= Math.abs(watch.expires) %> days ago <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
                                           <p><font color='blue'><%= watch.content %></font></p>
                                         <% } else { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires <font color='blue'><b>today</b></font></p>
+                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires <font color='blue'><b>today <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
                                           <p><font color='blue'><%= watch.content %></font></p>
                                         <% } %>
                                         

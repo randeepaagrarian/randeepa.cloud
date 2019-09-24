@@ -679,3 +679,18 @@ Sale.getWatches = function(cloudID, callback) {
         })
       })
 }
+
+Sale.closeWatch = function(watchID, username, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE sale_watch SET closed = 1 WHERE id = ? AND user = ?', [watchID, username], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}
