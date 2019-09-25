@@ -1070,7 +1070,7 @@ router.get('/excel/year/officer/sysdate', function(req, res) {
     })
 })
 
-router.post('/addWatch/:saleID', (req, res) => {
+router.post('/addWatch/:saleID', multipart, (req, res) => {
   const { content, due_date } = req.body;
   const { saleID } = req.params;
 
