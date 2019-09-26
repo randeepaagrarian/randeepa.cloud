@@ -642,10 +642,16 @@ router.post('/addComment/:contractID', multipart, (req, res) => {
     })
 })
 
-router.get('/fulfill/:contractID/:commentID', (req, res) => {
+router.get('/fulfill/:contractID/:commentID/:type', (req, res) => {
+
+    const fulfillType = {
+        fulfilled: 1,
+        fulfilled_type: req.params.type
+    }
+
     async.series([
         function(callback) {
-          HirePurchase.fulfill(req.params.commentID, req.user.username, callback)
+          HirePurchase.fulfill(fulfillType, req.params.commentID, req.user.username, callback)
         }
       ], function(err, fulfilled) {
         if(fulfilled) {
