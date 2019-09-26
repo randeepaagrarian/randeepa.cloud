@@ -527,7 +527,7 @@ HirePurchase.getComments = function(contractID, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT CC.id, CC.installment_id, U.name as user, CC.date, CC.text, CC.commitment, CC.fulfilled, DATEDIFF(CC.due_date, NOW()) as expires FROM contract_comment CC LEFT JOIN user U ON CC.username = U.username WHERE CC.contract_id = ? ORDER BY CC.date DESC;', contractID, function(err, rows, fields) {
+        connection.query('SELECT CC.id, CC.installment_id, U.name as user, CC.date, CC.text, CC.commitment, CC.fulfilled, DATEDIFF(CC.due_date, NOW()) as expires, CC.fulfilled_type FROM contract_comment CC LEFT JOIN user U ON CC.username = U.username WHERE CC.contract_id = ? ORDER BY CC.date DESC;', contractID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -537,12 +537,12 @@ HirePurchase.getComments = function(contractID, callback) {
     })
 }
 
-HirePurchase.fulfill = function(commentID, username, callback) {
+HirePurchase.fulfill = function(fulfillType, commentID, username, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('UPDATE contract_comment SET fulfilled = 1 WHERE id = ?;', [commentID], function(err, rows, fields) {
+        connection.query('UPDATE contract_comment SET ? WHERE id = ?;', [fulfillType, commentID], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, false)
