@@ -6,7 +6,7 @@ Sales.topRegionsByMonth = function(year, month, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT COUNT(*) AS sales, region, name FROM sale LEFT JOIN region ON sale.region = region.id WHERE YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY region, name ORDER BY sales DESC LIMIT 4;', [year, month], function(err, rows, fields) {
+        connection.query('SELECT COUNT(*) AS sales, region, name FROM sale LEFT JOIN region ON sale.region = region.id WHERE deleted = 0 AND YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY region, name ORDER BY sales DESC LIMIT 4;', [year, month], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -21,7 +21,7 @@ Sales.topOfficersByMonth = function(year, month, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT COUNT(*) AS sales, officer, user.name, sale.region, region.name AS region_name FROM sale LEFT JOIN user ON sale.officer = user.username LEFT JOIN region ON sale.region = region.id WHERE YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY officer, user.name, region, region.name ORDER BY sales DESC LIMIT 5;', [year, month], function(err, rows, fields) {
+        connection.query('SELECT COUNT(*) AS sales, officer, user.name, sale.region, region.name AS region_name FROM sale LEFT JOIN user ON sale.officer = user.username LEFT JOIN region ON sale.region = region.id WHERE deleted = 0 AND YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY officer, user.name, region, region.name ORDER BY sales DESC LIMIT 5;', [year, month], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -36,7 +36,7 @@ Sales.byModelMonth = function(year, month, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT COUNT(*) AS sales, name FROM sale LEFT JOIN model ON sale.model = model.id WHERE YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY model ORDER BY sales DESC;', [year, month], function(err, rows, fields) {
+        connection.query('SELECT COUNT(*) AS sales, name FROM sale LEFT JOIN model ON sale.model = model.id WHERE deleted = 0 AND YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY model ORDER BY sales DESC;', [year, month], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -51,7 +51,7 @@ Sales.byOfficerMonth = function(year, month, callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT COUNT(*) AS sales, officer, user.name, sale.region, region.name AS region_name FROM sale LEFT JOIN user ON sale.officer = user.username LEFT JOIN region ON sale.region = region.id WHERE YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY officer, user.name, region, region.name ORDER BY sales DESC;', [year, month], function(err, rows, fields) {
+        connection.query('SELECT COUNT(*) AS sales, officer, user.name, sale.region, region.name AS region_name FROM sale LEFT JOIN user ON sale.officer = user.username LEFT JOIN region ON sale.region = region.id WHERE deleted = 0 AND  YEAR(sys_date) = ? AND MONTH(sys_date) = ? GROUP BY officer, user.name, region, region.name ORDER BY sales DESC;', [year, month], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -66,7 +66,7 @@ Sales.lastYear = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -81,7 +81,7 @@ Sales.lastYearCentral = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 20) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0 AND  region = 20) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -96,7 +96,7 @@ Sales.lastYearRajarata = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 21) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0 AND  region = 21) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -111,7 +111,7 @@ Sales.lastYearNorthWest = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 22) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0 AND  region = 22) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -126,7 +126,7 @@ Sales.lastYearRuhuna = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 23) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0 AND region = 23) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -141,7 +141,7 @@ Sales.lastYearIndustrial = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE region = 24) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year FROM sale WHERE deleted = 0 AND region = 24) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -156,7 +156,7 @@ Sales.lastYearNorth = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 25) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, COUNT(sales.id) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND region = 25) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -171,7 +171,7 @@ Sales.lastYearByRevenue = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -186,7 +186,7 @@ Sales.lastYearByRevenueCentral = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 20) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND region = 20) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -201,7 +201,7 @@ Sales.lastYearByRevenueRajarata = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 21) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND region = 21) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -216,7 +216,7 @@ Sales.lastYearByRevenueNorthWest = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 22) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND  region = 22) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -231,7 +231,7 @@ Sales.lastYearByRevenueRuhuna = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 23) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND  region = 23) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -246,7 +246,7 @@ Sales.lastYearByRevenueIndustrial = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 24) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND  region = 24) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -261,7 +261,7 @@ Sales.lastYearByRevenueNorth = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE region = 25) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
+        connection.query('CALL Calendar(); SELECT CAL.month, CAL.year, SUM(sales.price) as sales FROM CAL LEFT JOIN ( SELECT id, MONTH(sys_date) AS month, YEAR(sys_date) as year, price FROM sale WHERE deleted = 0 AND  region = 25) sales ON sales.month = CAL.month AND sales.year = CAL.year GROUP BY month, year ORDER BY year ASC, month ASC',  function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
