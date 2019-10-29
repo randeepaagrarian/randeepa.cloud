@@ -397,13 +397,16 @@ router.get('/hirePurchase', Auth.signedIn, Auth.validHirePurchaseUser, function(
 			Service.getTechnicians(callback)
 		}, function(callback) {
 			HirePurchase.getBatches(callback)
+		}, function(callback) {
+			HirePurchase.getRecoveryOfficers(callback)
 		}
 	], function(err, data) {
 		res.render('hirePurchase', {
 			title: 'Hire Purchase',
 			navbar: 'Hire Purchase',
 			user: req.user,
-			batches: data[1]
+			batches: data[1],
+			recoveryOfficers: data[2]
 		})
 	})
 })
