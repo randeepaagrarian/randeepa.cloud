@@ -62,6 +62,27 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <p class="title">Filter by Recovery Officer</p>
+                                                    <form method="get" action="/hirePurchase/contractsByRecoveryOfficer">
+                                                        <table>
+                                                            <tr>
+                                                                <td>Batch: &nbsp;&nbsp;</td>
+                                                                <td>
+                                                                    <select class="form-control" name="officer">
+                                                                        <% recoveryOfficers.forEach(function(model) { %>
+                                                                            <option value="<%= model.id %>"><%= model.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td><input class="btn sumit" type='submit' value='Filter'></td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <p class="title">Contracts As At</p>
                                                     <form action="/hirePurchase/contractsAsAt">
                                                         <table>

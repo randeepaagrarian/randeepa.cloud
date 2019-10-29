@@ -309,6 +309,25 @@ router.get('/contractsByBatch', function(req, res) {
     })
 })
 
+router.get('/contractsByRecoveryOfficer', function(req, res) {
+    const officer = req.query.officer;
+
+    async.series([
+        function(callback) {
+            HirePurchase.allContractsByRecoveryOfficer(officer, callback)
+        }
+    ], function(err, data) {
+        res.render('hirePurchase/contracts', {
+            title: 'Contracts by Recovery Officer',
+            navbar: 'Hire Purchase',
+            contracts: data[0],
+            url: req.url,
+            results: data[0].length,
+            user: req.user
+        })
+    })
+})
+
 router.get('/excel/contractsByBatch', function(req, res) {
     const batchID = req.query.batch;
 
