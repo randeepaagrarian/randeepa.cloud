@@ -116,7 +116,24 @@ router.get('/searchByServiceID', function(req, res) {
         }
     ], function(err, data) {
         res.render('service/searchByServiceID', {
-            title: 'Services By Date Officer',
+            title: 'Services By Service ID',
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            serviceID: req.query.serviceID,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/searchByChassisNo', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.searchByChassisNo(req.query.chassisNo, callback)
+        }
+    ], function(err, data) {
+        res.render('service/searchByServiceID', {
+            title: 'Services By Chassis No',
             navbar: 'Service',
             user: req.user,
             services: data[0],
