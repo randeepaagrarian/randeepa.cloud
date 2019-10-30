@@ -44,7 +44,7 @@
                                                                     <% commitments.forEach(function(commitment) { %>
     
                                                                         <tr>
-                                                                            <td><a href="/hirePurchase/contractInfo?contractID<%= commitment.contract_id %>"><%= commitment.contract_id %></a></td>
+                                                                            <td><a href="/hirePurchase/contractInfo?contractID=<%= commitment.contract_id %>"><%= commitment.contract_id %></a></td>
                                                                             <td><%= commitment.id_1 %></td>
                                                                             <td><%= commitment.installment_id %></td>
                                                                             <% if(commitment.expires == 0) { %>
