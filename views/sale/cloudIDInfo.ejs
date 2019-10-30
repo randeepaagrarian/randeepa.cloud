@@ -312,17 +312,24 @@
                                   </div>
                                   <div id="watches" class="tab-pane">
                                       <% watches.forEach(function(watch) { %>
-                                        <% if(watch.expires < 0) { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires in <font color='green'><b><%= Math.abs(watch.expires) %> days <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
-                                          <p><font color='blue'><%= watch.content %></font></p>
-                                        <% } else if (watch.expires > 0) { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expired <font color='red'><b><%= Math.abs(watch.expires) %> days ago <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
-                                          <p><font color='blue'><%= watch.content %></font></p>
-                                        <% } else { %>
-                                          <p>Watch Added By <b><%= watch.name %></b> for <%= watch.due_date %> expires <font color='blue'><b>today <a href="/sale/closeWatch/<%= sales[0]['id'] %>/<%= watch.id %>">Close</a></b></font></p>
-                                          <p><font color='blue'><%= watch.content %></font></p>
+                                        <% if(watch.closed == -1) { %>
+                                          <% if(watch.expires < 0) { %>
+                                            <p>Watch Added on <b><%= watch.date %></b> for <b><%= watch.due_date %></b> expires in <font color='green'><b><%= Math.abs(watch.expires) %> days <a href="/sale/watchSucceeded/<%= sales[0]['id'] %>/<%= watch.id %>">Succeeded</a></b></font>&nbsp;<a href="/sale/watchFailed/<%= sales[0]['id'] %>/<%= watch.id %>">Failed</a></b></font></p>
+                                            <p><font color='blue'><%= watch.content %></font></p>
+                                          <% } else if (watch.expires > 0) { %>
+                                            <p>Watch Added on <b><%= watch.date %></b> for <b><%= watch.due_date %></b> expired <font color='red'><b><%= Math.abs(watch.expires) %> days ago <a href="/sale/watchSucceeded/<%= sales[0]['id'] %>/<%= watch.id %>">Succeeded</a></b></font>&nbsp;<a href="/sale/watchFailed/<%= sales[0]['id'] %>/<%= watch.id %>">Failed</a></b></font></p>
+                                            <p><font color='blue'><%= watch.content %></font></p>
+                                          <% } else { %>
+                                            <p>Watch Added on <b><%= watch.date %></b> for <b><%= watch.due_date %></b> expires <font color='blue'><b>today <a href="/sale/watchSucceeded/<%= sales[0]['id'] %>/<%= watch.id %>">Succeeded</a></b></font>&nbsp;<a href="/sale/watchFailed/<%= sales[0]['id'] %>/<%= watch.id %>">Failed</a></b></font></p>
+                                            <p><font color='blue'><%= watch.content %></font></p>
+                                          <% } %>
+                                        <% } else if(watch.closed == 0) { %>
+                                            <font color='green'><p>Watch Added on <b><%= watch.date %></b> for <b><%= watch.due_date %></b> succeeded
+                                            <p><%= watch.content %></p></font>
+                                        <% } else if(watch.closed == 1) { %>
+                                            <font color='red'><p>Watch Added on <b><%= watch.date %></b> for <b><%= watch.due_date %></b> failed
+                                            <p><%= watch.content %></p></font>
                                         <% } %>
-                                        
                                       <% }) %>
                                     </div>
                                 </div>

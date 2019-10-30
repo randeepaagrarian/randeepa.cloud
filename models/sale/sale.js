@@ -665,12 +665,12 @@ Sale.addWatch = function(watch, callback) {
     })
 }
 
-Sale.getWatches = function(cloudID, callback) {
+Sale.getOpenWatches = function(callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT sale_watch.id, content, DATE_FORMAT(due_date, \'%Y-%m-%d\') due_date, U.name, DATEDIFF(NOW(), due_date) as expires FROM sale_watch LEFT JOIN user U on U.username = user WHERE closed = 0 AND sale_watch.sale_id = ?;', cloudID, function(err, rows, fields) {
+        connection.query('SELECT SW.id, SW.sale_id, content, date, due_date, DATEDIFF(NOW(), due_date) as expires FROM sale_watch SW WHERE SW.closed = -1 AND DATEDIFF(NOW(), due_date) <= 0;', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
@@ -680,12 +680,42 @@ Sale.getWatches = function(cloudID, callback) {
       })
 }
 
-Sale.closeWatch = function(watchID, username, callback) {
+Sale.getWatches = function(cloudID, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('UPDATE sale_watch SET closed = 1 WHERE id = ? AND user = ?', [watchID, username], function(err, rows, fields) {
+        connection.query('SELECT SW.id, content, date, due_date, DATEDIFF(NOW(), due_date) as expires, closed, U.name as closed_user FROM sale_watch SW LEFT JOIN user U ON SW.closed_by = U.username WHERE SW.sale_id = ?;', cloudID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+      })
+}
+
+Sale.watchSucceeded = function(watchID, username, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE sale_watch SET closed = 0, closed_by = ? WHERE id = ?', [username, watchID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+    })
+}
+
+Sale.watchFailed = function(watchID, username, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE sale_watch SET closed = 1, closed_by = ? WHERE id = ?', [username, watchID], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, false)

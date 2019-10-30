@@ -1077,6 +1077,7 @@ router.post('/addWatch/:saleID', multipart, (req, res) => {
   const sale_watch = {
     sale_id: saleID,
     content,
+    date: MDate.getDateTime(),
     due_date,
     user: req.user.username
   }
@@ -1097,10 +1098,25 @@ router.post('/addWatch/:saleID', multipart, (req, res) => {
   })
 });
 
-router.get('/closeWatch/:saleID/:watchID', (req, res) => {
+router.get('/watchSucceeded/:saleID/:watchID', (req, res) => {
   async.series([
     function(callback) {
-      Sale.closeWatch(req.params.watchID, req.user.username, callback)
+      Sale.watchSucceeded(req.params.watchID, req.user.username, callback)
+    }
+  ], function(err, closed) {
+    if(closed) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.saleID)
+    } else {
+      req.flash('warning_msg', 'Failed to close watch')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.saleID)
+    }
+  })
+})
+
+router.get('/watchFailed/:saleID/:watchID', (req, res) => {
+  async.series([
+    function(callback) {
+      Sale.watchFailed(req.params.watchID, req.user.username, callback)
     }
   ], function(err, closed) {
     if(closed) {
