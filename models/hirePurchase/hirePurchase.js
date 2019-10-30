@@ -566,3 +566,18 @@ HirePurchase.fulfill = function(fulfillType, commentID, username, callback) {
         })
     })
 }
+
+HirePurchase.getPendingCommitments = function(callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT CC.contract_id, C.id_1, CC.installment_id, DATEDIFF(CC.due_date, NOW()) as expires, CC.text FROM contract_comment CC LEFT JOIN contract C ON CC.contract_id = C.id WHERE CC.commitment = 1 AND CC.fulfilled = 0', function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
