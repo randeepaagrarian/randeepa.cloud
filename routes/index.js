@@ -252,6 +252,8 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			Region.getAllRegions(callback)
 		}, function(callback) {
 			User.getActiveUsers(callback)
+		}, function(callback) {
+			Sale.getOpenWatches(callback)
 		}
 	], function(err, data) {
 		res.render('sales', {
@@ -259,7 +261,8 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			navbar: 'Sales',
 			user: req.user,
 			regions: data[0],
-			users: data[1]
+			users: data[1],
+			watches: data[2]
 		})
 	})
 })
