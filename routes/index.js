@@ -402,6 +402,8 @@ router.get('/hirePurchase', Auth.signedIn, Auth.validHirePurchaseUser, function(
 			HirePurchase.getBatches(callback)
 		}, function(callback) {
 			HirePurchase.getRecoveryOfficers(callback)
+		}, function(callback) {
+			HirePurchase.getPendingCommitments(callback)
 		}
 	], function(err, data) {
 		res.render('hirePurchase', {
@@ -409,7 +411,8 @@ router.get('/hirePurchase', Auth.signedIn, Auth.validHirePurchaseUser, function(
 			navbar: 'Hire Purchase',
 			user: req.user,
 			batches: data[1],
-			recoveryOfficers: data[2]
+			recoveryOfficers: data[2],
+			commitments: data[3]
 		})
 	})
 })
