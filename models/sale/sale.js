@@ -670,7 +670,7 @@ Sale.getOpenWatches = function(callback) {
         if(pool_err) {
             return callback(pool_err, null)
         }
-        connection.query('SELECT SW.id, SW.sale_id, content, date, due_date, DATEDIFF(NOW(), due_date) as expires FROM sale_watch SW WHERE SW.closed = -1 AND DATEDIFF(NOW(), due_date) <= 0;', function(err, rows, fields) {
+        connection.query('SELECT SW.id, SW.sale_id, content, date, due_date, DATEDIFF(NOW(), due_date) as expires FROM sale_watch SW WHERE SW.closed = -1 AND DATEDIFF(NOW(), due_date) >= 0;', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
