@@ -257,26 +257,27 @@
                                                       <% if(comment.commitment == 1) { %>
                                                         <% if(comment.fulfilled == 1) { %>
                                                             <% if(comment.fulfilled_type == 1) { %>
-                                                                <font color='green'><p>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
-                                                                    <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                                <font color='green'><p style='padding: 0; margin: 0;'>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
+                                                                    <p style='padding: 0; margin: 0;'>Installment ID: <b><%= comment.installment_id %></b></p>
                                                                     <p><%= comment.text %></p></font>
                                                             <% } else if(comment.fulfilled_type == 0) { %>
-                                                                <font color='red'><p>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
-                                                                    <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                                <font color='red'><p style='padding: 0; margin: 0;'>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
+                                                                    <p style='padding: 0; margin: 0;'>Installment ID: <b><%= comment.installment_id %></b></p>
                                                                     <p><%= comment.text %></p></font>
                                                             <% } %>
                                                         <% } else { %>
-                                                            <font color='blue'><p>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b> expires in <font color='red'><%= comment.expires %></font> days <br>
+                                                            <font color='blue'><p style='padding: 0; margin: 0;'>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b> expires in <font color='red'><%= comment.expires %></font> days <br>
                                                                 <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/1"><b>Fulfill</b></a>
                                                                 <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/0"><b>Broken</b></a></p>
-                                                            <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                            <p style='padding: 0; margin: 0;'>Installment ID: <b><%= comment.installment_id %></b></p>
                                                             <p><%= comment.text %></p></font>
                                                         <% } %>
                                                       <% } else { %>
-                                                        <p>Comment added by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
-                                                        <p>Installment ID: <b><%= comment.installment_id %></b></p>
+                                                        <p style='padding: 0; margin: 0;'>Comment added by <b><%= comment.user %></b> on <b><%= comment.date %></b></p>
+                                                        <p style='padding: 0; margin: 0;'>Installment ID: <b><%= comment.installment_id %></b></p>
                                                         <p><%= comment.text %></p>
                                                       <% } %>
+                                                      <hr />
                                                   <% }) %>
                                             </div>
                                         </div>
