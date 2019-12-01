@@ -581,3 +581,21 @@ HirePurchase.getPendingCommitments = function(callback) {
         })
     })
 }
+
+HirePurchase.getContractDetails = function(contractID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT C.id_1, C.id_2, C.customer_name FROM contract C WHERE C.id = ?', contractID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            if(rows.length == 1)
+                return callback(err, rows[0])
+            else 
+                return callback(err, false)
+        })
+    })
+}

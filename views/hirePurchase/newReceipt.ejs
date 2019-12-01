@@ -2,6 +2,7 @@
 <html>
     <head>
         <% include ../layouts/pro/head %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <style>
         </style>
     </head>
@@ -34,7 +35,18 @@
                                                 <tr>
                                                     <td>Contract ID &nbsp;</td>
                                                     <td><font color='orange'>(Required)</font>&nbsp;</td>
-                                                    <td><input class="form-control" style='width: 350px' type='text' name='contract_id' /></td>
+                                                    <td><input id="contractIDTxt" class="form-control" style='width: 350px' type='text' name='contract_id' /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Details</td>
+                                                    <td></td>
+                                                    <td>
+                                                        <div id='contractDetails'>
+                                                            ID 1: N/A <br>
+                                                            ID 2: N/A <br>
+                                                            Customer Name: N/A
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Amount &nbsp;</td>
@@ -73,5 +85,17 @@
             </div>
         </div>
     </body>
-    <% include ../layouts/pro/includes %>
+    <script>
+        $.ajaxSetup({traditional: true});
+        $("#contractIDTxt").keyup(function(){
+            $("#contractDetails").html("ID 1: Loading... <br>ID 2: Loading... <br>Customer Name: Loading...");
+            $.post("/hirePurchase/contractDetails",
+                {
+                    contractID: $('input[name="contract_id"]').val()
+                },
+                function(data, status) {
+                    $("#contractDetails").html(data);
+            });
+        });
+    </script>
 </html>

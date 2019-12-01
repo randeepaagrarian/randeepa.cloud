@@ -684,4 +684,21 @@ router.get('/fulfill/:contractID/:commentID/:type', (req, res) => {
       })
 })
 
+router.post('/contractDetails', (req, res) => {
+    async.series([
+        function(callback) {
+            HirePurchase.getContractDetails(req.body.contractID, callback)
+        }
+    ], function(err, data) {
+        console.log(data[0])
+        let response = ""
+        if(err || !data[0]) {
+            response = "ID 1: N/A <br>ID 2: N/A <br>Customer Name: N/A"
+        } else {
+            response = "ID 1: "+data[0].id_1+" <br>ID 2: "+data[0].id_2+" <br>Customer Name: "+data[0].customer_name
+        }
+        res.send(response)
+    })
+})
+
 module.exports = router
