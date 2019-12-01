@@ -267,8 +267,8 @@
                                                             <% } %>
                                                         <% } else { %>
                                                             <font color='blue'><p style='padding: 0; margin: 0;'>Comment added as commitment by <b><%= comment.user %></b> on <b><%= comment.date %></b> expires in <font color='red'><%= comment.expires %></font> days <br>
-                                                                <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/1"><b>Fulfill</b></a>
-                                                                <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/0"><b>Broken</b></a></p>
+                                                                <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/1"><b><font color='green'>Fulfill</font></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <a href="/hirePurchase/fulfill/<%= contractInfo[0]['id'] %>/<%= comment.id %>/0"><b><font color='red'>Broken</font></b></a></p>
                                                             <p style='padding: 0; margin: 0;'>Installment ID: <b><%= comment.installment_id %></b></p>
                                                             <p><%= comment.text %></p></font>
                                                         <% } %>
