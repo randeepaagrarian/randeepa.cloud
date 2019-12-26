@@ -1000,7 +1000,7 @@ router.get('/year/region/sysdate', function(req, res) {
     })
 })
 
-router.get('/excel/year/region/actualdate', function(req, res) {
+router.get('/excel/year/region/sysdate', function(req, res) {
     async.series([
         function(callback) {
             Sale.sysByYearRegion(req.query.year, req.query.region, callback)
