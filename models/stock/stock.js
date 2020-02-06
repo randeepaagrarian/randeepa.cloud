@@ -379,7 +379,7 @@ Stock.getDealersAndShowrooms = function(callback) {
             return callback(pool_err, null)
         }
 
-        connection.query('SELECT * FROM dealer WHERE dealer_type_id IN (2, 3) ORDER BY name ASC;', function(err, rows, fields) {
+        connection.query('SELECT * FROM dealer WHERE dealer_type_id IN (1, 2, 3) ORDER BY name ASC;', function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
