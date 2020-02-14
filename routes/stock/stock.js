@@ -11,20 +11,20 @@ const Auth = require('../../functions/auth')
 const Stock = require('../../models/stock/stock')
 const Region = require('../../models/region/region')
 
-router.use(Auth.signedIn, Auth.validStockUser, function(req, res, next) {
+router.use(Auth.signedIn, Auth.validStockUser, function (req, res, next) {
     next()
 })
 
-router.get('/packingList', function(req, res){
+router.get('/packingList', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getMainStocks(callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getModels(callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getImporters(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/packingList', {
             title: 'New Packing List',
             navbar: 'Stock',
@@ -36,14 +36,14 @@ router.get('/packingList', function(req, res){
     })
 })
 
-router.post('/packingList', function(req, res) {
+router.post('/packingList', function (req, res) {
 
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.validateImporter(req.body.fromStock, callback)
         }
-    ], function(err, data) {
-        if(data[0] == true) {
+    ], function (err, data) {
+        if (data[0] == true) {
 
             const deliveryDocument = {
                 delivery_document_type_id: 1,
@@ -67,8 +67,8 @@ router.post('/packingList', function(req, res) {
 
             let machines = []
 
-            if(models.constructor === Array) {
-                for(let i = 0; i < models.length; i++) {
+            if (models.constructor === Array) {
+                for (let i = 0; i < models.length; i++) {
                     machines.push([models[i], primaryNumbers[i], secondaryNumbers[i], prices[i]])
                 }
             } else {
@@ -76,11 +76,11 @@ router.post('/packingList', function(req, res) {
             }
 
             async.series([
-                function(callback) {
+                function (callback) {
                     Stock.newPackingList(deliveryDocument, machines, callback)
                 }
-            ], function(err, data) {
-                if(err) {
+            ], function (err, data) {
+                if (err) {
                     res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
                 } else {
                     res.send("<br><div class='alert alert-info'>Packing list issued successfully</div>")
@@ -94,14 +94,14 @@ router.post('/packingList', function(req, res) {
 
 })
 
-router.get('/deliveryNote', function(req, res){
+router.get('/deliveryNote', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getMainStocks(callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getDealersAndShowrooms(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/deliveryNote', {
             title: 'New Delivery Note',
             navbar: 'Stock',
@@ -112,17 +112,17 @@ router.get('/deliveryNote', function(req, res){
     })
 })
 
-router.post('/getSecondaryIdModelName', function(req, res) {
+router.post('/getSecondaryIdModelName', function (req, res) {
 
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getSecondaryIdModelName(req.body.primaryNumber, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
 
-        let response = {"secondaryId": "Invalid", "modelName": "Invalid" }
+        let response = { "secondaryId": "Invalid", "modelName": "Invalid" }
 
-        if(data[0][0] != undefined) {
+        if (data[0][0] != undefined) {
             response.secondaryId = data[0][0].secondary_id
             response.modelName = data[0][0].name
         }
@@ -132,40 +132,40 @@ router.post('/getSecondaryIdModelName', function(req, res) {
 
 })
 
-router.post('/deliveryNote', function(req, res) {
-      let textMessageNumbers = req.body.textMessageNumbers
-      let textMessage = req.body.textMessage
-      let sendingMessage = true
+router.post('/deliveryNote', function (req, res) {
+    let textMessageNumbers = req.body.textMessageNumbers
+    let textMessage = req.body.textMessage
+    let sendingMessage = true
 
-      if(textMessageNumbers.length == 0) {
-          sendingMessage = false
-      }
+    if (textMessageNumbers.length == 0) {
+        sendingMessage = false
+    }
 
-      if(sendingMessage) {
-          textMessageNumbers = textMessageNumbers.split(',')
-          let validNumbers = true
+    if (sendingMessage) {
+        textMessageNumbers = textMessageNumbers.split(',')
+        let validNumbers = true
 
-          for(let i = 0; i < textMessageNumbers.length; i++) {
-              if(isNaN(textMessageNumbers[i]) || textMessageNumbers[i].length != 11) {
-                  validNumbers = false
-                  break
-              }
-          }
+        for (let i = 0; i < textMessageNumbers.length; i++) {
+            if (isNaN(textMessageNumbers[i]) || textMessageNumbers[i].length != 11) {
+                validNumbers = false
+                break
+            }
+        }
 
-          if(!validNumbers) {
-              res.send("<br><div class='alert alert-warning'>Invalid number list.</div>")
-              return
-          }
-      }
+        if (!validNumbers) {
+            res.send("<br><div class='alert alert-warning'>Invalid number list.</div>")
+            return
+        }
+    }
 
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.validateMainStock(req.body.mainStock, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.validateShowroomOrDealer(req.body.dealerOrShowroom, callback)
         }
-    ], function(err, data) {
-        if(data[0] == true && data[1] == true) {
+    ], function (err, data) {
+        if (data[0] == true && data[1] == true) {
 
             const deliveryDocument = {
                 delivery_document_type_id: 2,
@@ -188,8 +188,8 @@ router.post('/deliveryNote', function(req, res) {
             let machines = []
             let machinePrices = []
 
-            if(primaryNumbers.constructor === Array) {
-                for(let i = 0; i < primaryNumbers.length; i++) {
+            if (primaryNumbers.constructor === Array) {
+                for (let i = 0; i < primaryNumbers.length; i++) {
                     machines.push([primaryNumbers[i]])
                     machinePrices.push([prices[i]])
                 }
@@ -199,16 +199,16 @@ router.post('/deliveryNote', function(req, res) {
             }
 
             async.series([
-                function(callback) {
+                function (callback) {
                     Stock.newDeliveryNote(deliveryDocument, machines, machinePrices, callback)
                 }
-            ], function(err, data) {
-                if(err) {
+            ], function (err, data) {
+                if (err) {
                     res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
                     return
                 } else {
 
-                    if(sendingMessage) {
+                    if (sendingMessage) {
                         res.write("<br><div class='alert alert-info'>Delivery note issued successfully.</div>")
                         res.write("<div class='alert alert-info'>Sending text messages....</div>")
 
@@ -216,15 +216,15 @@ router.post('/deliveryNote', function(req, res) {
                         let oneOrMoreFails = false
                         let failedNumbers = []
 
-                        async.eachSeries(textMessageNumbers, function(number, callback) {
-                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + api + '&message=' + textMessage, { json: true }, function(err, res, body) {
-                                if(err) {
+                        async.eachSeries(textMessageNumbers, function (number, callback) {
+                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + api + '&message=' + textMessage, { json: true }, function (err, res, body) {
+                                if (err) {
                                     oneOrMoreFails = true
                                     failedNumbers.push(number)
                                     callback(null)
                                 }
 
-                                if(res.body == 0) {
+                                if (res.body == 0) {
                                     callback(null)
                                 } else {
                                     oneOrMoreFails = true
@@ -233,22 +233,22 @@ router.post('/deliveryNote', function(req, res) {
                                 }
                             })
                         },
-                        function(err) {
-                            let failedNumbersString = ""
-                            if(oneOrMoreFails) {
-                                for(let i = 0; i < failedNumbers.length; i++) {
-                                    failedNumbersString = failedNumbersString + ", " + failedNumbers[i]
+                            function (err) {
+                                let failedNumbersString = ""
+                                if (oneOrMoreFails) {
+                                    for (let i = 0; i < failedNumbers.length; i++) {
+                                        failedNumbersString = failedNumbersString + ", " + failedNumbers[i]
+                                    }
+                                    res.write("<div class='alert alert-warning'> Failed to Send Message To <b>" + failedNumbersString + "</b></div>")
+                                    res.write("<div class='alert alert-success'> Delivery Note Successfull</div>")
+                                    res.end()
+                                    return
+                                } else {
+                                    res.write("<div class='alert alert-success'> Delivery Note Successfull</div>")
+                                    res.end()
+                                    return
                                 }
-                                res.write("<div class='alert alert-warning'> Failed to Send Message To <b>" + failedNumbersString + "</b></div>")
-                                res.write("<div class='alert alert-success'> Delivery Note Successfull</div>")
-                                res.end()
-                                return
-                            } else {
-                                res.write("<div class='alert alert-success'> Delivery Note Successfull</div>")
-                                res.end()
-                                return
-                            }
-                        })
+                            })
 
                     } else {
                         res.send("<br><div class='alert alert-info'>Delivery note issued successfully.</div>")
@@ -263,12 +263,12 @@ router.post('/deliveryNote', function(req, res) {
     })
 })
 
-router.get('/transferNote', function(req, res){
+router.get('/transferNote', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getDealersAndShowrooms(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/transferNote', {
             title: 'New Transfer Note',
             navbar: 'Stock',
@@ -278,79 +278,66 @@ router.get('/transferNote', function(req, res){
     })
 })
 
-router.post('/transferNote', function(req, res) {
+router.post('/transferNote', function (req, res) {
 
-    if(req.body.fromDealerOrShowroom == req.body.toDealerOrShowroom) {
+    if (req.body.fromDealerOrShowroom == req.body.toDealerOrShowroom) {
         res.send("<br><div class='alert alert-warning'>From and To locations are the same</div>")
         return
     }
 
-    async.series([
-        function(callback) {
-            Stock.validateShowroomOrDealer(req.body.fromDealerOrShowroom, callback)
-        }, function(callback) {
-            Stock.validateShowroomOrDealer(req.body.toDealerOrShowroom, callback)
+
+    const deliveryDocument = {
+        delivery_document_type_id: 3,
+        dealer_id: req.body.toDealerOrShowroom,
+        from_dealer_id: req.body.fromDealerOrShowroom,
+        date: MDate.getDateTime(),
+        issuer: req.user.username,
+        notes: req.body.notes,
+        officer_responsible: req.body.officerResponsible,
+        officer_telephone: req.body.officerTelephone,
+        vehicle_no: req.body.vehicleNo,
+        driver_name: req.body.driverName,
+        driver_nic: req.body.driverNic,
+        driver_telephone: req.body.driverTelephone,
+    }
+
+    const primaryNumbers = req.body.primaryNumber
+    const prices = req.body.price
+
+    let machines = []
+    let machinePrices = []
+
+    if (primaryNumbers.constructor === Array) {
+        for (let i = 0; i < primaryNumbers.length; i++) {
+            machines.push([primaryNumbers[i]])
+            machinePrices.push([prices[i]])
         }
-    ], function(err, data) {
-        if(data[0] == true && data[1] == true) {
+    } else {
+        machines.push([primaryNumbers])
+        machinePrices.push([prices])
+    }
 
-            const deliveryDocument = {
-                delivery_document_type_id: 3,
-                dealer_id: req.body.toDealerOrShowroom,
-                from_dealer_id: req.body.fromDealerOrShowroom,
-                date: MDate.getDateTime(),
-                issuer: req.user.username,
-                notes: req.body.notes,
-                officer_responsible: req.body.officerResponsible,
-                officer_telephone: req.body.officerTelephone,
-                vehicle_no: req.body.vehicleNo,
-                driver_name: req.body.driverName,
-                driver_nic: req.body.driverNic,
-                driver_telephone: req.body.driverTelephone,
-            }
-
-            const primaryNumbers = req.body.primaryNumber
-            const prices = req.body.price
-
-            let machines = []
-            let machinePrices = []
-
-            if(primaryNumbers.constructor === Array) {
-                for(let i = 0; i < primaryNumbers.length; i++) {
-                    machines.push([primaryNumbers[i]])
-                    machinePrices.push([prices[i]])
-                }
-            } else {
-                machines.push([primaryNumbers])
-                machinePrices.push([prices])
-            }
-
-            async.series([
-                function(callback) {
-                    Stock.newTransferNote(deliveryDocument, machines, machinePrices, callback)
-                }
-            ], function(err, data) {
-                if(err) {
-                    res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
-                } else {
-                    res.send("<br><div class='alert alert-info'>Transfer note issued successfully</div>")
-                }
-            })
-
+    async.series([
+        function (callback) {
+            Stock.newTransferNote(deliveryDocument, machines, machinePrices, callback)
+        }
+    ], function (err, data) {
+        if (err) {
+            res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
         } else {
-            res.send("<br><div class='alert alert-warning'>Location validation error</div>")
+            res.send("<br><div class='alert alert-info'>Transfer note issued successfully</div>")
         }
     })
 })
 
-router.get('/returnNote', function(req, res){
+router.get('/returnNote', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getMainStocks(callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getDealersAndShowrooms(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/returnNote', {
             title: 'New Return Note',
             navbar: 'Stock',
@@ -361,15 +348,15 @@ router.get('/returnNote', function(req, res){
     })
 })
 
-router.post('/returnNote', function(req, res) {
+router.post('/returnNote', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.validateMainStock(req.body.mainStock, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.validateShowroomOrDealer(req.body.dealerOrShowroom, callback)
         }
-    ], function(err, data) {
-        if(data[0] == true && data[1] == true) {
+    ], function (err, data) {
+        if (data[0] == true && data[1] == true) {
 
             const deliveryDocument = {
                 delivery_document_type_id: 4,
@@ -392,8 +379,8 @@ router.post('/returnNote', function(req, res) {
             let machines = []
             let machinePrices = []
 
-            if(primaryNumbers.constructor === Array) {
-                for(let i = 0; i < primaryNumbers.length; i++) {
+            if (primaryNumbers.constructor === Array) {
+                for (let i = 0; i < primaryNumbers.length; i++) {
                     machines.push([primaryNumbers[i]])
                     machinePrices.push([prices[i]])
                 }
@@ -403,11 +390,11 @@ router.post('/returnNote', function(req, res) {
             }
 
             async.series([
-                function(callback) {
+                function (callback) {
                     Stock.newReturnNote(deliveryDocument, machines, machinePrices, callback)
                 }
-            ], function(err, data) {
-                if(err) {
+            ], function (err, data) {
+                if (err) {
                     res.send("<br><div class='alert alert-warning'>" + err.code + "</div>")
                 } else {
                     res.send("<br><div class='alert alert-info'>Return note issued successfully</div>")
@@ -420,14 +407,14 @@ router.post('/returnNote', function(req, res) {
     })
 })
 
-router.get('/stock', function(req, res) {
+router.get('/stock', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getMainStocks(callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getDealersAndShowrooms(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/stock', {
             title: 'Stock',
             navbar: 'Stock',
@@ -438,16 +425,16 @@ router.get('/stock', function(req, res) {
     })
 })
 
-router.get('/viewStock', function(req, res) {
+router.get('/viewStock', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getStock(req.query.stockLocation, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getDealerOrShowroomDetails(req.query.stockLocation, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getSoldStock(req.query.stockLocation, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/viewStock', {
             title: 'Stock',
             navbar: 'Stock',
@@ -460,14 +447,14 @@ router.get('/viewStock', function(req, res) {
     })
 })
 
-router.get('/stockDetails', function(req, res) {
+router.get('/stockDetails', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getStockHistory(req.query.primaryId, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getCurrentLocation(req.query.primaryId, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/stockDetails', {
             title: 'Stock Details',
             navbar: 'Stock',
@@ -478,18 +465,18 @@ router.get('/stockDetails', function(req, res) {
     })
 })
 
-router.get('/allDeliveryDocuments', function(req, res) {
+router.get('/allDeliveryDocuments', function (req, res) {
 
     const pageNumber = req.query.page
 
-    if(isNaN(pageNumber) || pageNumber == 0) {
+    if (isNaN(pageNumber) || pageNumber == 0) {
         res.status(200).send('URL error')
         return
     }
 
     let prev, next
 
-    if(pageNumber == 1) {
+    if (pageNumber == 1) {
         prev = -1
         next = 2
     } else {
@@ -498,10 +485,10 @@ router.get('/allDeliveryDocuments', function(req, res) {
     }
 
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getDeliveryDocuments(pageNumber, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/allDeliveryDocuments', {
             title: 'All Delivery Documents',
             navbar: 'Stock',
@@ -514,14 +501,14 @@ router.get('/allDeliveryDocuments', function(req, res) {
     })
 })
 
-router.get('/deliveryDocumentContent', function(req, res) {
+router.get('/deliveryDocumentContent', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getDeliveryDocumentDetails(req.query.deliveryDocumentId, callback)
-        }, function(callback) {
+        }, function (callback) {
             Stock.getDeliveryDocumentContent(req.query.deliveryDocumentId, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/deliveryDocumentContent', {
             title: 'Delivery Document',
             deliveryDocumentId: req.query.deliveryDocumentId,
@@ -531,12 +518,12 @@ router.get('/deliveryDocumentContent', function(req, res) {
     })
 })
 
-router.get('/dealer/add', function(req, res) {
+router.get('/dealer/add', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Region.getAllTerritories(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/dealer/add', {
             title: 'Add Dealer',
             navbar: 'Stock',
@@ -546,7 +533,7 @@ router.get('/dealer/add', function(req, res) {
     })
 })
 
-router.post('/dealer/add', function(req, res) {
+router.post('/dealer/add', function (req, res) {
     const dealer = {
         dealer_type_id: req.body.dealer_type,
         name: req.body.dealer_name,
@@ -556,11 +543,11 @@ router.post('/dealer/add', function(req, res) {
     }
 
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.addDealer(dealer, callback)
         }
-    ], function(err, data) {
-        if(err) {
+    ], function (err, data) {
+        if (err) {
             req.flash('warning_msg', 'Error occurred while adding dealer.')
             res.redirect('/stock/dealer/add')
         } else {
@@ -570,12 +557,12 @@ router.post('/dealer/add', function(req, res) {
     })
 })
 
-router.get('/dealer/all', function(req, res) {
+router.get('/dealer/all', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getAllDealers(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/dealer/all', {
             title: 'All Dealers',
             navbar: 'Stock',
@@ -585,14 +572,14 @@ router.get('/dealer/all', function(req, res) {
     })
 })
 
-router.get('/dealer/edit', function(req, res) {
+router.get('/dealer/edit', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.getDealerDetails(req.query.dealerId, callback)
-        }, function(callback) {
+        }, function (callback) {
             Region.getAllTerritories(callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/dealer/edit', {
             title: 'Edit Dealer',
             navbar: 'Stock',
@@ -604,28 +591,28 @@ router.get('/dealer/edit', function(req, res) {
     })
 })
 
-router.post('/dealer/edit/:dealerId', function(req, res) {
+router.post('/dealer/edit/:dealerId', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.updateDealerDetails(req.params.dealerId, req.body, callback)
         }
-    ], function(err, data) {
-        if(err) {
+    ], function (err, data) {
+        if (err) {
             req.flash('warning_msg', 'Failed to update dealer')
             res.redirect('/stock/dealer/all')
         } else {
             req.flash('success_msg', 'Dealer updated successfully')
-        	res.redirect('/stock/dealer/all')
+            res.redirect('/stock/dealer/all')
         }
     })
 })
 
-router.get('/search', function(req, res) {
+router.get('/search', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.search(req.query.skw, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/search', {
             title: 'Search',
             navbar: 'Stock',
@@ -637,12 +624,12 @@ router.get('/search', function(req, res) {
     })
 })
 
-router.get('/search/print', function(req, res) {
+router.get('/search/print', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.search(req.query.skw, callback)
         }
-    ], function(err, data) {
+    ], function (err, data) {
         res.render('stock/stock/searchPrint', {
             title: 'Search',
             navbar: 'Stock',
@@ -654,18 +641,18 @@ router.get('/search/print', function(req, res) {
     })
 })
 
-router.get('/markSold', function(req, res) {
+router.get('/markSold', function (req, res) {
     async.series([
-        function(callback) {
+        function (callback) {
             Stock.markSold(req.query.primaryId, callback)
         }
-    ], function(err, data) {
-        if(err) {
+    ], function (err, data) {
+        if (err) {
             req.flash('warning_msg', 'Failed to mark sold')
-        	res.redirect(req.query.continue)
+            res.redirect(req.query.continue)
         } else {
             req.flash('success_msg', 'Stock ' + req.query.primaryId + ' marked sold successfully')
-        	res.redirect(req.query.continue)
+            res.redirect(req.query.continue)
         }
     })
 })
