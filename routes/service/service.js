@@ -90,6 +90,35 @@ router.get('/date', function(req, res) {
     })
 })
 
+router.get('/pending', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.pendingServices(callback)
+        }
+    ], function(err, data) {
+        res.render('service/pending', {
+            title: 'Pending Services',
+            url: req.url,
+            navbar: 'Service',
+            user: req.user,
+            services: data[0],
+            startDate: req.query.startDate,
+            endDate: req.query.endDate,
+            results: data[0].length
+        })
+    })
+})
+
+router.get('/excel/pending', function(req, res) {
+    async.series([
+        function(callback) {
+            Service.pendingServices(callback)
+        }
+    ], function(err, data) {
+        res.xls('Pending Services.xlsx', data[0])
+    })
+})
+
 router.get('/byofficer/date', function(req, res) {
     async.series([
         function(callback) {
