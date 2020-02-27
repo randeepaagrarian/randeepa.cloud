@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../layouts/pro/head %>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="header">
+                                        <%= title %>
+                                        <p class="category">There are <b><%= results %> </b> services</p>
+                                        <a class="category" href="/service/excel<%= url %>"><u>Download Excel</u></a>
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date</th>
+                                                        <th>Issue</th>
+                                                        <th>Allocated</th>
+                                                        <th>Work Sheet</th>
+                                                        <th>Completed</th>
+                                                        <th>Technician</th>
+                                                        <th>Cloud ID</th>
+                                                        <th>Sale Date</th>
+                                                        <th>Chassis No</th>
+                                                        <th>Model</th>
+                                                        <th>Meter</th>
+                                                        <th>Customer Name</th>
+                                                        <th>Customer Contact</th>
+                                                        <th>Address</th>
+                                                        <th>Dealer</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% services.forEach(function(service) { %>
+                                                        <% if(service.service_completed == 1) { %>
+                                                            <tr class="success">
+                                                        <% } else { %>
+                                                            <tr>
+                                                        <% } %>
+                                                            <td><a href='/service/serviceInfo?serviceID=<%= service.id %>'><%= service.id %></a></td>
+                                                            <td><%= service.date %></td>
+                                                            <td><%= service.issue %></td>
+                                                            <% if(service.technician_allocated == 1) { %>
+                                                                <td> <font color='green'>&#x2713;</font> </td>
+                                                            <% } else { %>
+                                                                <td> <font color='red'>&#x2717;</font> </td>
+                                                            <% } %>
+                                                            <% if(service.work_sheet) { %>
+                                                                <td><a href='<%= service.work_sheet %>' target="_blank"><i class="material-icons">image</i></a></td>
+                                                            <% } else { %>
+                                                                <td> <font color='red'>&#x2717;</font> </td>
+                                                            <% } %>
+                                                            <% if(service.service_completed == 0) { %>
+                                                                <td><font color='red'>Pending for <%= service.days %> days</font></td>
+                                                            <% } else { %>
+                                                                <td><font color='green'>Completed in <%= service.days %> days</font></td>
+                                                            <% } %>
+                                                            <td><%= service.technician_name %></td>
+                                                            <td><%= service.sale_id %></td>
+                                                            <td><%= service.sale_date %></td>
+                                                            <td><%= service.chassis_no %></td>
+                                                            <td><%= service.model_name %></td>
+                                                            <td><%= service.meter %>  <%= service.meter_type %></td>
+                                                            <td><%= service.customer_name %></td>
+                                                            <td><%= service.customer_contact %></td>
+                                                            <td><%= service.current_address %></td>
+                                                            <td><%= service.dealer_name %></td>
+                                                            </tr>
+                                                            <% if(service.service_completed == 1) { %>
+                                                                <tr style='font-style: italic; font-size: 90%;' class="success">
+                                                            <% } else { %>
+                                                                <tr style='font-style: italic; font-size: 90%;' class="info">
+                                                            <% } %>
+                                                                <td>Cloud Details</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td><%= service.s_sale_date %></td>
+                                                                <td><%= service.s_chassis_no %></td>
+                                                                <td><%= service.s_model_name %></td>
+                                                                <td></td>
+                                                                <td><%= service.s_customer_name %></td>
+                                                                <td><%= service.s_customer_contact %></td>
+                                                                <td><%= service.s_customer_address %></td>
+                                                                <td><%= service.s_dealer_name %></td>
+                                                            </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../layouts/pro/includes %>
+</html>
