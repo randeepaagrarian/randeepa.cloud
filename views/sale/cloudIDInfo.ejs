@@ -141,6 +141,9 @@
                                     <li>
                                       <a href="#sales_watch" data-toggle="tab">Sales Watch</a>
                                     </li>
+                                    <li>
+                                      <a href="#rmv" data-toggle="tab">RMV</a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -287,6 +290,205 @@
                                         <input class="btn btn-default" type="submit" value="Add Watch">
                                       </div>
                                     </form>
+                                  </div>
+                                  <div id="rmv" class="tab-pane">
+                                    <h5 style="margin-top: 0px;">Document Set</h5>
+                                    <% if(rmvDetails[0]['document_set_complete'] == 0) { %>
+                                    <table>
+                                      <tr>
+                                        <td>Document Set Complete&nbsp;&nbsp;</td>
+                                        <td><a href="/sale/dscomplete/<%= sales[0]['id'] %>"><button class="success"><font color="black">Mark Complete</font></button></a></td>
+                                      </tr>
+                                    </table>
+                                    <% } else { %>
+                                      <p><font color="green">Document Set Complete</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= rmvDetails[0]['document_set_completed_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= rmvDetails[0]['document_set_completed_on'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                    <hr>
+                                    <h5 style="margin-top: 0px;">RMV Delivery</h5>
+                                    <% if(rmvDetails[0]['documents_sent_to_rmv'] == 0) { %>
+                                    <table>
+                                      <tr>
+                                        <td>Sent to RMV&nbsp;&nbsp;</td>
+                                        <td><a href="/sale/senttormv/<%= sales[0]['id'] %>"><button class="success"><font color="black">Mark Sent</font></button></a></td>
+                                      </tr>
+                                    </table>
+                                    <% } else { %>
+                                      <p><font color="green">Sent to RMV</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= rmvDetails[0]['documents_sent_to_rmv_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= rmvDetails[0]['documents_sent_to_rmv_on'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                    <hr>
+                                    <h5 style="margin-top: 0px;">Registration</h5>
+                                    <% if(rmvDetails[0]['registered'] == 0) { %>
+                                      <form action="/sale/registration/<%= sales[0]['id'] %>" method="post" enctype="multipart/form-data">
+                                    <table>
+                                      <tr>
+                                        <td>Registered Date&nbsp;&nbsp;</td>
+                                        <td><input type="text" name="date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Registered Number&nbsp;&nbsp;</td>
+                                        <td><input type="text" name="number" class="form-control" placeholder="CAS-6769" /></td>
+                                      </tr>
+                                      <tr>
+                                        <td>CR&nbsp;&nbsp;</td>
+                                        <td><input type="file" name="attachment" accept=".jpg, .jpeg, .png, .JPG, .JPEG, .PNG"></td>
+                                      </tr>
+                                      <tr>
+                                        <td></td>
+                                        <td><input type="submit" name="" value="Add"></td>
+                                      </tr>
+                                    </table>
+                                    </form>
+                                    <% } else { %>
+                                      <p><font color="green">Registered</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>Registration Date</td>
+                                          <td><%= rmvDetails[0]['registered_date'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Number</td>
+                                          <td><%= rmvDetails[0]['registered_number'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>CR</td>
+                                          <td><a href="<%= rmvDetails[0]['cr'] %>">View Image</a></td>
+                                        </tr>
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= rmvDetails[0]['registered_added_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= rmvDetails[0]['registered_added_on'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                    <hr>
+                                    <h5 style="margin-top: 0px;">CR Hand Over</h5>
+                                    <% if(rmvDetails[0]['cr_handed_over'] == 0) { %>
+                                    <form action="/sale/crhandover/<%= sales[0]['id'] %>" method="post">
+                                    <table>
+                                      <tr>
+                                        <td>Pronto Number&nbsp;&nbsp;</td>
+                                        <td><input type="text" name="pronto_number" class="form-control" placeholder="234234" /></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Pronto Date&nbsp;&nbsp;</td>
+                                        <td><input type="text" name="pronto_date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Person Responsible&nbsp;&nbsp;</td>
+                                        <td><input type="text" name="responsible" class="form-control" placeholder="Mr James Potter" /></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Remarks&nbsp;&nbsp;</td>
+                                            <td width="80%"><textarea class="form-control" rows="4" columns="50" name="remarks" placeholder="Remarks"></textarea></td>
+                                      </tr>
+                                      <tr>
+                                        <td></td>
+                                        <td><input type="submit" name="" value="Add"></td>
+                                      </tr>
+                                    </table>
+                                    </form>
+                                    <% } else { %>
+                                      <p><font color="green">CR Handed Over</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>Pronto Number</td>
+                                          <td><%= rmvDetails[0]['pronto_number'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Pronto Date</td>
+                                          <td><%= rmvDetails[0]['pronto_date'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Person Responsible</td>
+                                          <td><%= rmvDetails[0]['hand_over_person_responsible'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Hand Over Remarks</td>
+                                          <td><%= rmvDetails[0]['hand_over_remarks'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= rmvDetails[0]['hand_over_added_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= rmvDetails[0]['hand_over_added_on'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                    <hr>
+                                    <h5 style="margin-top: 0px;">Customer Confirmation</h5>
+                                    <% if(rmvDetails[0]['customer_confirmation'] == 0) { %>
+                                      <form action="/sale/customerconfirmation/<%= sales[0]['id'] %>" method="post">
+                                    <table>
+                                      <tr>
+                                        <td>Customer Remarks&nbsp;&nbsp;</td>
+                                            <td width="80%"><textarea class="form-control" rows="4" columns="50" name="remarks" placeholder="Remarks"></textarea></td>
+                                      </tr>
+                                      <tr>
+                                        <td></td>
+                                        <td><input type="submit" name="" value="Add"></td>
+                                      </tr>
+                                    </table>
+                                  </form>
+                                    <% } else { %>
+                                      <p><font color="green">Customer Confirmed</font></p>
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <td>Remarks</td>
+                                          <td><%= rmvDetails[0]['customer_remarks'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>By</td>
+                                          <td><%= rmvDetails[0]['confirmation_added_by'] %></td>
+                                        </tr>
+                                        <tr>
+                                          <td>On</td>
+                                          <td><%= rmvDetails[0]['confirmation_added_on'] %></td>
+                                        </tr>
+                                      </table>
+                                    <% } %>
+                                    <!-- <form action="/sale/addWatch/<%= sales[0]['id'] %>" method="post" enctype="multipart/form-data">
+                                      <h4 style="margin-top: 0px;">Add Sale Watch</h4>
+                                      <div class="form-group">
+                                        <table>
+                                          <tr>
+                                            <td>Details</td>
+                                            <td width="100%"><textarea class="form-control" rows="4" columns="50" name="content" placeholder="Details"></textarea></td>
+                                          </tr>
+                                          <tr>
+                                            <td>Date</td>
+                                            <td><input type="text" name="due_date" class="form-control datetimepicker" placeholder="YYYY-MM-DD" /></td>
+                                          </tr>
+                                        </table>
+                                      </div>
+                                      <div class="form-group">
+                                        <input class="btn btn-default" type="submit" value="Add Watch">
+                                      </div>
+                                    </form> -->
                                   </div>
                                 </div>
 

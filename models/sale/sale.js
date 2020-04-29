@@ -448,6 +448,51 @@ Sale.verify = function(cloudID, user, datetime, callback) {
   })
 }
 
+Sale.addRegistration = function(cloudID, req_update, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('UPDATE sale_rmv SET ? WHERE sale_id = ?', [req_update, cloudID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, false)
+            }
+            callback(err, true)
+        })
+      })
+}
+
+Sale.rmvSent = function(cloudID, user, datetime, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+      connection.query('UPDATE sale_rmv SET documents_sent_to_rmv = 1, documents_sent_to_rmv_by = ?, documents_sent_to_rmv_on = ? WHERE sale_id = ?', [user, datetime, cloudID], function(err, rows, fields) {
+          connection.release()
+          if(err) {
+              return callback(err, false)
+          }
+          callback(err, true)
+      })
+    })
+  }
+
+Sale.dsComplete = function(cloudID, user, datetime, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+      if(pool_err) {
+          return callback(pool_err, null)
+      }
+      connection.query('UPDATE sale_rmv SET document_set_complete = 1, document_set_completed_by = ?, document_set_completed_on = ? WHERE sale_id = ?', [user, datetime, cloudID], function(err, rows, fields) {
+          connection.release()
+          if(err) {
+              return callback(err, false)
+          }
+          callback(err, true)
+      })
+    })
+  }
+
 Sale.saleCompletedTypes = function(callback) {
   MySql.pool.getConnection(function(pool_err, connection) {
     if(pool_err) {
@@ -686,6 +731,21 @@ Sale.getWatches = function(cloudID, callback) {
             return callback(pool_err, null)
         }
         connection.query('SELECT SW.id, content, date, due_date, DATEDIFF(NOW(), due_date) as expires, closed, U.name as closed_user FROM sale_watch SW LEFT JOIN user U ON SW.closed_by = U.username WHERE SW.sale_id = ?;', cloudID, function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+      })
+}
+
+Sale.getRMVDetails = function(cloudID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT SR.document_set_complete, SR.document_set_completed_on, U1.name AS document_set_completed_by, SR.documents_sent_to_rmv, SR.documents_sent_to_rmv_on, U2.name AS documents_sent_to_rmv_by, SR.registered, SR.registered_date, SR.registered_number, SR.cr, SR.registered_added_on, U3.name AS registered_added_by, SR.cr_handed_over, SR.pronto_number, SR.pronto_date, SR.hand_over_person_responsible, SR.hand_over_remarks, SR.hand_over_added_on, U4.name AS hand_over_added_by, SR.customer_confirmation, SR.customer_remarks, SR.confirmation_added_on, U5.name AS confirmation_added_by FROM sale_rmv SR LEFT JOIN user U1 ON U1.username = SR.document_set_completed_by LEFT JOIN user U2 ON U2.username = SR.documents_sent_to_rmv_by LEFT JOIN user U3 ON U3.username = SR.registered_added_by LEFT JOIN user U4 ON U4.username = SR.hand_over_added_by LEFT JOIN user U5 ON U5.username = SR.confirmation_added_by WHERE SR.sale_id = ?;', cloudID, function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)
