@@ -168,6 +168,116 @@ router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
   })
 })
 
+router.get('/dscomplete/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.dsComplete(req.params.cloudID, req.user.username, MDate.getDateTime(), callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    } else {
+      console.log(err)
+      res.send('Error')
+    }
+  })
+})
+
+router.get('/senttormv/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  async.series([
+    function(callback) {
+      Sale.rmvSent(req.params.cloudID, req.user.username, MDate.getDateTime(), callback)
+    }
+  ], function(err, data) {
+    if(data[0] == true) {
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    } else {
+      console.log(err)
+      res.send('Error')
+    }
+  })
+})
+
+router.post('/crhandover/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  const reg_update = {
+    cr_handed_over: 1,
+    pronto_number: req.body.pronto_number,
+    pronto_date: req.body.pronto_date,
+    hand_over_person_responsible: req.body.responsible,
+    hand_over_remarks: req.body.remarks,
+    hand_over_added_on: MDate.getDateTime(),
+    hand_over_added_by: req.user.username
+  }
+
+  Sale.addRegistration(req.params.cloudID, reg_update, function(err, data) {
+    if(err) {
+      req.flash('warning_msg', 'Failed to add hand over')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      return
+    }
+    res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    return
+  })
+})
+
+router.post('/customerconfirmation/:cloudID', Auth.salesSearchAllowed, function(req, res) {
+  const reg_update = {
+    customer_confirmation: 1,
+    customer_remarks: req.body.remarks,
+    confirmation_added_on: MDate.getDateTime(),
+    confirmation_added_by: req.user.username
+  }
+
+  Sale.addRegistration(req.params.cloudID, reg_update, function(err, data) {
+    if(err) {
+      req.flash('warning_msg', 'Failed to add confirmation')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      return
+    }
+    res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    return
+  })
+})
+
+router.post('/registration/:cloudID', multipart, Auth.salesSearchAllowed, function(req, res) {
+  if(req.files.attachment.originalFilename == '') {
+    req.flash('warning_msg', 'CR Missing')
+    res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+    return
+  }
+
+  async.series([
+    function(callback) {
+      Cloudinary.upload(req.files.attachment.path, callback)
+    }
+  ], function(err, uploadData) {
+    if(uploadData[0].error) {
+      req.flash('warning_msg', 'Something went wrong while uploading the file')
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      return
+    }
+
+    const reg_update = {
+      registered: 1,
+      registered_date: req.body.date,
+      registered_number: req.body.number,
+      cr: uploadData[0].url,
+      registered_added_on: MDate.getDateTime(),
+      registered_added_by: req.user.username
+    }
+
+    Sale.addRegistration(req.params.cloudID, reg_update, function(err, data) {
+      if(err) {
+        req.flash('warning_msg', 'Failed to add registration')
+        res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+        return
+      }
+      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      return
+    })
+  })
+})
+
 router.post('/addComment/:cloudID', multipart, Auth.salesSearchAllowed, function(req, res) {
 
 
@@ -351,6 +461,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       Sale.saleCompletedTypes(callback)
     }, function(callback) {
       Sale.getWatches(req.query.cloudID, callback)
+    }, function(callback) {
+      Sale.getRMVDetails(req.query.cloudID, callback)
     }
   ], function(err, details) {
     res.render('sale/cloudIDInfo', {
@@ -360,7 +472,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       sales: details[0],
       comments: details[1],
       saleCompletedTypes: details[2],
-      watches: details[3]
+      watches: details[3],
+      rmvDetails: details[4]
     })
   })
 })
