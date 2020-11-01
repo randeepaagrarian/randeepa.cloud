@@ -801,3 +801,51 @@ Stock.markSold = function(primaryId, callback) {
         })
     })
 }
+
+Stock.markAudited = function(reviewId, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('UPDATE stock_review SET audited = 1 WHERE id = ?', reviewId, function(err, result, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, true)
+        })
+    })
+}
+
+Stock.dealerStockReviews = function(dealerId, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('(SELECT SR.id, SR.created, U.name AS user, SR.remark, SR.picture, SR.audited FROM stock_review SR LEFT JOIN user U ON U.username = SR.username WHERE SR.dealer_id = ? AND audited = 0 ORDER BY SR.created DESC) UNION (SELECT SR.id, SR.created, U.name AS user, SR.remark, SR.picture, SR.audited FROM stock_review SR LEFT JOIN user U ON U.username = SR.username WHERE SR.dealer_id = ? AND audited = 1 ORDER BY SR.created DESC LIMIT 5)', [dealerId, dealerId], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
+
+Stock.reviewsByDateRange = function(startDate, endDate, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        connection.query('SELECT SR.id, SR.created, D.name AS dealer, U.name AS user, SR.remark, SR.picture, SR.audited FROM stock_review SR LEFT JOIN user U ON U.username = SR.username LEFT JOIN dealer D ON D.id = SR.dealer_id WHERE DATE(SR.created) BETWEEN ? AND ? ORDER BY SR.created DESC', [startDate, endDate], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}

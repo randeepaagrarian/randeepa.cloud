@@ -106,6 +106,19 @@
                                 								</form>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-12">
+                                                            <h5 class="title">Stock Reviews</h5>
+                                                            <p><i>From සහ To යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
+                                                            <form action="/stock/reviews" method="get">
+                            									<div class="form-group">
+                                                                    <b>From:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                                                    <b>To:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                            									</div>
+                            									<div class="form-group">
+                            										<input class="btn btn-primary" type="submit" value="List">
+                            									</div>
+                            								</form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -261,4 +274,20 @@
         </div>
     </body>
     <% include ./layouts/pro/includes %>
+    <script type="text/javascript">
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    </script>
 </html>
