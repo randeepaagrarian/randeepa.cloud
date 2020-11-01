@@ -433,6 +433,8 @@ router.get('/viewStock', function (req, res) {
             Stock.getDealerOrShowroomDetails(req.query.stockLocation, callback)
         }, function (callback) {
             Stock.getSoldStock(req.query.stockLocation, callback)
+        }, function(callback) {
+            Stock.dealerStockReviews(req.query.stockLocation, callback)
         }
     ], function (err, data) {
         res.render('stock/stock/viewStock', {
@@ -442,8 +444,43 @@ router.get('/viewStock', function (req, res) {
             stocks: data[0],
             soldStocks: data[2],
             url: encodeURIComponent(req.originalUrl),
-            showroomDealerDetails: data[1]
+            showroomDealerDetails: data[1],
+            stockReviews: data[3]
         })
+    })
+})
+
+router.get('/reviews', function (req, res) {
+    async.series([
+        function (callback) {
+            Stock.reviewsByDateRange(req.query.startDate, req.query.endDate, callback)
+        }
+    ], function (err, data) {
+        res.render('stock/stock/reviews', {
+            title: 'Stock Reviews',
+            navbar: 'Stock',
+            user: req.user,
+            url: encodeURIComponent(req.originalUrl),
+            stockReviews: data[0],
+            from: req.query.startDate,
+            to: req.query.endDate
+        })
+    })
+})
+
+router.get('/markAudited', function (req, res) {
+    async.series([
+        function (callback) {
+            Stock.markAudited(req.query.reviewId, callback)
+        }
+    ], function (err, data) {
+        if (err) {
+            req.flash('warning_msg', 'Failed to mark sold')
+            res.redirect(req.query.continue)
+        } else {
+            req.flash('success_msg', 'Review ' + req.query.reviewId + ' marked audited successfully')
+            res.redirect(req.query.continue)
+        }
     })
 })
 

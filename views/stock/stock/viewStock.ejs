@@ -27,66 +27,123 @@
                                     <div class="header">
                                         <%= showroomDealerDetails[0].name %>
                                     </div>
-                                    <div class="header">
-                                        Physical Stock
-                                    </div>
-                                    <div class="content">
-                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <th>Delivery Document Id</th>
-                                                    <th>Delivery Document Type</th>
-                                                    <th>Date</th>
-                                                    <th>Primary ID</th>
-                                                    <th>Secondary ID</th>
-                                                    <th>Model</th>
-                                                    <th>Mark Sold</th>
-                                                </thead>
-                                                <tbody>
-                                                    <% stocks.forEach(function(stock) { %>
-                                                        <tr>
-                                                            <td><%= stock.delivery_document_id %></td>
-                                                            <td><%= stock.delivery_document_type_name %></td>
-                                                            <td><%= stock.date %></td>
-                                                            <td><a href="/stock/stockDetails?primaryId=<%= stock.primary_id %>"><%= stock.primary_id %></a></td>
-                                                            <td><%= stock.secondary_id %></td>
-                                                            <td><%= stock.name %></td>
-                                                            <td><a href="/stock/markSold?primaryId=<%= stock.primary_id %>&continue=<%= url %>">Mark Sold</a></td>
-                                                        </tr>
-                                                    <% }) %>
-                                                </tbody>
-                                            </table>
+
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li role="presentation" class="active">
+                                            <a href="#stocks" data-toggle="tab">Stocks</a>
+                                        </li>
+                                        <li>
+                                            <a href="#reviews" data-toggle="tab">Reviews</a>
+                                        </li>
+                                      </ul>
+      
+                                      <div class="tab-content">
+                                        <div id="stocks" class="tab-pane active">
+                                            <div class="header">
+                                                Physical Stock
+                                            </div>
+                                            <div class="content">
+                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <th>Delivery Document Id</th>
+                                                            <th>Delivery Document Type</th>
+                                                            <th>Date</th>
+                                                            <th>Primary ID</th>
+                                                            <th>Secondary ID</th>
+                                                            <th>Model</th>
+                                                            <th>Mark Sold</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% stocks.forEach(function(stock) { %>
+                                                                <tr>
+                                                                    <td><%= stock.delivery_document_id %></td>
+                                                                    <td><%= stock.delivery_document_type_name %></td>
+                                                                    <td><%= stock.date %></td>
+                                                                    <td><a href="/stock/stockDetails?primaryId=<%= stock.primary_id %>"><%= stock.primary_id %></a></td>
+                                                                    <td><%= stock.secondary_id %></td>
+                                                                    <td><%= stock.name %></td>
+                                                                    <td><a href="/stock/markSold?primaryId=<%= stock.primary_id %>&continue=<%= url %>">Mark Sold</a></td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="header">
+                                                Sold Stock
+                                            </div>
+                                            <div class="content">
+                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <th>Delivery Document Id</th>
+                                                            <th>Delivery Document Type</th>
+                                                            <th>Date</th>
+                                                            <th>Primary ID</th>
+                                                            <th>Secondary ID</th>
+                                                            <th>Model</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% soldStocks.forEach(function(stock) { %>
+                                                                <tr class="info">
+                                                                    <td><%= stock.delivery_document_id %></td>
+                                                                    <td><%= stock.delivery_document_type_name %></td>
+                                                                    <td><%= stock.date %></td>
+                                                                    <td><a href="/stock/stockDetails?primaryId=<%= stock.primary_id %>"><%= stock.primary_id %></a></td>
+                                                                    <td><%= stock.secondary_id %></td>
+                                                                    <td><%= stock.name %></td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="header">
-                                        Sold Stock
-                                    </div>
-                                    <div class="content">
-                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <th>Delivery Document Id</th>
-                                                    <th>Delivery Document Type</th>
-                                                    <th>Date</th>
-                                                    <th>Primary ID</th>
-                                                    <th>Secondary ID</th>
-                                                    <th>Model</th>
-                                                </thead>
-                                                <tbody>
-                                                    <% soldStocks.forEach(function(stock) { %>
-                                                        <tr class="info">
-                                                            <td><%= stock.delivery_document_id %></td>
-                                                            <td><%= stock.delivery_document_type_name %></td>
-                                                            <td><%= stock.date %></td>
-                                                            <td><a href="/stock/stockDetails?primaryId=<%= stock.primary_id %>"><%= stock.primary_id %></a></td>
-                                                            <td><%= stock.secondary_id %></td>
-                                                            <td><%= stock.name %></td>
-                                                        </tr>
-                                                    <% }) %>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                        <div id="reviews" class="tab-pane">
+                                            <div class="header">
+                                                Reviews
+                                            </div>
+                                            <div class="content">
+                                                <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <th>Id</th>
+                                                            <th>Added</th>
+                                                            <th>User</th>
+                                                            <th>Remark</th>
+                                                            <th>Picture</th>
+                                                            <th>Audited</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% stockReviews.forEach(function(stock) { %>
+                                                                <% if(stock.audited == 1) { %>
+                                                                    <tr class="info">
+                                                                        <td><%= stock.id %></td>
+                                                                        <td><%= stock.created %></td>
+                                                                        <td><%= stock.user %></td>
+                                                                        <td><%= stock.remark %></td>
+                                                                        <td><a target="_blank" href="<%= stock.picture %>">Image</a></td>
+                                                                        <td>Yes</td>
+                                                                    </tr>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td><%= stock.id %></td>
+                                                                        <td><%= stock.created %></td>
+                                                                        <td><%= stock.user %></td>
+                                                                        <td><%= stock.remark %></td>
+                                                                        <td><a target="_blank" href="<%= stock.picture %>">Image</a></td>
+                                                                        <td><a href="/stock/markAudited?reviewId=<%= stock.id %>&continue=<%= url %>">Mark Audited</a></td>
+                                                                    </tr>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                          </div>
+                                      </div>
+
                                 </div>
                             </div>
 
