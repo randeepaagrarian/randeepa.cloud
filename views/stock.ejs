@@ -119,6 +119,29 @@
                             									</div>
                             								</form>
                                                         </div>
+                                                        <div class="col-md-12">
+                                                            <h5 class="title">Stocks By Age</h5>
+                                                            <form action="/stock/byAge" method="get">
+                            									<div class="form-group">
+                                                                    <b>Days:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" name="days" value=60 class="form-control" placeholder="Days" />
+                                                                    <b>Locations:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="locations" class="form-control">
+                                                                        <option value="Y">Yards</option>
+                                                                        <option value="SD">Showrooms / Dealers</option>
+                                                                        <option value="A">All</option>
+                                                                    </select>
+                                                                    <b>Model:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="model" class="form-control">
+                                                                        <option value="">Select Model</option>
+                                                                        <% models.forEach(function
+                                                                        (dealerAndShowroom){ %>
+                                                                            <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
+                            									</div>
+                            									<div class="form-group">
+                            										<input class="btn btn-primary" type="submit" value="List">
+                            									</div>
+                            								</form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
