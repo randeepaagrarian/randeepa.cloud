@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../../layouts/pro/head %>
+    </head>
+    <body>
+        <div class="wrapper">
+            <% include ../../layouts/pro/sidebar %>
+            <div class="main-panel">
+                <% include ../../layouts/pro/navbar %>
+
+                <div class="main-content">
+                    <div class="container-fluid">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <% if(warning_msg != '') { %>
+                                    <div class='alert alert-warning'><%= warning_msg %></div>
+                                <% } %>
+
+                                <% if(success_msg != '') { %>
+                                    <div class='alert alert-success'><%= success_msg %></div>
+                                <% } %>
+                                <div class="card">
+                                    <div class="header">
+                                            Stocks by Age
+                                        <br>
+                                        
+                                    </div>
+                                    <div class="content">
+                                        <div style="max-width: 100%; overflow: auto;" class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <th>Document Id</th>
+                                                    <th>Model</th>
+                                                    <th>Days In Stock</th>
+                                                    <th>Primary ID</th>
+                                                    <th>Secondary ID</th>
+                                                    <th>Price</th>
+                                                    <th>Location</th>
+                                                    <th>Mark Sold</th>
+                                                </thead>
+                                                <tbody>
+                                                    <% results.forEach(function(result) { %>
+                                                        <tr>
+                                                            <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= result.delivery_document_id %>"><%= result.delivery_document_id %></a></td>
+                                                            <td><%= result.model_name %></td>
+                                                            <% if(result.days_in_stock < 60) { %>
+                                                                <td><font color='green'><%= result.days_in_stock.toLocaleString() %></font></td>
+                                                            <% } else if(result.days_in_stock < 90) { %>
+                                                                <td><font color='blue'><%= result.days_in_stock.toLocaleString() %></font></td>
+                                                            <% } else { %>
+                                                                <td><font color='red'><%= result.days_in_stock.toLocaleString() %></font></td>
+                                                            <% } %>
+                                                            <td><a href="/stock/stockDetails?primaryId=<%= result.primary_id %>"><%= result.primary_id %></a></td>
+                                                            <td><%= result.secondary_id %></td>
+                                                            <td><%= result.price %></td>
+                                                            <td><a href="/stock/viewStock?stockLocation=<%= result.dealer_id %>"><%= result.dealer_name %></a></td>
+                                                            <td><a href="/stock/markSold?primaryId=<%= result.primary_id %>&continue=<%= url %>">Mark Sold</a></td>
+                                                            <td><%= result.notes %></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <% include ../../layouts/pro/footer %>
+            </div>
+        </div>
+    </body>
+    <% include ../../layouts/pro/includes %>
+</html>

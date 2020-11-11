@@ -661,6 +661,23 @@ router.get('/search', function (req, res) {
     })
 })
 
+router.get('/byAge', function (req, res) {
+    async.series([
+        function (callback) {
+            Stock.stocksByAge(req.query.days, req.query.locations, req.query.model, callback)
+        }
+    ], function (err, data) {
+        res.render('stock/stock/byAge', {
+            title: 'Stocks By Age',
+            navbar: 'Stock',
+            results: data[0],
+            // keyword: req.query.skw,
+            url: encodeURIComponent(req.originalUrl),
+            user: req.user
+        })
+    })
+})
+
 router.get('/search/print', function (req, res) {
     async.series([
         function (callback) {

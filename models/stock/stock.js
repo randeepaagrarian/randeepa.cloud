@@ -849,3 +849,45 @@ Stock.reviewsByDateRange = function(startDate, endDate, callback) {
         })
     })
 }
+
+Stock.stocksByAge = function(days, locations, model, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+
+        let types = [];
+        switch(locations) {
+            case "Y":
+                types = [1];
+                break;
+            case "SD":
+                types = [2, 3];
+                break;
+            case "A":
+                types = [1, 2, 3];
+                break;
+        }
+        
+        if(model) {
+
+        } else {
+            model = "NULL"
+        }
+
+        connection.query(`SELECT delivery_document_id, model.name AS model_name, DATEDIFF(DATE(NOW()), date) AS days_in_stock, primary_id, secondary_id, price, dealer.name AS dealer_name, dealer.id AS dealer_id
+        FROM main_stock 
+        LEFT JOIN model ON main_stock.model_id = model.id 
+        LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id 
+        LEFT JOIN dealer ON dealer.id = delivery_document.dealer_id
+        LEFT JOIN delivery_document_type ON delivery_document_type_id = delivery_document_type.id 
+        WHERE sold = 0 AND DATEDIFF(DATE(NOW()), date) > ? AND dealer.dealer_type_id IN (?) AND (NULLIF(?, 'NULL') IS NULL OR model.id = NULLIF(?, 'NULL'))
+        ORDER BY days_in_stock DESC;`, [days, types, model, model], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+    })
+}
