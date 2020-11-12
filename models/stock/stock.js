@@ -861,8 +861,11 @@ Stock.stocksByAge = function(days, locations, model, callback) {
             case "Y":
                 types = [1];
                 break;
-            case "SD":
-                types = [2, 3];
+            case "S":
+                types = [3];
+                break;
+            case "D":
+                types = [2];
                 break;
             case "A":
                 types = [1, 2, 3];
