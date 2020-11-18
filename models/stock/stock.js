@@ -561,6 +561,22 @@ Stock.getModels = function(callback) {
     })
 }
 
+Stock.getModelsGroup = function(callback) {
+       MySql.pool.getConnection(function(pool_err, connection) {
+           if(pool_err) {
+            return callback(pool_err, null)
+           }
+    
+           connection.query('SELECT * FROM model_group', function(err, rows, fields) {
+              connection.release()
+             if(err) {
+                  return callback(err, null)
+              }
+              callback(err, rows)
+           })
+       })
+    }
+    
 Stock.getDeliveryDocuments = function(pageNumber, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
@@ -850,7 +866,7 @@ Stock.reviewsByDateRange = function(startDate, endDate, callback) {
     })
 }
 
-Stock.stocksByAge = function(days, locations, model, callback) {
+Stock.stocksByAgeModelGroup = function(days, locations, model, modelGroup, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
             return callback(pool_err, null)
@@ -877,15 +893,21 @@ Stock.stocksByAge = function(days, locations, model, callback) {
         } else {
             model = "NULL"
         }
+        if(modelGroup) {
 
-        connection.query(`SELECT delivery_document_id, model.name AS model_name, DATEDIFF(DATE(NOW()), date) AS days_in_stock, primary_id, secondary_id, price, dealer.name AS dealer_name, dealer.id AS dealer_id
+        } else {
+            modelGroup = "NULL"
+        }
+
+        connection.query(`SELECT delivery_document_id, model.id ,model.name AS model_name,model_group.name as model_group_name, DATEDIFF(DATE(NOW()), date) AS days_in_stock, primary_id, secondary_id, price, dealer.name AS dealer_name, dealer.id AS dealer_id
         FROM main_stock 
         LEFT JOIN model ON main_stock.model_id = model.id 
         LEFT JOIN delivery_document ON main_stock.delivery_document_id = delivery_document.id 
         LEFT JOIN dealer ON dealer.id = delivery_document.dealer_id
         LEFT JOIN delivery_document_type ON delivery_document_type_id = delivery_document_type.id 
-        WHERE sold = 0 AND DATEDIFF(DATE(NOW()), date) > ? AND dealer.dealer_type_id IN (?) AND (NULLIF(?, 'NULL') IS NULL OR model.id = NULLIF(?, 'NULL'))
-        ORDER BY days_in_stock DESC;`, [days, types, model, model], function(err, rows, fields) {
+        LEFT JOIN model_group ON model_group.id = model.model_group_id
+        WHERE sold = 0 AND DATEDIFF(DATE(NOW()), date) > ? AND dealer.dealer_type_id IN (?) AND (NULLIF(?, 'NULL') IS NULL OR model.id = ?) AND (NULLIF(?, 'NULL') IS NULL OR model_group.id = ?)
+        ORDER BY days_in_stock DESC;`, [days, types, model, model, modelGroup, modelGroup], function(err, rows, fields) {
             connection.release()
             if(err) {
                 return callback(err, null)

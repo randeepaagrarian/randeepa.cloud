@@ -1,277 +1,329 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <% include ./layouts/pro/head %>
-        <style media="screen">
-            .ct-label.ct-horizontal { position: relative; transform: rotate(90deg); transform-origin: left top; }
-        </style>
-    </head>
-    <body>
-        <div class="wrapper">
-            <% include ./layouts/pro/sidebar %>
-            <div class="main-panel">
-                <% include ./layouts/pro/navbar %>
 
-                <div class="main-content">
-                    <div class="container-fluid">
+<head>
+    <% include ./layouts/pro/head %>
+    <style media="screen">
+        .ct-label.ct-horizontal {
+            position: relative;
+            transform: rotate(90deg);
+            transform-origin: left top;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <% include ./layouts/pro/sidebar %>
+        <div class="main-panel">
+            <% include ./layouts/pro/navbar %>
+
+            <div class="main-content">
+                <div class="container-fluid">
 
 
-                        <div class="row">
+                    <div class="row">
 
-                            <% if(user.accessLevel.stock == 8) { %>
+                        <% if(user.accessLevel.stock == 8) { %>
 
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="header">
-                                            <h4 class="title"><%= title %></h4>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title"><%= title %></h4>
+                                </div>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="alert alert-warning">
+                                            <font color='#683f43'>
+                                                Randeepa Cloud හි මෙම මෙම මොඩියුලය රහසිගත රහසිගත (Confidential) සහ ඉතා
+                                                වැදගත් තොරතුරු ඇතුලත් වන අතර ඔබ විසින් මෙම පද්ධතියෙහි සිදු කරන සියලුම
+                                                ක්‍රියා දත්ත ආයතන Server හි තැන්පත් වේ. මෙම තොරතුරු වෙනත් පාර්ශව වෙත
+                                                නිරාවරණය කිරීම, මුරපද (Password) වෙනත් පුද්ගලයකු අතට ලබා දීම, ඔබ හා සමගම
+                                                අතර ඇති ගිවිසුම් උල්ලංගනය කිරීමක් වන අතර ඒ පිළිබඳව දැඩි විනයනකුල පියවර
+                                                ඔබග එරෙහිව ලබා ගැනීමට හෝ සේවයෙන් ඉවත් කිරීමට ආයතනය විසින් ක්‍රියා කරනු
+                                                ඇත.
+                                            </font>
                                         </div>
-                                        <div class="container-fluid">
+                                        <div class="col-md-6">
                                             <div class="row">
-                                                <div class="alert alert-warning">
-                                                    <font color='#683f43'>
-                                                        Randeepa Cloud හි මෙම මෙම මොඩියුලය රහසිගත රහසිගත (Confidential) සහ ඉතා වැදගත් තොරතුරු ඇතුලත් වන අතර ඔබ විසින් මෙම පද්ධතියෙහි සිදු කරන සියලුම ක්‍රියා දත්ත ආයතන Server හි තැන්පත් වේ. මෙම තොරතුරු වෙනත් පාර්ශව වෙත නිරාවරණය කිරීම, මුරපද (Password) වෙනත් පුද්ගලයකු අතට ලබා දීම, ඔබ හා සමගම අතර ඇති ගිවිසුම් උල්ලංගනය කිරීමක් වන අතර ඒ පිළිබඳව දැඩි විනයනකුල පියවර ඔබග එරෙහිව ලබා ගැනීමට හෝ සේවයෙන් ඉවත් කිරීමට ආයතනය විසින් ක්‍රියා කරනු ඇත.
-                                                    </font>
-                                                </div>
                                                 <div class="col-md-6">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <h5 class="title">Delivery Documents</h5>
-                                                            <div class="content">
-                                                                <div class="dropdown">
+                                                    <h5 class="title">Delivery Documents</h5>
+                                                    <div class="content">
+                                                        <div class="dropdown">
 
-                                                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                                                                        Show
-                                                                        <span class="caret"></span>
-                                                                    </button>
+                                                            <button class="btn dropdown-toggle" type="button"
+                                                                id="dropdownMenu1" data-toggle="dropdown">
+                                                                Show
+                                                                <span class="caret"></span>
+                                                            </button>
 
-                                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Issue</a></li>
-                                                                        <li role="presentation" class="divider"></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/packingList">Packing List</a></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/deliveryNote">Delivery Note</a></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/transferNote">Transfer Note</a></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/returnNote">Return Note</a></li>
-                                                                        <li role="presentation" class="divider"></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/allDeliveryDocuments?page=1">View All</a></li>
-                                                                    </ul>
+                                                            <ul class="dropdown-menu" role="menu"
+                                                                aria-labelledby="dropdownMenu1">
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="#">Issue</a></li>
+                                                                <li role="presentation" class="divider"></li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/packingList">Packing List</a></li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/deliveryNote">Delivery Note</a>
+                                                                </li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/transferNote">Transfer Note</a>
+                                                                </li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/returnNote">Return Note</a></li>
+                                                                <li role="presentation" class="divider"></li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/allDeliveryDocuments?page=1">View
+                                                                        All</a></li>
+                                                            </ul>
 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5 class="title">Stock</h5>
-                                                            <div class="content">
-                                                                <div class="dropdown">
-
-                                                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                                                                        Show
-                                                                        <span class="caret"></span>
-                                                                    </button>
-
-                                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/stock">View Stock</a></li>
-                                                                    </ul>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5 class="title">Dealer</h5>
-                                                            <div class="content">
-                                                                <div class="dropdown">
-
-                                                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                                                                        Show
-                                                                        <span class="caret"></span>
-                                                                    </button>
-
-                                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/dealer/all">All</a></li>
-                                                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/stock/dealer/add">Add</a></li>
-                                                                    </ul>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5 class="title">Search</h5>
-                                                            <div class="content">
-                                                                <form action="/stock/search" method="get">
-                                									<div class="form-group">
-                                										<input class="form-control" type="text" name="skw" placeholder="Search Keyword">
-                                									</div>
-                                									<div class="form-group">
-                                										<input class="btn btn-default" type="submit" value="Search">
-                                									</div>
-                                								</form>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5 class="title">Stock Reviews</h5>
-                                                            <p><i>From සහ To යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
-                                                            <form action="/stock/reviews" method="get">
-                            									<div class="form-group">
-                                                                    <b>From:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
-                                                                    <b>To:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
-                            									</div>
-                            									<div class="form-group">
-                            										<input class="btn btn-primary" type="submit" value="List">
-                            									</div>
-                            								</form>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5 class="title">Stocks By Age</h5>
-                                                            <form action="/stock/byAge" method="get">
-                            									<div class="form-group">
-                                                                    <b>Days:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" name="days" value=60 class="form-control" placeholder="Days" />
-                                                                    <b>Locations:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="locations" class="form-control">
-                                                                        <option value="Y">Yards</option>
-                                                                        <option value="D">Dealers</option>
-                                                                        <option value="S">Showrooms</option>
-                                                                        <option value="A">All</option>
-                                                                    </select>
-                                                                    <b>Model:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="model" class="form-control">
-                                                                        <option value="">Select Model</option>
-                                                                        <% models.forEach(function
-                                                                        (dealerAndShowroom){ %>
-                                                                            <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
-                                                                        <% }) %>
-                                                                    </select>
-                            									</div>
-                            									<div class="form-group">
-                            										<input class="btn btn-primary" type="submit" value="List">
-                            									</div>
-                            								</form>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <h5 class="title">Recent 5 Delivery Documents</h5>
+                                                    <h5 class="title">Stock</h5>
                                                     <div class="content">
-                                                        <div class="table-responsive">
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-center">Id</th>
-                                                                        <th>Dealer Name</th>
-                                                                        <th>Date</th>
-                                                                    </tr>
-                                                                    <tbody>
-                                                                        <% recentFivedeliveryDocuments.forEach(function(recentFivedeliveryDocument) { %>
-                                                                            <tr>
-                                                                                <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= recentFivedeliveryDocument.id %>"><%= recentFivedeliveryDocument.id %></a></td>
-                                                                                <td><%= recentFivedeliveryDocument.dealer_name %></td>
-                                                                                <td><%= recentFivedeliveryDocument.date %></td>
-                                                                            </tr>
-                                                                        <% }) %>
-                                                                    </tbody>
-                                                                </thead>
-                                                            </table>
+                                                        <div class="dropdown">
+
+                                                            <button class="btn dropdown-toggle" type="button"
+                                                                id="dropdownMenu1" data-toggle="dropdown">
+                                                                Show
+                                                                <span class="caret"></span>
+                                                            </button>
+
+                                                            <ul class="dropdown-menu" role="menu"
+                                                                aria-labelledby="dropdownMenu1">
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/stock">View Stock</a></li>
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="title">Dealer</h5>
+                                                    <div class="content">
+                                                        <div class="dropdown">
+
+                                                            <button class="btn dropdown-toggle" type="button"
+                                                                id="dropdownMenu1" data-toggle="dropdown">
+                                                                Show
+                                                                <span class="caret"></span>
+                                                            </button>
+
+                                                            <ul class="dropdown-menu" role="menu"
+                                                                aria-labelledby="dropdownMenu1">
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/dealer/all">All</a></li>
+                                                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                        href="/stock/dealer/add">Add</a></li>
+                                                            </ul>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="header">
-                                                            Stock Summary
+                                                    <h5 class="title">Search</h5>
+                                                    <div class="content">
+                                                        <form action="/stock/search" method="get">
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="skw"
+                                                                    placeholder="Search Keyword">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input class="btn btn-default" type="submit"
+                                                                    value="Search">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <h5 class="title">Stock Reviews</h5>
+                                                    <p><i>From සහ To යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b>
+                                                            යන ආකෘතිය අනුගමනය කරන්න.</i></p>
+                                                    <form action="/stock/reviews" method="get">
+                                                        <div class="form-group">
+                                                            <b>From:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"
+                                                                name="startDate" class="form-control datetimepicker"
+                                                                placeholder="YYYY-MM-DD" />
+                                                            <b>To:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"
+                                                                name="endDate" class="form-control datetimepicker"
+                                                                placeholder="YYYY-MM-DD" />
                                                         </div>
-                                                        <div class="col-md-12">
-                                                            <div class="col-md-6">
-                                                                <h5 class="title">Total Stock</h5>
-                                                                <div class="content">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Model</th>
-                                                                                    <th>Quantity</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <% totalStocks.forEach(function(totalStock) { %>
-                                                                                    <tr>
-                                                                                        <td><%= totalStock.model_name %></td>
-                                                                                        <td><%= totalStock.stock %></td>
-                                                                                    </tr>
-                                                                                <% }) %>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="form-group">
+                                                            <input class="btn btn-primary" type="submit" value="List">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <h5 class="title">Stocks By Age Model Group</h5>
+                                                    <form action="/stock/byAge" method="get">
+                                                        <div class="form-group">
+                                                            <b>Days:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="number"
+                                                                name="days" value=60 class="form-control"
+                                                                placeholder="Days" />
+                                                            <b>Locations:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select
+                                                                name="locations" class="form-control">
+                                                                <option value="Y">Yards</option>
+                                                                <option value="D">Dealers</option>
+                                                                <option value="S">Showrooms</option>
+                                                                <option value="A">All</option>
+                                                            </select>
+                                                            <b>Model:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="model"
+                                                                class="form-control">
+                                                                <option value="">Select Model</option>
+                                                                <% models.forEach(function
+                                                                        (dealerAndShowroom){ %>
+                                                                <option value="<%= dealerAndShowroom.id %>">
+                                                                    <%= dealerAndShowroom.name %></option>
+                                                                <% }) %>
+                                                            </select>
+
+                                                            <b>Model Group:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select
+                                                                name="modelGroup" class="form-control">
+                                                                <option value="">Select Model Group</option>
+                                                                <% modelsGroup.forEach(function(modelGroup){ %>
+                                                                <option value="<%= modelGroup.id %>">
+                                                                    <%= modelGroup.name %>
+                                                                </option> <% }) %>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input class="btn btn-primary" type="submit" value="List">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="title">Recent 5 Delivery Documents</h5>
+                                            <div class="content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">Id</th>
+                                                                <th>Dealer Name</th>
+                                                                <th>Date</th>
+                                                            </tr>
+                                                        <tbody>
+                                                            <% recentFivedeliveryDocuments.forEach(function(recentFivedeliveryDocument) { %>
+                                                            <tr>
+                                                                <td><a
+                                                                        href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= recentFivedeliveryDocument.id %>"><%= recentFivedeliveryDocument.id %></a>
+                                                                </td>
+                                                                <td><%= recentFivedeliveryDocument.dealer_name %></td>
+                                                                <td><%= recentFivedeliveryDocument.date %></td>
+                                                            </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="header">
+                                                    Stock Summary
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="col-md-6">
+                                                        <h5 class="title">Total Stock</h5>
+                                                        <div class="content">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Model</th>
+                                                                            <th>Quantity</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% totalStocks.forEach(function(totalStock) { %>
+                                                                        <tr>
+                                                                            <td><%= totalStock.model_name %></td>
+                                                                            <td><%= totalStock.stock %></td>
+                                                                        </tr>
+                                                                        <% }) %>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <h5 class="title">Yard Stock</h5>
-                                                                <div class="content">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Model</th>
-                                                                                    <th>Quantity</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <% yardStocks.forEach(function(totalStock) { %>
-                                                                                    <tr>
-                                                                                        <td><%= totalStock.model_name %></td>
-                                                                                        <td><%= totalStock.stock %></td>
-                                                                                    </tr>
-                                                                                <% }) %>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h5 class="title">Yard Stock</h5>
+                                                        <div class="content">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Model</th>
+                                                                            <th>Quantity</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% yardStocks.forEach(function(totalStock) { %>
+                                                                        <tr>
+                                                                            <td><%= totalStock.model_name %></td>
+                                                                            <td><%= totalStock.stock %></td>
+                                                                        </tr>
+                                                                        <% }) %>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="col-md-6">
+                                                        <h5 class="title">Showroom Stock</h5>
+                                                        <div class="content">
+                                                            <div class="content">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Model</th>
+                                                                                <th>Quantity</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <% showroomStocks.forEach(function(totalStock) { %>
+                                                                            <tr>
+                                                                                <td><%= totalStock.model_name %></td>
+                                                                                <td><%= totalStock.stock %></td>
+                                                                            </tr>
+                                                                            <% }) %>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12">
-                                                            <div class="col-md-6">
-                                                                <h5 class="title">Showroom Stock</h5>
-                                                                <div class="content">
-                                                                    <div class="content">
-                                                                        <div class="table-responsive">
-                                                                            <table class="table table-striped">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Model</th>
-                                                                                        <th>Quantity</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <% showroomStocks.forEach(function(totalStock) { %>
-                                                                                        <tr>
-                                                                                            <td><%= totalStock.model_name %></td>
-                                                                                            <td><%= totalStock.stock %></td>
-                                                                                        </tr>
-                                                                                    <% }) %>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <h5 class="title">Dealer Stock</h5>
-                                                                <div class="content">
-                                                                    <div class="content">
-                                                                        <div class="table-responsive">
-                                                                            <table class="table table-striped">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Model</th>
-                                                                                        <th>Quantity</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <% dealerStocks.forEach(function(totalStock) { %>
-                                                                                        <tr>
-                                                                                            <td><%= totalStock.model_name %></td>
-                                                                                            <td><%= totalStock.stock %></td>
-                                                                                        </tr>
-                                                                                    <% }) %>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h5 class="title">Dealer Stock</h5>
+                                                        <div class="content">
+                                                            <div class="content">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Model</th>
+                                                                                <th>Quantity</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <% dealerStocks.forEach(function(totalStock) { %>
+                                                                            <tr>
+                                                                                <td><%= totalStock.model_name %></td>
+                                                                                <td><%= totalStock.stock %></td>
+                                                                            </tr>
+                                                                            <% }) %>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -281,37 +333,40 @@
                                         </div>
                                     </div>
                                 </div>
-
-                            <% } %>
-
-
-
+                            </div>
                         </div>
+
+                        <% } %>
 
 
 
                     </div>
-                </div>
 
-                <% include ./layouts/pro/footer %>
+
+
+                </div>
             </div>
+
+            <% include ./layouts/pro/footer %>
         </div>
-    </body>
-    <% include ./layouts/pro/includes %>
-    <script type="text/javascript">
-        $('.datetimepicker').datetimepicker({
-            format: 'YYYY-MM-DD',
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-chevron-up",
-                down: "fa fa-chevron-down",
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
-                today: 'fa fa-screenshot',
-                clear: 'fa fa-trash',
-                close: 'fa fa-remove'
-            }
-        });
-    </script>
+    </div>
+</body>
+<% include ./layouts/pro/includes %>
+<script type="text/javascript">
+    $('.datetimepicker').datetimepicker({
+        format: 'YYYY-MM-DD',
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+        }
+    });
+</script>
+
 </html>
