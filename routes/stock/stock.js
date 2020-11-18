@@ -664,7 +664,7 @@ router.get('/search', function (req, res) {
 router.get('/byAge', function (req, res) {
     async.series([
         function (callback) {
-            Stock.stocksByAge(req.query.days, req.query.locations, req.query.model, callback)
+            Stock.stocksByAge(req.query.days, req.query.locations, req.query.model, req.query.modelGroup, callback)
         }
     ], function (err, data) {
         res.render('stock/stock/byAge', {

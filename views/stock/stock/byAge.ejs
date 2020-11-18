@@ -35,6 +35,7 @@
                                                 <thead>
                                                     <th>Document Id</th>
                                                     <th>Model</th>
+                                                    <th>Model Group</th>
                                                     <th>Days In Stock</th>
                                                     <th>Primary ID</th>
                                                     <th>Secondary ID</th>
@@ -47,6 +48,7 @@
                                                         <tr>
                                                             <td><a href="/stock/deliveryDocumentContent?deliveryDocumentId=<%= result.delivery_document_id %>"><%= result.delivery_document_id %></a></td>
                                                             <td><%= result.model_name %></td>
+                                                            <td><%= result.model_group_name %></td>
                                                             <% if(result.days_in_stock < 60) { %>
                                                                 <td><font color='green'><%= result.days_in_stock.toLocaleString() %></font></td>
                                                             <% } else if(result.days_in_stock < 90) { %>

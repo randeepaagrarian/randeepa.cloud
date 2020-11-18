@@ -137,6 +137,13 @@
                                                                             <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
                                                                         <% }) %>
                                                                     </select>
+                                                                    <b>Model Group:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="modelGroup" class="form-control">
+                                                                        <option value="">Select Model Group</option>
+                                                                        <% modelGroup.forEach(function
+                                                                        (modelGroup){ %>
+                                                                            <option value="<%= modelGroup.id %>"><%= modelGroup.name %></option>
+                                                                        <% }) %>
+                                                                    </select>
                             									</div>
                             									<div class="form-group">
                             										<input class="btn btn-primary" type="submit" value="List">
