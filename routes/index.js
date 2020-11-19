@@ -334,6 +334,8 @@ router.get('/stock', Auth.signedIn, Auth.validStockDashboardUser, function(req, 
 			Stock.getRecentFivedeliveryDocuments(callback)
 		}, function(callback) {
 			Stock.getModels(callback)
+		}, function(callback) {
+			Stock.stocksByAgeModelGroup(callback)
 		}
 	], function(err, data) {
 		res.render('stock', {
@@ -347,6 +349,7 @@ router.get('/stock', Auth.signedIn, Auth.validStockDashboardUser, function(req, 
 			showroomStocks: data[4],
 			recentFivedeliveryDocuments: data[5],
 			models: data[6],
+			modelGroup: data[7]
 		})
 	})
 })
