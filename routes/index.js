@@ -246,7 +246,7 @@ router.get('/profile', Auth.signedIn, Auth.validProfileDashboardUser, function(r
 	}
 })
 
-router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
+/* router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
 	async.series([
 		function(callback) {
 			Region.getAllRegions(callback)
@@ -263,6 +263,35 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			regions: data[0],
 			users: data[1],
 			watches: data[2]
+		})
+	})
+}) */
+
+
+router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, res) {
+	async.series([
+		function(callback) {
+			Region.getAllRegions(callback)
+		}, function(callback) {
+			User.getActiveUsers(callback)
+		}, function(callback) {
+			Sale.getOpenWatches(callback)
+		}, function(callback) {
+			Sale.getModels(callback)
+		}, function(callback) {
+			Sale.salesReportModelGroup(callback)
+		}
+	], function(err, data) {
+		res.render('sales', {
+			title: 'Sales',
+			navbar: 'Sales',
+			user: req.user,
+			regions: data[0],
+			users: data[1],
+			watches: data[2],
+			models: data[3],
+			modelGroup: data[4]
+
 		})
 	})
 })
