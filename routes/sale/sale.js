@@ -86,7 +86,7 @@ router.get('/excel/incompleteSales', function(req, res) {
 })
 
 
-router.get('/incompleteSalesByModel', function(req, res) {
+router.get('/searchSalesByModel', function(req, res) {
   async.series([
       function(callback) {
           Sale.incompleteSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
@@ -94,15 +94,17 @@ router.get('/incompleteSalesByModel', function(req, res) {
 
   ], function(err, details) {
   
-      res.render('sale/incompleteSalesByModel', {
+      res.render('sale/searchSalesByModel', {
           url: req.url,
-          navbar: 'Sales',
-          title: 'Incomplete Sales',
+          navbar: 'Sales Result',
+          title: 'Search Result By Model ',
           sales: details[0],
           user: req.user,
           url: req.url,
           startDate: req.query.startDate,
           endDate: req.query.endDate,
+          model: req.query.model,
+          modelGroup:req.query.modelGroup,
           modelSummary: SalesFunctions.modelSummary(details[0]),
           results: details[0].length
       })
@@ -110,7 +112,7 @@ router.get('/incompleteSalesByModel', function(req, res) {
 })
 
 
-router.get('/excel/incompleteSalesByModel', function(req, res) {
+router.get('/excel/searchSalesByModel', function(req, res) {
   async.series([
       function(callback) {
         Sale.incompleteSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)

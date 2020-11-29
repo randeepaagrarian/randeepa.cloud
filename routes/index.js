@@ -290,7 +290,7 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			users: data[1],
 			watches: data[2],
 			models: data[3],
-			modelGroup: data[4]
+			modelGroups: data[4]
 
 		})
 	})
