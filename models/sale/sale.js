@@ -666,7 +666,7 @@ Sale.incompleteSales = function(startDate, endDate, callback) {
 }
 
 
-Sale.incompleteSalesModelGroup = function(startDate, endDate, model, modelGroup, callback) {
+Sale.searchSalesModelGroup = function(startDate, endDate, model, modelGroup, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err){
             return callback(pool_err, null)

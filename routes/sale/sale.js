@@ -89,7 +89,7 @@ router.get('/excel/incompleteSales', function(req, res) {
 router.get('/searchSalesByModel', function(req, res) {
   async.series([
       function(callback) {
-          Sale.incompleteSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
+          Sale.searchSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
       }
 
   ], function(err, details) {
@@ -103,8 +103,6 @@ router.get('/searchSalesByModel', function(req, res) {
           url: req.url,
           startDate: req.query.startDate,
           endDate: req.query.endDate,
-          model: req.query.model,
-          modelGroup:req.query.modelGroup,
           modelSummary: SalesFunctions.modelSummary(details[0]),
           results: details[0].length
       })
@@ -115,7 +113,7 @@ router.get('/searchSalesByModel', function(req, res) {
 router.get('/excel/searchSalesByModel', function(req, res) {
   async.series([
       function(callback) {
-        Sale.incompleteSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
+        Sale.searchSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
       }
   ], function(err, details) {
       res.xls('Incomplete Sales '+req.query.startDate+ ' ' +req.query.endDate+'.xlsx', details[0])
