@@ -116,7 +116,7 @@ router.get('/excel/searchSalesByModel', function(req, res) {
         Sale.searchSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
       }
   ], function(err, details) {
-      res.xls('Incomplete Sales '+req.query.startDate+ ' ' +req.query.endDate+'.xlsx', details[0])
+      res.xls('Search Sales Results '+req.query.startDate+ ' ' +req.query.endDate+'.xlsx', details[0])
   })
 })
 
