@@ -190,6 +190,9 @@
                                             <li>
                                                 <a href="#incomplete_sales" data-toggle="tab">Incomplete Sales</a>
                                             </li>
+                                            <li>
+                                                <a href="##search_sales_by_model" data-toggle="tab">Search By Model</a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -707,6 +710,39 @@
                                                                         <option value="allexhp">All Except HP Files</option>
                                                                     </select>
                                                                     <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                    <div class="form-group">
+                                                                        <input class="btn btn-primary" type="submit" value="List">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="search_sales_by_model" class="tab-pane">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h5 class="title">Cloud Date</h5>
+                                                            <div class="content">
+                                                                <p><i>Start Date සහ End Date යන fields වලට දින ඇතුලත් කිරීමේදී <b>YYYY-MM-DD</b> යන ආකෘතිය අනුගමනය කරන්න.</i></p>
+                                                                <form action="/sale/searchSalesByModel" method="get">
+                                                                    <b>Start Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="startDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                                                    <b>End Date:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="endDate" class="form-control datetimepicker" placeholder="YYYY-MM-DD" />
+                                                                    <div style="display: inline-block;">&nbsp; &nbsp;</div>
+                                                                
+                                                                    <b>Model:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="model" class="form-control">
+                                                                        <option value="">Select Model</option>
+                                                                        <% models.forEach(function(dealerAndShowroom){ %>
+                                                                            <option value="<%= dealerAndShowroom.id %>"><%= dealerAndShowroom.name %></option>
+                                                                            <% }) %>
+                                                                    </select>
+                                                                    <b>Model Group:</b>&nbsp;&nbsp;&nbsp;&nbsp;<select name="modelGroup" class="form-control">
+                                                                        <option value="">Select Model</option>
+                                                                        <% modelGroups.forEach(function(modelGroup){ %>
+                                                                            <option value="<%= modelGroup.id %>"><%= modelGroup.name %></option>
+                                                                            <% }) %>
+                                                                    </select>
                                                                     <div class="form-group">
                                                                         <input class="btn btn-primary" type="submit" value="List">
                                                                     </div>

@@ -85,6 +85,39 @@ router.get('/excel/incompleteSales', function(req, res) {
     })
 })
 
+router.get('/searchSalesByModel', function(req, res) {
+  async.series([
+      function(callback) {
+          Sale.searchSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
+      }
+
+  ], function(err, details) {
+  
+      res.render('sale/searchSalesByModel', {
+          url: req.url,
+          navbar: 'Sales Result',
+          title: 'Search Result By Model ',
+          sales: details[0],
+          user: req.user,
+          url: req.url,
+          startDate: req.query.startDate,
+          endDate: req.query.endDate,
+          modelSummary: SalesFunctions.modelSummary(details[0]),
+          results: details[0].length
+      })
+  })
+})
+
+router.get('/excel/searchSalesByModel', function(req, res) {
+  async.series([
+      function(callback) {
+        Sale.searchSalesModelGroup(req.query.startDate, req.query.endDate, req.query.model, req.query.modelGroup, callback)
+      }
+  ], function(err, details) {
+      res.xls('Search Sales Results '+req.query.startDate+ ' ' +req.query.endDate+'.xlsx', details[0])
+  })
+})
+
 router.get('/edit', Auth.validSalesEditor, function(req, res) {
   async.series([
     function(callback) {
