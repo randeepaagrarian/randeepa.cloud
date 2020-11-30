@@ -254,6 +254,10 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			User.getActiveUsers(callback)
 		}, function(callback) {
 			Sale.getOpenWatches(callback)
+		}, function(callback) {
+			Stock.getModels(callback)
+		}, function(callback) {
+			Stock.stocksByAgeModelGroup (callback)
 		}
 	], function(err, data) {
 		res.render('sales', {
@@ -262,7 +266,10 @@ router.get('/sales', Auth.signedIn, Auth.validSaleDashboardUser, function(req, r
 			user: req.user,
 			regions: data[0],
 			users: data[1],
-			watches: data[2]
+			watches: data[2],
+			models: data[3],
+			modelGroups: data[4]
+
 		})
 	})
 })
