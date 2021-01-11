@@ -521,6 +521,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       Sale.getWatches(req.query.cloudID, callback)
     }, function(callback) {
       Sale.getRMVDetails(req.query.cloudID, callback)
+    }, function(callback) {
+      Sale.getCheckListDetails(req.query.cloudID, callback)
     }
   ], function(err, details) {
     res.render('sale/cloudIDInfo', {
@@ -531,7 +533,8 @@ router.get('/cloudIDInfo', Auth.salesSearchAllowed, function(req, res) {
       comments: details[1],
       saleCompletedTypes: details[2],
       watches: details[3],
-      rmvDetails: details[4]
+      rmvDetails: details[4],
+      checkList: details[5]
     })
   })
 })

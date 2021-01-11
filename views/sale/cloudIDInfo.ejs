@@ -150,8 +150,34 @@
                                   <div id="verify_comment" class="tab-pane active">
                                     <% if(sales[0]['verified'] == 0) { %>
                                       <div>
-                                        <b>Verify this Sale: </b>&nbsp;&nbsp;<a href="/sale/verify/<%= sales[0]['id'] %>"><button class="success"><font color="black">Verify Sale</font></button></a>
-                                        <br><br>
+                                        <% let allChecked = true; %>
+
+                                        <table>
+                                        <% checkList.forEach(function(item) { %>
+
+                                          <tr>
+                                            <td><b><%= item.name %></b></td>
+                                            <% if(item.checked == 1) { %>
+                                              <td><%= item.remarks %></td>
+                                            <% } else { %>
+                                              <td>
+                                              <form method="POST">
+                                                <input type="text">&nbsp;&nbsp;<input type="submit" value="Add">
+                                              </form>
+                                            </td>
+                                            <% } %>
+                                          </tr>
+
+                                        <% }) %>
+                                      </table>
+                                      <br>
+                                        
+                                        <% checkList.forEach(function(item) { if (item.checked == 0) { allChecked = false; } }) %>
+                                        
+                                        <% if (allChecked) { %>
+                                          <b>Verify this Sale: </b>&nbsp;&nbsp;<a href="/sale/verify/<%= sales[0]['id'] %>"><button class="success"><font color="black">Verify Sale</font></button></a>
+                                          <br><br>
+                                        <% } %>
                                       </div>
                                     <% } else { %>
                                       <p><font color="green">Sale Verified</font></p>

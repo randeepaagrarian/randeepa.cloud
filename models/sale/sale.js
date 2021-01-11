@@ -598,6 +598,21 @@ Sale.getRMVDetails = function(cloudID, callback) {
       })
 }
 
+Sale.getCheckListDetails = function(cloudID, callback) {
+    MySql.pool.getConnection(function(pool_err, connection) {
+        if(pool_err) {
+            return callback(pool_err, null)
+        }
+        connection.query('SELECT MCI.id, name, COALESCE(SMCI.checked, 0) AS checked, SMCI.remarks FROM model_check_item MCI LEFT JOIN sale_model_check_item SMCI ON SMCI.sale_id = ? AND SMCI.model_check_item_id = MCI.id WHERE MCI.model_id = (SELECT model FROM sale WHERE id = ?)', [cloudID, cloudID], function(err, rows, fields) {
+            connection.release()
+            if(err) {
+                return callback(err, null)
+            }
+            callback(err, rows)
+        })
+      })
+}
+
 Sale.watchSucceeded = function(watchID, username, callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
         if(pool_err) {
