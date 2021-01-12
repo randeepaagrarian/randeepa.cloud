@@ -212,12 +212,11 @@ router.post('/deliveryNote', function (req, res) {
                         res.write("<br><div class='alert alert-info'>Delivery note issued successfully.</div>")
                         res.write("<div class='alert alert-info'>Sending text messages....</div>")
 
-                        let api = '15572917316573'
                         let oneOrMoreFails = false
                         let failedNumbers = []
 
                         async.eachSeries(textMessageNumbers, function (number, callback) {
-                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + api + '&message=' + textMessage, { json: true }, function (err, res, body) {
+                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + args.textAPIKey + '&message=' + textMessage, { json: true }, function (err, res, body) {
                                 if (err) {
                                     oneOrMoreFails = true
                                     failedNumbers.push(number)
