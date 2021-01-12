@@ -1,7 +1,10 @@
 const express = require('express')
 const async = require('async')
+const request = require('request')
 const Cloudinary = require('../../models/comms/cloudinary')
 const multiparty = require('connect-multiparty')
+const args = require('yargs').argv
+
 const router = express.Router()
 
 const Auth = require('../../functions/auth')
@@ -219,7 +222,9 @@ router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
     }
   ], function(err, data) {
     if(data[0] == true) {
-      res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + '94768237192,94703524280,94703524285,94703524290' + '&q=' + args.textAPIKey + '&message=' + 'Sale ' + req.params.cloudID + ' has been verified', { json: true }, function (err, res2, body) {
+        res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
+      })
     } else {
       res.send('Error')
     }
