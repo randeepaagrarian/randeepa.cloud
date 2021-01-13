@@ -222,7 +222,7 @@ router.get('/verify/:cloudID', Auth.salesSearchAllowed, function(req, res) {
     }
   ], function(err, data) {
     if(data[0] == true) {
-      request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + '94768237192,94703524280,94703524285,94703524290' + '&q=' + args.textAPIKey + '&message=' + 'Sale ' + req.params.cloudID + ' has been verified', { json: true }, function (err, res2, body) {
+      request('https://cpsolutions.dialog.lk/api/sms/inline/send.php?destination=' + '94768237192,94703524280,94703524285,94703524290' + '&q=' + args.textAPIKey + '&message=' + 'Sale ' + req.params.cloudID + ' has been verified', { json: true }, function (err, res2, body) {
         res.redirect('/sale/cloudIDInfo?cloudID=' + req.params.cloudID)
       })
     } else {
