@@ -216,7 +216,7 @@ router.post('/deliveryNote', function (req, res) {
                         let failedNumbers = []
 
                         async.eachSeries(textMessageNumbers, function (number, callback) {
-                            request('https://cpsolutions.dialog.lk/index.php/cbs/sms/send?destination=' + number + '&q=' + args.textAPIKey + '&message=' + textMessage, { json: true }, function (err, res, body) {
+                            request('https://cpsolutions.dialog.lk/api/sms/inline/send.php?destination=' + number + '&q=' + args.textAPIKey + '&message=' + textMessage, { json: true }, function (err, res, body) {
                                 if (err) {
                                     oneOrMoreFails = true
                                     failedNumbers.push(number)
