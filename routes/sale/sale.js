@@ -599,7 +599,8 @@ router.get('/search', Auth.salesSearchAllowed, function(req, res) {
       user: req.user,
       sales: details[0],
       skw: req.query.skw,
-      modelSummary: SalesFunctions.modelSummary(details[0])
+      modelSummary: SalesFunctions.modelSummary(details[0]),
+      modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
     })
   })
 })
@@ -727,6 +728,7 @@ router.get('/range/all/sysdate', function(req, res) {
             endDate: req.query.endDate,
             sales: details[0],
             modelSummary: SalesFunctions.modelSummary(details[0]),
+            modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             results: details[0].length
         })
     })
@@ -758,6 +760,7 @@ router.get('/range/region/sysdate', function(req, res) {
             region: req.query.region,
             sales: details[0],
             modelSummary: SalesFunctions.modelSummary(details[0]),
+            modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             results: details[0].length
         })
     })
@@ -789,6 +792,7 @@ router.get('/range/officer/sysdate', function(req, res) {
             officer: req.query.officer,
             sales: details[0],
             modelSummary: SalesFunctions.modelSummary(details[0]),
+            modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             results: details[0].length
         })
     })
