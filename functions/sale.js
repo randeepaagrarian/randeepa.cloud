@@ -50,3 +50,38 @@ SalesFunctions.modelGroupSummary = function(sales) {
 
     return summary
 }
+
+SalesFunctions.dealerSalesSummary = function(sales) {
+    
+    let summary = [{}]
+    
+
+    for(var i = 0; i < sales.length; i++) {
+        
+        let inSummary = false
+       
+        for(var x = 0; x < summary.length; x++) {
+            if(summary[x].model == sales[i]['sd_location']) {
+                inSummary = true
+                summary[x].sales = summary[x].sales + 1 
+
+                   summary[x].price = parseFloat(sales[i]['sale_price']) + parseFloat(summary[x].price)
+
+                break
+            }
+           
+        }
+       
+        if(!inSummary) {
+            summary.push({"model": sales[i]['sd_location'], "sales": 1, price: sales[i]['sale_price'], "region" : sales[i]['region_name'], "territory" : sales[i]['territory_name']})
+           
+        }
+       
+    }
+    
+    summary.sort(function (a, b) {
+        return b.price - a.price ;
+      });
+    console.log(summary)    
+    return summary
+}
