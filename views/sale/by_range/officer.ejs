@@ -35,6 +35,12 @@
                                             <li>
                                                 <a href="#model_summary" data-toggle="tab">Model Summary</a>
                                             </li>
+                                            <li>
+                                                <a href="#model_group_summary" data-toggle="tab">Model Group Summary</a>
+                                            </li>
+                                            <li>
+                                                <a href="#dealer_sales_summary" data-toggle="tab">Dealer Sales Summary</a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -115,6 +121,51 @@
                                                                     <td> <%= modelItem.model %> </td>
                                                                     <td> <%= modelItem.sales %> </td>
                                                                 </tr>
+                                                            <% } %>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div id="model_group_summary" class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <th>Model Group</th>
+                                                        <th>Sales</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% modelGroupSummary.forEach(function(modelGroupItem) { %>
+                                                            <% if(modelGroupItem.model == undefined) {%>
+                                                                
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td> <%= modelGroupItem.model %> </td>
+                                                                        <td> <%= modelGroupItem.sales %> </td>
+                                                                    </tr>
+                                                            <% } %>
+                                                         <% }) %> 
+                                                        </tbody>
+                                                </table>
+                                            </div>
+                                            <div id="dealer_sales_summary" class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <th>Dealer</th>
+                                                        <th>Region</th>
+                                                        <th>Territory</th>
+                                                        <th>Sales Units</th>
+                                                        <th>Sales values</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% dealerSummary.forEach(function(item){ %>
+                                                            <% if(item.model == undefined) { %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td> <%= item.model %> </td>
+                                                                        <td> <%= item.region %> </td>
+                                                                        <td> <%= item.territory %> </td>
+                                                                        <td> <%= item.sales %> </td>
+                                                                        <td> <%= item.price %> </td>
+                                                                    </tr>
                                                             <% } %>
                                                         <% }) %>
                                                     </tbody>
