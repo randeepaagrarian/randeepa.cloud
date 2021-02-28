@@ -40,6 +40,9 @@
                                             <li>
                                                 <a href="#dealer_sales_summary" data-toggle="tab">Dealer Sales Summary</a>
                                             </li>
+                                            <li>
+                                                <a href="#region_territory_summary" data-toggle="tab">Region And Territory Sales Summary</a>
+                                            </li>
                                         </ul>
 
                                         <div class="tab-content">
@@ -163,10 +166,37 @@
                                                                         <td> <%= item.region %> </td>
                                                                         <td> <%= item.territory %> </td>
                                                                         <td> <%= item.sales %> </td>
-                                                                        <td> <%= item.price %> </td>
+                                                                        <td> <%= item.price.toLocaleString(undefined, {minimumFractionDigits: 2}) %> </td>
                                                                     </tr>
                                                             <% } %>
                                                         <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div id="region_territory_summary" class="tab-pane">
+                                                <table class="table table-striped">
+                                                    <thead >
+                                                        <th><b>Locale</b></th>
+                                                        <th><b>Sales Units</b></th>
+                                                        <th><b>Sales Values</b></th>
+                                                    </thead>
+                                                    <tbody>
+                                                       <% regionSummary.forEach(function(region) { %>
+                                                            <% if(region.model == undefined) { %>
+                                                            <% } else { %>
+                                                                    <tr style="color: black; background-color: rgb(167, 245, 160);"><td><b><%= region.model %></b></td>
+                                                                    <td><b><%= region.sales %></b></td>
+                                                                    <td><b><%= region.price.toLocaleString(undefined, {minimumFractionDigits: 2}) %></b></td></tr>
+                                                                    
+                                                                    <% territorySummary.forEach(function(territory){ %>
+                                                                        <% if(territory.model != undefined && region.model == territory.mod){ %>
+                                                                            <tr><td><%= territory.model %></td>
+                                                                            <td><%= territory.sales %></td>
+                                                                            <td><%= territory.price.toLocaleString(undefined, {minimumFractionDigits: 2}) %></td></tr>
+                                                                            <% } %>
+                                                                    <% }) %>
+                                                            <% } %>
+                                                       <% }) %>
                                                     </tbody>
                                                 </table>
                                             </div>

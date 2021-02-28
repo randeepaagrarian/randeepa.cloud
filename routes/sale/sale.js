@@ -602,6 +602,8 @@ router.get('/search', Auth.salesSearchAllowed, function(req, res) {
       modelSummary: SalesFunctions.modelSummary(details[0]),
       modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
       dealerSummary: SalesFunctions.dealerSalesSummary(details[0]),
+      regionSummary: SalesFunctions.regionSalesSummary(details[0]),
+      territorySummary: SalesFunctions.territorySalesSummary(details[0])
     })
   })
 })
@@ -731,6 +733,8 @@ router.get('/range/all/sysdate', function(req, res) {
             modelSummary: SalesFunctions.modelSummary(details[0]),
             modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             dealerSummary: SalesFunctions.dealerSalesSummary(details[0]),
+            regionSummary: SalesFunctions.regionSalesSummary(details[0]),
+            territorySummary: SalesFunctions.territorySalesSummary(details[0]),
             results: details[0].length
         })
     })
@@ -764,6 +768,8 @@ router.get('/range/region/sysdate', function(req, res) {
             modelSummary: SalesFunctions.modelSummary(details[0]),
             modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             dealerSummary: SalesFunctions.dealerSalesSummary(details[0]),
+            regionSummary: SalesFunctions.regionSalesSummary(details[0]),
+            territorySummary: SalesFunctions.territorySalesSummary(details[0]),
             results: details[0].length
         })
     })
@@ -797,6 +803,8 @@ router.get('/range/officer/sysdate', function(req, res) {
             modelSummary: SalesFunctions.modelSummary(details[0]),
             modelGroupSummary: SalesFunctions.modelGroupSummary(details[0]),
             dealerSummary: SalesFunctions.dealerSalesSummary(details[0]),
+            regionSummary: SalesFunctions.regionSalesSummary(details[0]),
+            territorySummary: SalesFunctions.territorySalesSummary(details[0]),
             results: details[0].length
         })
     })
