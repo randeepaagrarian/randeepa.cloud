@@ -695,21 +695,21 @@ router.get('/search/print', function (req, res) {
 })
 
 router.get('/markSold', function (req, res) {
-    req.flash('warning_msg', 'Mark sold function has been disabled. Please contact system admin for mark sold requests')
-    res.redirect(req.query.continue)
-    //async.series([
-    //    function (callback) {
-    //        Stock.markSold(req.query.primaryId, callback)
-    //    }
-    //], function (err, data) {
-    //    if (err) {
-    //        req.flash('warning_msg', 'Failed to mark sold')
-    //        res.redirect(req.query.continue)
-    //    } else {
-    //        req.flash('success_msg', 'Stock ' + req.query.primaryId + ' marked sold successfully')
-    //        res.redirect(req.query.continue)
-    //    }
-    //})
+    // req.flash('warning_msg', 'Mark sold function has been disabled. Please contact system admin for mark sold requests')
+    // res.redirect(req.query.continue)
+    async.series([
+       function (callback) {
+           Stock.markSold(req.query.primaryId, callback)
+       }
+    ], function (err, data) {
+       if (err) {
+           req.flash('warning_msg', 'Failed to mark sold')
+           res.redirect(req.query.continue)
+       } else {
+           req.flash('success_msg', 'Stock ' + req.query.primaryId + ' marked sold successfully')
+           res.redirect(req.query.continue)
+       }
+    })
 })
 
 module.exports = router

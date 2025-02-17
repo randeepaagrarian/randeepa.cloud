@@ -101,101 +101,85 @@ router.get('/addUser', function(req, res) {
     })
 })
 
-router.post('/addUser', multipart, function(req, res) {
+router.post('/addUser', multipart, async (req, res) => {
+    try {
+        // Validate input
+        const validationErrors = validateUserInput(req.body);
+        if (validationErrors.length > 0) {
+            req.flash('warning_msg', validationErrors.join(', '));
+            return res.redirect('/admin/addUser');
+        }
 
-    if(req.body.first_name == '' || req.body.last_name == '' || req.body.common_name == '' || req.body.display_name == '' || req.body.email == '' || req.body.birthday == '' || req.body.designation == '' || req.files.application_form.originalFilename == '' || Validator.validEmail(req.body.email) == false || req.body.common_name.indexOf(' ') >= 0) {
-        req.flash('warning_msg', 'Validation Errors')
-        res.redirect('/admin/addUser')
-        return
+        // Generate password and hash
+        const password = generateRandomPassword();
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+
+        // Create user object
+        const user = createUserObject(req.body, hash);
+
+        // Add user to database
+        const isUserAdded = await Admin.addUser(user);
+        if (!isUserAdded) {
+            throw new Error('Failed to add user to database');
+        }
+
+        // Send email notification (if enabled)
+        // if (req.body.login_enabled == 1) {
+        //     await sendEmailNotification(req.body, user.username, password);
+        // }
+
+        // Redirect with success message
+        req.flash('warning_msg', `Account successfully created. Username - ${user.username} Password - ${password}`);
+        res.redirect('/admin/allUsers');
+    } catch (error) {
+        console.error('Error in /addUser route:', error);
+        req.flash('warning_msg', 'An error occurred. Please try again.');
+        res.redirect('/admin/addUser');
     }
+});
 
-    const password = Math.random().toString(36).substring(7)
-    const salt = bcrypt.genSaltSync(10)
-    const hash = bcrypt.hashSync(password, salt)
+// Helper functions
+function validateUserInput(body) {
+    const errors = [];
+    const requiredFields = ['first_name', 'last_name', 'common_name', 'display_name', 'email', 'birthday', 'designation'];
+    requiredFields.forEach(field => {
+        if (!body[field] || body[field].trim() === '') {
+            errors.push(`${field} is required`);
+        }
+    });
+    if (!Validator.validEmail(body.email)) {
+        errors.push('Invalid email format');
+    }
+    if (body.common_name.indexOf(' ') >= 0) {
+        errors.push('Common name cannot contain spaces');
+    }
+    return errors;
+}
 
-    let user = {
-        username: req.body.common_name + '.' + req.body.first_name.substring(0, 1).toLowerCase() + req.body.last_name.substring(0, 1).toLowerCase(),
-        password: hash,
-        email: req.body.email,
+function generateRandomPassword() {
+    return Math.random().toString(36).substring(7);
+}
+
+function createUserObject(body, passwordHash) {
+    return {
+        username: `${body.common_name}.${body.first_name.substring(0, 1).toLowerCase()}${body.last_name.substring(0, 1).toLowerCase()}`,
+        password: passwordHash,
+        email: body.email,
         active: 1,
-        login_enabled: req.body.login_enabled,
-        name: req.body.display_name,
-        region: req.body.region,
-        territory: req.body.territory,
+        login_enabled: body.login_enabled,
+        name: body.display_name,
+        region: body.region,
+        territory: body.territory,
         profile_pic: 'https://res.cloudinary.com/randeepa-com/image/upload/v1532593842/jo7zcyh1shgq1jhifuub.png',
-        birthday: req.body.birthday,
-        designation: req.body.designation,
-        designation_fk: req.body.designation_fk,
-        profile: req.body.profile,
-        change_password: 1
-    }
-
-    async.series([
-        function(callback) {
-            Cloudinary.upload(req.files.application_form.path, callback)
-        }
-    ], function(err, data) {
-
-        if(data[0].error) {
-            req.flash('warning_msg', 'Check image format')
-            res.redirect('/admin/addUser')
-            return
-        }
-
-        user['application_form'] = data[0].url
-
-        async.series([
-            function(callback) {
-                Admin.addUser(user, callback)
-            }
-        ], function(err, data) {
-            if(data[0] == true) {
-
-                if(req.body.login_enabled == 0) {
-                    req.flash('warning_msg', 'Account successfully created.')
-                    res.redirect('/admin/allUsers')
-                    return
-                } else {
-                    let transporter = nodemailer.createTransport({
-                        host: 'smtp.zoho.com',
-                        port: 465,
-                        secure: true,
-                        auth: {
-                            user: 'admin@randeepa.cloud',
-                            pass: args.adminEmailPassword
-                        }
-                    })
-
-                    const message = '<p>Dear ' + req.body.first_name + ' ' + req.body.last_name + ', <br> Your Randeepa Cloud account details are as follows, <br> Username - ' + user.username + ' <br> Password - ' + password + ' <br> Please use the link, https://www.randeepa.cloud to access the cloud.<br> You will be asked to change your password at first login. Please note that unathorized use of this credentials described in the employment agreement may lead to disciplinary action and or termination. <br> Thank You,<br>Randeepa Cloud Team</p>'
-
-                    const mailOptions = {
-                        from: 'Randeepa Cloud <admin@randeepa.cloud>',
-                        to: req.body.email+',shamal@randeepa.com',
-                        subject: 'Welcome to Randeepa, '+ req.body.first_name + '. Your Randeepa Cloud account is ready',
-                        html: message
-                    }
-
-                    async.series([
-                        function(callback) {
-                            transporter.sendMail(mailOptions, callback)
-                        }
-                    ], function(err, data) {
-                        if(err) {
-                            req.flash('warning_msg', 'Account created. But an internal error occured. Please contact administrator to fix the issue')
-                            res.redirect('/admin/allUsers')
-                            return
-                        } else {
-                            req.flash('warning_msg', 'Account successfully created. Please check user email for login credentials')
-                            res.redirect('/admin/allUsers')
-                            return
-                        }
-                    })
-                }
-
-            }
-        })
-    })
-})
+        birthday: body.birthday,
+        designation: body.designation,
+        designation_fk: body.designation_fk,
+        profile: body.profile,
+        change_password: 1,
+        application_form: 'no_application'
+    };
+}
 
 router.get('/setAccess', function(req, res) {
     async.series([

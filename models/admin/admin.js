@@ -77,20 +77,22 @@ Admin.allDesignations = function(callback) {
     })
 }
 
-Admin.addUser = function(user, callback) {
-    MySql.pool.getConnection(function(pool_err, connection) {
-        if(pool_err) {
-            return callback(pool_err, null)
-        }
-        connection.query('INSERT INTO user SET ?', user, function(err, result) {
-            connection.release()
-            if(err) {
-                return callback(err, null)
+Admin.addUser = function(user) {  // Remove the callback parameter
+    return new Promise((resolve, reject) => { // Return a Promise
+        MySql.pool.getConnection(function(pool_err, connection) {
+            if(pool_err) {
+                return reject(pool_err); // Reject with the error
             }
-            callback(err, true)
-        })
-    })
-}
+            connection.query('INSERT INTO user SET ?', user, function(err, result) {
+                connection.release();
+                if(err) {
+                    return reject(err); // Reject with the error
+                }
+                resolve(true); // Resolve with true on success
+            });
+        });
+    });
+};
 
 Admin.allModules = function(callback) {
     MySql.pool.getConnection(function(pool_err, connection) {
