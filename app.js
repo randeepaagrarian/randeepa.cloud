@@ -56,7 +56,7 @@ const service = require('./routes/service/service')
 const hirePurchase = require('./routes/hirePurchase/hirePurchase')
 
 // Model files
-const Notification = require('./models/notification/notification')
+// const Notification = require('./models/notification/notification')
 const MDate = require('./functions/mdate')
 
 app.use(favicon(__dirname + '/public/img/favicon.ico'))
