@@ -99,19 +99,19 @@ app.use(function(req, res, next){
     res.locals.success_msg = req.flash('success_msg')
     res.locals.warning_msg = req.flash('warning_msg')
     if(req.user != undefined) {
-      async.series([
-        function(callback) {
-          Notification.getUserNotifications(req.user.username, callback)
-        }, function(callback) {
-          Notification.getUnreadUserNotifications(req.user.username, callback)
-        }
-      ], function(err, data) {
-        res.locals.notifications = data[0]
-        res.locals.notificationsCount = data[0].length
-        res.locals.unreadNotificationsCount = data[1].length
-        res.locals.pageURL = req.url
-        next()
-      })
+      // async.series([
+      //   function(callback) {
+      //     Notification.getUserNotifications(req.user.username, callback)
+      //   }, function(callback) {
+      //     Notification.getUnreadUserNotifications(req.user.username, callback)
+      //   }
+      // ], function(err, data) {
+      //   res.locals.notifications = data[0]
+      //   res.locals.notificationsCount = data[0].length
+      //   res.locals.unreadNotificationsCount = data[1].length
+      //   res.locals.pageURL = req.url
+      //   next()
+      // })
     } else {
       next()
     }
