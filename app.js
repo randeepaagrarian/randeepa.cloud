@@ -9,8 +9,6 @@ const flash = require('connect-flash')
 const json2xls = require('json2xls')
 const dateTime = require('node-datetime')
 const favicon = require('serve-favicon')
-const async = require('async')
-
 const app = express()
 
 const http = require('http').createServer(app)
@@ -56,7 +54,6 @@ const service = require('./routes/service/service')
 const hirePurchase = require('./routes/hirePurchase/hirePurchase')
 
 // Model files
-// const Notification = require('./models/notification/notification')
 const MDate = require('./functions/mdate')
 
 app.use(favicon(__dirname + '/public/img/favicon.ico'))
@@ -98,23 +95,7 @@ app.use(function(req, res, next){
     res.locals.error = req.flash('error')
     res.locals.success_msg = req.flash('success_msg')
     res.locals.warning_msg = req.flash('warning_msg')
-    if(req.user != undefined) {
-      // async.series([
-      //   function(callback) {
-      //     Notification.getUserNotifications(req.user.username, callback)
-      //   }, function(callback) {
-      //     Notification.getUnreadUserNotifications(req.user.username, callback)
-      //   }
-      // ], function(err, data) {
-      //   res.locals.notifications = data[0]
-      //   res.locals.notificationsCount = data[0].length
-      //   res.locals.unreadNotificationsCount = data[1].length
-      //   res.locals.pageURL = req.url
-      //   next()
-      // })
-    } else {
-      next()
-    }
+    next()
 })
 
 // Configuring routes with files

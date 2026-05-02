@@ -19,26 +19,6 @@
 
             <ul class="nav navbar-nav navbar-right">
 
-              <!-- <li class="dropdown nav-item">
-                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <i class="nc-icon nc-planet"></i>
-                      <span class="d-lg-none"><font color='blue'><b><%= unreadNotificationsCount %></b></font> Notifications</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-with-icons" style="height: 300px; width: 250px; overflow: scroll;">
-                    <% notifications.forEach(function(notification) { %>
-                      <% if(notification.checked == 0) { %>
-                        <p><a href="/notificationClicked?id=<%= notification.id %>"><font color='blue'><b><%= notification.title %></b></font></a></p>
-                        <hr style='margin: 0; border-color: #262f3d;'>
-                      <% } else { %>
-                        <p><a href="<%= notification.link %>"><font color='ash'><%= notification.title %></font></a>&nbsp;&nbsp;<a href="/markNotificationUnread?id=<%= notification.id %>&back=<%= pageURL %>"><font style="color: #1d1e2b; font-size: 12.5px;"><b>Mark Unread</b></font></a></p>
-                        <hr style='margin: 0; border-color: #262f3d;'>
-                      <% } %>
-                    <% }) %>
-                    <p style="text-align: center; color: blue;">Showing 100 Notifications<a href="/allNotifications"><br><font style="color: #1d1e2b; font-size: 12.5px;"><b>Show All</b></font></a><a href="/clearAllNotifications"><br><font style="color: #1d1e2b; font-size: 12.5px;"><b>Clear All</b></font></a></p>
-                    <hr style='margin: 0; border-color: #262f3d;'>
-                  </ul>
-              </li> -->
-
                 <li class="dropdown dropdown-with-icons">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-list"></i>

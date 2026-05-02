@@ -381,23 +381,6 @@ demo = {
 
     },
 
-	showNotification: function(from, align){
-    	color = Math.floor((Math.random() * 4) + 1);
-
-    	$.notify({
-        	icon: "pe-7s-gift",
-        	message: "<b>Light Bootstrap Dashboard PRO</b> - forget about boring dashboards."
-
-        },{
-            type: type[color],
-            timer: 4000,
-            placement: {
-                from: from,
-                align: align
-            }
-        });
-	},
-
 	initVectorMap: function(){
          var mapData = {
                 "AU": 760,
